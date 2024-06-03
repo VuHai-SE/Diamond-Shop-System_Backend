@@ -24,7 +24,7 @@ namespace DiamondStoreAPI.Controllers
 
         // GET: api/TblGemPriceLists
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TblGemPriceList>>> GetTblGemPriceLists()
+        public async Task<ActionResult<IEnumerable<TblMaterialCategory>>> GetTblGemPriceLists()
         {
             if (iTblGemPriceListService.GetGemPriceLists() == null)
             {
@@ -35,7 +35,7 @@ namespace DiamondStoreAPI.Controllers
 
         // GET: api/TblGemPriceLists/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TblGemPriceList>> GetTblGemPriceList(int id)
+        public async Task<ActionResult<TblMaterialCategory>> GetTblGemPriceList(int id)
         {
             if (iTblGemPriceListService.GetGemPriceLists() == null)
             {
@@ -54,7 +54,7 @@ namespace DiamondStoreAPI.Controllers
         // PUT: api/TblGemPriceLists/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTblGemPriceList(int id, TblGemPriceList tblGemPriceList)
+        public async Task<IActionResult> PutTblGemPriceList(int id, TblMaterialCategory tblGemPriceList)
         {
             if (id != tblGemPriceList.Id)
             {
@@ -69,7 +69,7 @@ namespace DiamondStoreAPI.Controllers
         // POST: api/TblGemPriceLists
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<TblGemPriceList>> PostTblGemPriceList(TblGemPriceList tblGemPriceList)
+        public async Task<ActionResult<TblMaterialCategory>> PostTblGemPriceList(TblMaterialCategory tblGemPriceList)
         {
             var isAdd = iTblGemPriceListService.AddTblGemPriceList(tblGemPriceList);
 

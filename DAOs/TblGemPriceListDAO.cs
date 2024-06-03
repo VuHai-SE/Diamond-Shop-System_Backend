@@ -18,11 +18,11 @@ namespace DAOs
             }
         }
 
-        public List<TblGemPriceList> GetGemPriceLists() => dbContext.TblGemPriceLists.ToList();
+        public List<TblMaterialCategory> GetGemPriceLists() => dbContext.TblGemPriceLists.ToList();
 
-        public TblGemPriceList GetTblGemPriceList(int id) => dbContext.TblGemPriceLists.FirstOrDefault(m => m.Id.Equals(id));
+        public TblMaterialCategory GetTblGemPriceList(int id) => dbContext.TblGemPriceLists.FirstOrDefault(m => m.Id.Equals(id));
 
-        public TblGemPriceList AddTblGemPriceList(TblGemPriceList tblGemPriceList)
+        public TblMaterialCategory AddTblGemPriceList(TblMaterialCategory tblGemPriceList)
         {
             try
             {
@@ -38,11 +38,11 @@ namespace DAOs
             }
         }
 
-        public bool UpdateTblGemPriceList(int id, TblGemPriceList tblGemPriceList)
+        public bool UpdateTblGemPriceList(int id, TblMaterialCategory tblGemPriceList)
         {
             try
             {
-                TblGemPriceList oTblGemPriceList = GetTblGemPriceList(id);
+                TblMaterialCategory oTblGemPriceList = GetTblGemPriceList(id);
                 if (oTblGemPriceList != null)
                 {
                     oTblGemPriceList.Origin = tblGemPriceList.Origin;
@@ -71,7 +71,7 @@ namespace DAOs
         {
             try
             {
-                TblGemPriceList oTblGemPriceList = GetTblGemPriceList(id);
+                TblMaterialCategory oTblGemPriceList = GetTblGemPriceList(id);
                 if (oTblGemPriceList != null)
                 {
                     dbContext.Remove(oTblGemPriceList);

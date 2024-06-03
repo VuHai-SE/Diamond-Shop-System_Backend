@@ -24,7 +24,7 @@ public partial class DiamondStoreContext : DbContext
 
     public virtual DbSet<TblGem> TblGems { get; set; }
 
-    public virtual DbSet<TblGemPriceList> TblGemPriceLists { get; set; }
+    public virtual DbSet<TblMaterialCategory> TblGemPriceLists { get; set; }
 
     public virtual DbSet<TblMaterialCategory> TblMaterialCategories { get; set; }
 
@@ -140,7 +140,7 @@ public partial class DiamondStoreContext : DbContext
             entity.Property(e => e.Symmetry).HasMaxLength(50);
         });
 
-        modelBuilder.Entity<TblGemPriceList>(entity =>
+        modelBuilder.Entity<TblMaterialCategory>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Tbl_GemP__3214EC27A788D686");
 

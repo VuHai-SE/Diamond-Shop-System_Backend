@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace BusinessObjects;
 
-public partial class TblGemPriceList
+public partial class TblMaterialCategory
 {
     public int Id { get; set; }
 

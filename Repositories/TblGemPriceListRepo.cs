@@ -19,19 +19,19 @@ namespace Repositories
                 tblGemPriceListDAO= new TblGemPriceListDAO();
             }
         }
-        public TblGemPriceList AddTblGemPriceList(TblGemPriceList tblGemPriceList)
+        public TblMaterialCategory AddTblGemPriceList(TblMaterialCategory tblGemPriceList)
             => tblGemPriceListDAO.AddTblGemPriceList(tblGemPriceList);
 
         public bool DeleteTblGemPriceList(int id)
             => tblGemPriceListDAO.DeleteTblGemPriceList(id);
 
-        public List<TblGemPriceList> GetGemPriceLists()
+        public List<TblMaterialCategory> GetGemPriceLists()
             => tblGemPriceListDAO.GetGemPriceLists();
 
-        public TblGemPriceList GetTblGemPriceList(int id)
+        public TblMaterialCategory GetTblGemPriceList(int id)
             => tblGemPriceListDAO.GetTblGemPriceList(id);
 
-        public bool UpdateTblGemPriceList(int id, TblGemPriceList tblGemPriceList)
+        public bool UpdateTblGemPriceList(int id, TblMaterialCategory tblGemPriceList)
             => tblGemPriceListDAO.UpdateTblGemPriceList(id, tblGemPriceList);
     }
 }

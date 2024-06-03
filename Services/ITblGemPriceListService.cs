@@ -9,10 +9,10 @@ namespace Services
 {
     public interface ITblGemPriceListService
     {
-        public List<TblGemPriceList> GetGemPriceLists();
-        public TblGemPriceList GetTblGemPriceList(int id);
-        public TblGemPriceList AddTblGemPriceList(TblGemPriceList tblGemPriceList);
-        public bool UpdateTblGemPriceList(int id, TblGemPriceList tblGemPriceList);
+        public List<TblMaterialCategory> GetGemPriceLists();
+        public TblMaterialCategory GetTblGemPriceList(int id);
+        public TblMaterialCategory AddTblGemPriceList(TblMaterialCategory tblGemPriceList);
+        public bool UpdateTblGemPriceList(int id, TblMaterialCategory tblGemPriceList);
         public bool DeleteTblGemPriceList(int id);
     }
 }

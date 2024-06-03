@@ -20,19 +20,19 @@ namespace Services
             }
         }
 
-        public TblGemPriceList AddTblGemPriceList(TblGemPriceList tblGemPriceList)
+        public TblMaterialCategory AddTblGemPriceList(TblMaterialCategory tblGemPriceList)
             => tblGemPriceListRepo.AddTblGemPriceList(tblGemPriceList);
 
         public bool DeleteTblGemPriceList(int id)
             => tblGemPriceListRepo.DeleteTblGemPriceList(id);
 
-        public List<TblGemPriceList> GetGemPriceLists()
+        public List<TblMaterialCategory> GetGemPriceLists()
             => tblGemPriceListRepo.GetGemPriceLists();
 
-        public TblGemPriceList GetTblGemPriceList(int id)
+        public TblMaterialCategory GetTblGemPriceList(int id)
             => tblGemPriceListRepo.GetTblGemPriceList(id);
 
-        public bool UpdateTblGemPriceList(int id, TblGemPriceList tblGemPriceList)
+        public bool UpdateTblGemPriceList(int id, TblMaterialCategory tblGemPriceList)
             => tblGemPriceListRepo.UpdateTblGemPriceList(id, tblGemPriceList);
     }
 }
