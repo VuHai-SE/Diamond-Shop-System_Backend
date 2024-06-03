@@ -3,7 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34902.65
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiamondStoreAPI", "DiamondStoreAPI\DiamondStoreAPI.csproj", "{F8155269-3835-42AF-B85E-9A73DEA69D83}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiamondStoreAPI", "DiamondStoreAPI\DiamondStoreAPI.csproj", "{F8155269-3835-42AF-B85E-9A73DEA69D83}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessObjects", "BusinessObjects\BusinessObjects.csproj", "{29540C23-F3F1-4F1E-9854-F7BDD9B9FEAB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAOs", "DAOs\DAOs.csproj", "{7EE7AF62-8D57-4BF6-8C91-B3653C259F90}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repositories", "Repositories\Repositories.csproj", "{99B96435-726E-42EB-81F1-843DB6A03E0C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Services.csproj", "{A25F186E-4934-4721-8105-3A92F8AA58FB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +23,22 @@ Global
 		{F8155269-3835-42AF-B85E-9A73DEA69D83}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F8155269-3835-42AF-B85E-9A73DEA69D83}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F8155269-3835-42AF-B85E-9A73DEA69D83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29540C23-F3F1-4F1E-9854-F7BDD9B9FEAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29540C23-F3F1-4F1E-9854-F7BDD9B9FEAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29540C23-F3F1-4F1E-9854-F7BDD9B9FEAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29540C23-F3F1-4F1E-9854-F7BDD9B9FEAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EE7AF62-8D57-4BF6-8C91-B3653C259F90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EE7AF62-8D57-4BF6-8C91-B3653C259F90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EE7AF62-8D57-4BF6-8C91-B3653C259F90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EE7AF62-8D57-4BF6-8C91-B3653C259F90}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99B96435-726E-42EB-81F1-843DB6A03E0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99B96435-726E-42EB-81F1-843DB6A03E0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99B96435-726E-42EB-81F1-843DB6A03E0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99B96435-726E-42EB-81F1-843DB6A03E0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A25F186E-4934-4721-8105-3A92F8AA58FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A25F186E-4934-4721-8105-3A92F8AA58FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A25F186E-4934-4721-8105-3A92F8AA58FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A25F186E-4934-4721-8105-3A92F8AA58FB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
