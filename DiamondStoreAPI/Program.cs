@@ -1,4 +1,4 @@
-using DAOs;
+using BusinessObjects;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
