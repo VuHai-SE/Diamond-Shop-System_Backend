@@ -5,6 +5,8 @@ namespace BusinessObjects;
 
 public partial class TblMaterialPriceList
 {
+    public int Id { get; set; }
+
     public string? MaterialId { get; set; }
 
     public double? UnitPrice { get; set; }

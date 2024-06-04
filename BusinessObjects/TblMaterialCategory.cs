@@ -9,5 +9,7 @@ public partial class TblMaterialCategory
 
     public string? MaterialName { get; set; }
 
+    public virtual TblMaterialPriceList? TblMaterialPriceList { get; set; }
+
     public virtual ICollection<TblProductMaterial> TblProductMaterials { get; set; } = new List<TblProductMaterial>();
 }
