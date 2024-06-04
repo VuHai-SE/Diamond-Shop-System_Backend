@@ -1,10 +1,11 @@
-using DiamondStoreAPI.Models;
+using DAOs;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddDbContext<DiamondStoreContext>(options => {
+builder.Services.AddDbContext<DiamondStoreContext>(options =>
+{
     options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection"));
 });
 

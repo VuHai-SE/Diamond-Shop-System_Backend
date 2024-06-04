@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DiamondStoreAPI.Models;
+namespace BusinessObjects;
 
 public partial class TblProduct
 {
