@@ -20,12 +20,6 @@ namespace DAOs
             }
         }
 
-        public List<TblProduct> GetProducts()
-            => _context.TblProducts.ToList();
-
-        public TblProduct GetProduct(string id)
-            => _context.TblProducts.FirstOrDefault(m => m.ProductId.Equals(id));
-
         public TblProduct AddProduct(TblProduct product)
         {
             _context.TblProducts.Add(product);
@@ -70,6 +64,18 @@ namespace DAOs
                 .Where(mpl => mpl.MaterialId == materialId)
                 .OrderByDescending(mpl => mpl.EffDate)
                 .AsNoTracking();
+        }
+
+        //Get All Products
+        public List<TblProduct> GetAllProducts()
+        {
+            return _context.TblProducts.ToList();
+        }
+
+        //Get product detail
+        public TblProduct GetProduct(string id)
+        {
+            return _context.TblProducts.FirstOrDefault(m => m.ProductId.Equals(id));
         }
     }
 }

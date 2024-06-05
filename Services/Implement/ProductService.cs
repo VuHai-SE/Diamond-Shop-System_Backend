@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using BusinessObjects;
 using Repositories;
 using Repositories.Implement;
+using Services.DTOs.Response;
 
 namespace Services.Implement
 {
@@ -29,11 +30,25 @@ namespace Services.Implement
         public TblProduct AddProduct(TblProduct product)
             => productRepository.AddProduct(product);
 
-        public TblProduct GetProduct(string id)
-            => productRepository.GetProduct(id);
+        public async Task<List<(TblProduct product, double price)>> GetAllProductsAndPricesAsync()
+        {
+            return await productRepository.GetAllProductsAndPricesAsync();
+        }
 
-        public List<TblProduct> GetProducts()
-            => productRepository.GetProducts();
+        public async Task<ProductWithPriceResponse> GetProductAndPriceByIdAsync(string productId)
+        {
+            var product = await productRepository.GetProductByIdAsync(productId);
+            if (product == null)
+            {
+                return null;
+            }
 
+            var price = await productRepository.CalculateProductPriceAsync(productId);
+            return new ProductWithPriceResponse
+            {
+                product = product,
+                price = price
+            };
+        }
     }
 }

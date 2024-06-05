@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BusinessObjects;
 using Services;
+using Services.DTOs.Response;
 
 namespace DiamondStoreAPI.Controllers
 {
@@ -21,12 +22,37 @@ namespace DiamondStoreAPI.Controllers
             _productService = productService;
         }
 
-        [HttpGet("{productId}/price")]
+        [HttpGet]
+        public async Task<IActionResult> GetAllProductsAndPrices()
+        {
+            var productsAndPrices = await _productService.GetAllProductsAndPricesAsync();
+            var result = productsAndPrices.Select(pp => new ProductWithPriceResponse
+            {
+                product = pp.product,
+                price = pp.price
+            }).ToList();
+
+            var response = new { products = result };
+            return Ok(response);
+        }
+
+        [HttpGet("{productId}")]
         public async Task<IActionResult> GetProductPrice(string productId)
         {
-            var price = await _productService.CalculateProductPriceAsync(productId);
-            return Ok(price);
+            var response = await _productService.GetProductAndPriceByIdAsync(productId);
+            if (response == null)
+            {
+                return NotFound();
+            }
+            return Ok(response);
         }
+
+        //[HttpGet("{productId}/price")]
+        //public async Task<IActionResult> GetProductPrice(string productId)
+        //{
+        //    var price = await _productService.CalculateProductPriceAsync(productId);
+        //    return Ok(price);
+        //}
     }
     //[Route("api/[controller]")]
     //[ApiController]

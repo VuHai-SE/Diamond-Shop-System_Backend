@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -48,14 +49,23 @@ namespace Repositories.Implement
             return gemTotalPrice + materialTotalPrice + (product.ProductionCost ?? 0);
         }
 
-        public TblProduct GetProduct(string id)
+        public async Task<List<(TblProduct product, double price)>> GetAllProductsAndPricesAsync()
         {
-            throw new NotImplementedException();
+            var products = productDAO.GetAllProducts();
+            var productPrices = new List<(TblProduct product, double price)>();
+
+            foreach (var product in products)
+            {
+                var price = await CalculateProductPriceAsync(product.ProductId);
+                productPrices.Add((product, price));
+            }
+
+            return productPrices;
         }
 
-        public List<TblProduct> GetProducts()
+        public async Task<TblProduct> GetProductByIdAsync(string productId)
         {
-            throw new NotImplementedException();
+            return await productDAO.GetProductByIdAsync(productId);
         }
     }
 }
