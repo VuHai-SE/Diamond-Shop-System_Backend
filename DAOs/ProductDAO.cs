@@ -4,42 +4,72 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects;
+using Microsoft.EntityFrameworkCore;
 
 namespace DAOs
 {
     public class ProductDAO
     {
-        private readonly DiamondStoreContext dbContext = null;
+        private readonly DiamondStoreContext _context = null;
 
         public ProductDAO()
         {
-            if (dbContext == null)
+            if (_context == null)
             {
-                dbContext = new DiamondStoreContext();
+                _context = new DiamondStoreContext();
             }
         }
 
         public List<TblProduct> GetProducts()
-            => dbContext.TblProducts.ToList();
+            => _context.TblProducts.ToList();
 
         public TblProduct GetProduct(string id)
-            => dbContext.TblProducts.FirstOrDefault(m => m.ProductId.Equals(id));
+            => _context.TblProducts.FirstOrDefault(m => m.ProductId.Equals(id));
 
         public TblProduct AddProduct(TblProduct product)
         {
-            dbContext.TblProducts.Add(product);
-            dbContext.SaveChanges();
+            _context.TblProducts.Add(product);
+            _context.SaveChanges();
             return product;
         }
 
-        public bool UpdateProduct(string id,  TblProduct product)
+        public async Task<TblProduct> GetProductByIdAsync(string productId)
         {
-            return false;
+            return await _context.TblProducts.AsNoTracking().FirstOrDefaultAsync(p => p.ProductId == productId);
         }
 
-        public bool DeleteProduct(string id, TblProduct product)
+        public async Task<List<TblGem>> GetGemsByProductIdAsync(string productId)
         {
-            return false;
+            return await (from gem in _context.TblGems
+                          join productGem in _context.TblProductGems on gem.GemId equals productGem.GemId
+                          where productGem.ProductId == productId
+                          select gem).AsNoTracking().ToListAsync();
+        }
+
+        public IQueryable<TblGemPriceList> GetGemPriceList(TblGem gem)
+        {
+            return _context.TblGemPriceLists
+                .Where(gpl => gpl.Origin == gem.Origin &&
+                              gpl.CaratWeight == gem.CaratWeight &&
+                              gpl.Color == gem.Color &&
+                              gpl.Cut == gem.Cut &&
+                              gpl.Clarity == gem.Clarity)
+                .OrderByDescending(gpl => gpl.EffDate).AsNoTracking();
+        }
+
+        public async Task<List<TblProductMaterial>> GetProductMaterialsAsync(string productId)
+        {
+            return await _context.TblProductMaterials
+                .Where(pm => pm.ProductId == productId)
+                .AsNoTracking().ToListAsync();
+        }
+
+        public IQueryable<TblMaterialPriceList> GetMaterialPriceList(string materialId)
+        {
+            return _context.TblMaterialPriceLists
+                .Where(mpl => mpl.MaterialId == materialId)
+                .OrderByDescending(mpl => mpl.EffDate)
+                .AsNoTracking();
         }
     }
 }

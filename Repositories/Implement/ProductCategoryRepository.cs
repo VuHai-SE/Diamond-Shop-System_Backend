@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using BusinessObjects;
 using DAOs;
 
-namespace Repositories
+namespace Repositories.Implement
 {
     public class ProductCategoryRepository : IProductCategoryRepository
     {

@@ -12,7 +12,6 @@ namespace Services
         public List<TblProduct> GetProducts();
         public TblProduct GetProduct(string id);
         public TblProduct AddProduct(TblProduct product);
-        public bool UpdateProduct(string id, TblProduct product);
-        public bool DeleteProduct(string id, TblProduct product);
+        Task<double> CalculateProductPriceAsync(string productId);
     }
 }

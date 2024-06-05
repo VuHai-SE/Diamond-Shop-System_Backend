@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BusinessObjects;
 using DAOs;
 using Services;
+using Services.Implement;
 
 namespace DiamondStoreAPI.Controllers
 {

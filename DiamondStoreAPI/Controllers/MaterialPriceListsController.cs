@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BusinessObjects;
 using Services;
+using Services.Implement;
 
 namespace DiamondStoreAPI.Controllers
 {

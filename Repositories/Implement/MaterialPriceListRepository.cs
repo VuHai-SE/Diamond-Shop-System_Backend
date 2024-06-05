@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 using BusinessObjects;
 using DAOs;
 
-namespace Repositories
+namespace Repositories.Implement
 {
     public class MaterialPriceListRepository : IMaterialPriceListRepository
     {
         private readonly MaterialPriceListDAO materialPriceListDAO = null;
-        
+
         public MaterialPriceListRepository()
         {
             if (materialPriceListDAO == null)

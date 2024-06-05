@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using BusinessObjects;
 using DAOs;
 
-namespace Repositories
+namespace Repositories.Implement
 {
     public class GemPriceListRepository : IGemPriceListRepository
     {
@@ -16,7 +16,7 @@ namespace Repositories
         {
             if (gemPriceListDAO == null)
             {
-                gemPriceListDAO= new GemPriceListDAO();
+                gemPriceListDAO = new GemPriceListDAO();
             }
         }
 

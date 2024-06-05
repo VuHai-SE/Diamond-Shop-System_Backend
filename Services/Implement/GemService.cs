@@ -5,8 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects;
 using Repositories;
+using Repositories.Implement;
 
-namespace Services
+namespace Services.Implement
 {
     public class GemService : IGemService
     {

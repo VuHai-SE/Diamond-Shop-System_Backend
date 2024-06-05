@@ -1,7 +1,15 @@
 using BusinessObjects;
+using DAOs;
 using Microsoft.EntityFrameworkCore;
+using Repositories.Implement;
+using Repositories;
+using Services.Implement;
+using Services;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddScoped<ProductDAO>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 // Add services to the container.
 builder.Services.AddDbContext<DiamondStoreContext>(options =>
