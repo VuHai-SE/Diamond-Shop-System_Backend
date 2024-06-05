@@ -5,9 +5,9 @@ namespace BusinessObjects;
 
 public partial class TblOrderDetail
 {
-    public string OrderDetailId { get; set; } = null!;
+    public int OrderDetailId { get; set; }
 
-    public string? OrderId { get; set; }
+    public int? OrderId { get; set; }
 
     public string? ProductId { get; set; }
 
