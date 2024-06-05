@@ -115,50 +115,50 @@ VALUES
 ('P004', 'G002');
 
 -- Insert sample data into Tbl_Order
-INSERT INTO Tbl_Order (OrderID, CustomerID, OrderDate, PaymentMethod, OrderStatus, ShippingDate, ReceiveDate, StaffID, ShipperID, ShipStatus)
+INSERT INTO Tbl_Order (CustomerID, OrderDate, PaymentMethod, OrderStatus, ShippingDate, ReceiveDate, StaffID, ShipperID, ShipStatus)
 VALUES 
-('O001', 'C001', '2024-05-01', 'Credit Card', 'Delivered', '2024-05-02', '2024-05-05', 'S001', 'SP001', 'Done'),
-('O002', 'C002', '2024-05-02', 'Paypal', 'Delivered', '2024-05-03', '2024-05-06', 'S002', 'SP002', 'Done'),
-('O003', 'C003', '2024-05-03', 'Cash on Delivery', 'Processing', NULL, NULL, 'S001', 'SP002', 'Pending'),
-('O004', 'C004', '2024-05-04', 'Credit Card', 'Delivered', '2024-05-05', '2024-05-08', 'S002', 'SP001', 'Done'),
-('O005', 'C005', '2024-05-05', 'Bank Transfer', 'Delivered', '2024-05-06', '2024-05-09', 'S001', 'SP002', 'Done');
+('C001', '2024-05-01', 'Credit Card', 'Delivered', '2024-05-02', '2024-05-05', 'S001', 'SP001', 'Done'),
+('C002', '2024-05-02', 'Paypal', 'Delivered', '2024-05-03', '2024-05-06', 'S002', 'SP002', 'Done'),
+('C003', '2024-05-03', 'Cash on Delivery', 'Processing', NULL, NULL, 'S001', 'SP002', 'Pending'),
+('C004', '2024-05-04', 'Credit Card', 'Delivered', '2024-05-05', '2024-05-08', 'S002', 'SP001', 'Done'),
+('C005', '2024-05-05', 'Bank Transfer', 'Delivered', '2024-05-06', '2024-05-09', 'S001', 'SP002', 'Done');
 
 
 -- Insert sample data into Tbl_OrderDetail
-INSERT INTO Tbl_OrderDetail (OrderDetailID, OrderID, ProductID, CustomizedSize, CustomizedAmount, Quantity, TotalPrice, FinalPrice)
+INSERT INTO Tbl_OrderDetail (OrderID, ProductID, CustomizedSize, CustomizedAmount, Quantity, TotalPrice, FinalPrice)
 VALUES 
-('OD001', 'O001', 'P001', 8, 5.0, 1, 450.0, 427.5),
-('OD002', 'O002', 'P002', 18, 10.0, 2, 200.0, 180.0),
-('OD003', 'O003', 'P003', 9, 8.0, 1, 432.0, 421.0),
-('OD004', 'O004', 'P004', 4, 6.0, 1, 2160.0, 1836.0),
-('OD005', 'O005', 'P005', 42, 7.0, 1, 425.0, 382.5);
+(1, 'P001', 8, 5.0, 1, 450.0, 427.5),
+(2, 'P002', 18, 10.0, 2, 200.0, 180.0),
+(3, 'P003', 9, 8.0, 1, 432.0, 421.0),
+(4, 'P004', 4, 6.0, 1, 2160.0, 1836.0),
+(5, 'P005', 42, 7.0, 1, 425.0, 382.5);
 
 -- Insert sample data into Tbl_Payment
 INSERT INTO Tbl_Payment (OrderID, CustomerID, PaymentMethod, Deposits, PayDetail)
 VALUES 
-('O001', 'C001', 'Credit Card', 100.0, 'Paid in full'),
-('O002', 'C002', 'Paypal', 50.0, 'Paid in full'),
-('O003', 'C003', 'Cash on Delivery', 0.0, 'To be paid upon delivery'),
-('O004', 'C004', 'Credit Card', 100.0, 'Paid in full'),
-('O005', 'C005', 'Bank Transfer', 150.0, 'Paid in full');
+(1, 'C001', 'Credit Card', 100.0, 'Paid in full'),
+(2, 'C002', 'Paypal', 50.0, 'Paid in full'),
+(3, 'C003', 'Cash on Delivery', 0.0, 'To be paid upon delivery'),
+(4, 'C004', 'Credit Card', 100.0, 'Paid in full'),
+(5, 'C005', 'Bank Transfer', 150.0, 'Paid in full');
 
 -- Insert sample data into Tbl_Warranty
 INSERT INTO Tbl_Warranty (WarrantyID, OrderDetailID, WarrantyStartDate, WarrantyEndDate)
 VALUES 
-('W001', 'OD001', '2024-05-05', '2025-05-05'),
-('W002', 'OD002', '2024-05-07', '2025-05-07'),
-('W003', 'OD003', '2024-05-09', '2025-05-09'),
-('W004', 'OD004', '2024-05-11', '2025-05-11'),
-('W005', 'OD005', '2024-05-13', '2025-05-13');
+('W001', 1, '2024-05-05', '2025-05-05'),
+('W002', 2, '2024-05-07', '2025-05-07'),
+('W003', 3, '2024-05-09', '2025-05-09'),
+('W004', 4, '2024-05-11', '2025-05-11'),
+('W005', 5, '2024-05-13', '2025-05-13');
 
 -- Insert sample data into Tbl_DiamondGradingReport
-INSERT INTO Tbl_DiamondGradingReport (ReportID, GemID, GenerateDate, Image)
+INSERT INTO Tbl_DiamondGradingReport (GemID, GenerateDate, Image)
 VALUES 
-('R001', 'G001', '2024-01-01', 'report1.jpg'),
-('R002', 'G002', '2024-01-02', 'report2.jpg'),
-('R003', 'G003', '2024-01-03', 'report3.jpg'),
-('R004', 'G004', '2024-01-04', 'report4.jpg'),
-('R005', 'G005', '2024-01-05', 'report5.jpg');
+('G001', '2024-01-01', 'report1.jpg'),
+('G002', '2024-01-02', 'report2.jpg'),
+('G003', '2024-01-03', 'report3.jpg'),
+('G004', '2024-01-04', 'report4.jpg'),
+('G005', '2024-01-05', 'report5.jpg');
 
 INSERT INTO Tbl_Product (ProductName, Image) 
 VALUES
