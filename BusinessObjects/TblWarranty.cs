@@ -7,7 +7,7 @@ public partial class TblWarranty
 {
     public string WarrantyId { get; set; } = null!;
 
-    public string? OrderDetailId { get; set; }
+    public int? OrderDetailId { get; set; }
 
     public DateTime? WarrantyStartDate { get; set; }
 
