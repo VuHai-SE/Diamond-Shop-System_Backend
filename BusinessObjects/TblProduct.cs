@@ -33,7 +33,7 @@ public partial class TblProduct
 
     public virtual ICollection<TblOrderDetail> TblOrderDetails { get; set; } = new List<TblOrderDetail>();
 
-    public virtual ICollection<TblProductMaterial> TblProductMaterials { get; set; } = new List<TblProductMaterial>();
+    public virtual ICollection<TblProductGem> TblProductGems { get; set; } = new List<TblProductGem>();
 
-    public virtual ICollection<TblGem> Gems { get; set; } = new List<TblGem>();
+    public virtual ICollection<TblProductMaterial> TblProductMaterials { get; set; } = new List<TblProductMaterial>();
 }

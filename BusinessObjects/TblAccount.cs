@@ -5,7 +5,7 @@ namespace BusinessObjects;
 
 public partial class TblAccount
 {
-    public string AccountId { get; set; } = null!;
+    public int AccountId { get; set; }
 
     public string? Username { get; set; }
 
@@ -13,7 +13,9 @@ public partial class TblAccount
 
     public string? Role { get; set; }
 
-    public virtual ICollection<TblCustomer> TblCustomers { get; set; } = new List<TblCustomer>();
+    public virtual TblCustomer? TblCustomer { get; set; }
 
-    public virtual TblStaff? TblStaff { get; set; }
+    public virtual TblSaleStaff? TblSaleStaff { get; set; }
+
+    public virtual TblShipper? TblShipper { get; set; }
 }

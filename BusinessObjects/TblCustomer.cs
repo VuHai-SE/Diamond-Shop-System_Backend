@@ -7,7 +7,7 @@ public partial class TblCustomer
 {
     public string CustomerId { get; set; } = null!;
 
-    public string? AccountId { get; set; }
+    public int? AccountId { get; set; }
 
     public string? FirstName { get; set; }
 
@@ -32,4 +32,6 @@ public partial class TblCustomer
     public virtual TblAccount? Account { get; set; }
 
     public virtual ICollection<TblOrder> TblOrders { get; set; } = new List<TblOrder>();
+
+    public virtual ICollection<TblPayment> TblPayments { get; set; } = new List<TblPayment>();
 }

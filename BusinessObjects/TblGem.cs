@@ -29,5 +29,5 @@ public partial class TblGem
 
     public virtual TblDiamondGradingReport? TblDiamondGradingReport { get; set; }
 
-    public virtual ICollection<TblProduct> Products { get; set; } = new List<TblProduct>();
+    public virtual ICollection<TblProductGem> TblProductGems { get; set; } = new List<TblProductGem>();
 }
