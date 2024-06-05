@@ -5,7 +5,7 @@ namespace BusinessObjects;
 
 public partial class TblDiamondGradingReport
 {
-    public string ReportId { get; set; } = null!;
+    public int ReportId { get; set; }
 
     public string? GemId { get; set; }
 
