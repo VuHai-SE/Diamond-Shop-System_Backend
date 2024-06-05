@@ -159,3 +159,10 @@ VALUES
 ('R003', 'G003', '2024-01-03', 'report3.jpg'),
 ('R004', 'G004', '2024-01-04', 'report4.jpg'),
 ('R005', 'G005', '2024-01-05', 'report5.jpg');
+
+Insert into Tbl_Product(Image)
+values
+('HIGH JEWELLERY NECKLACE', 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw47181d40/images/large/0173c18084d351718d0a9e48cbf37bf4.png?sw=350&sh=350&sm=fit&sfrm=png'),
+('WHITE GOLD CARTIER NECKLACE', 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dwffda1a5e/images/large/a7cde65b34e85f8d81ac915d458c5f9c.png?sw=350&sh=350&sm=fit&sfrm=png'),
+('HIGH JEWELLERY NECKLACE', 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw1a70f15f/images/large/f1d14e7bda6653d094c29e0e8e0c255d.png?sw=750&sh=750&sm=fit&sfrm=png'),
+('WHITE GOLD CARTIER NECKLACE' , 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw239464bc/images/large/624964b5d1fa5b4bb3477f89a0c4ac85.png?sw=350&sh=350&sm=fit&sfrm=png'),
