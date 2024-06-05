@@ -160,9 +160,23 @@ VALUES
 ('R004', 'G004', '2024-01-04', 'report4.jpg'),
 ('R005', 'G005', '2024-01-05', 'report5.jpg');
 
-Insert into Tbl_Product(Image)
-values
+INSERT INTO Tbl_Product (ProductName, Image) VALUES
 ('HIGH JEWELLERY NECKLACE', 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw47181d40/images/large/0173c18084d351718d0a9e48cbf37bf4.png?sw=350&sh=350&sm=fit&sfrm=png'),
 ('WHITE GOLD CARTIER NECKLACE', 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dwffda1a5e/images/large/a7cde65b34e85f8d81ac915d458c5f9c.png?sw=350&sh=350&sm=fit&sfrm=png'),
 ('HIGH JEWELLERY NECKLACE', 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw1a70f15f/images/large/f1d14e7bda6653d094c29e0e8e0c255d.png?sw=750&sh=750&sm=fit&sfrm=png'),
-('WHITE GOLD CARTIER NECKLACE' , 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw239464bc/images/large/624964b5d1fa5b4bb3477f89a0c4ac85.png?sw=350&sh=350&sm=fit&sfrm=png'),
+('WHITE GOLD CARTIER NECKLACE', 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw239464bc/images/large/624964b5d1fa5b4bb3477f89a0c4ac85.png?sw=350&sh=350&sm=fit&sfrm=png'),
+('CREATIVE COLLECTION NECKLACE', 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw0268880d/images/large/8adcabe099f45e909df00c8611bb72ed.png?sw=350&sh=350&sm=fit&sfrm=png'),
+('CACTUS CARTIER NECKLACE', 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw46b1b322/images/large/acb4bede2579540ba22c8aa8772cbafa.png?sw=350&sh=350&sm=fit&sfrm=png'),
+('DIAMOND COLLECTION NECKLACE', 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dwdaadb731/images/large/e0291a1acfd05dd4a650685bcc9bae7b.png?sw=350&sh=350&sm=fit&sfrm=png'),
+('ESSENTIAL LINES NECKLACE', 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw8912a4d8/images/large/b9e2c2997bd95191a9714fa3827b4ce8.png?sw=350&sh=350&sm=fit&sfrm=png'),
+('HIGH JEWELLERY NECKLACE', 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw7a7ff269/images/large/18c28814474f5cd8ac3f7a8ce2b77c4f.png?sw=350&sh=350&sm=fit&sfrm=png'),
+('PLUIE CARTIER NECKLACE', 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw8306c07f/images/large/3ceae3fdcd5650a4a8d2297609e328a1.png?sw=350&sh=350&sm=fit&sfrm=png'),
+('ROSE GOLD ROWS', 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw81b5d6ac/images/large/f204dae450545ef1a598dd970d2c03bd.png?sw=350&sh=350&sm=fit&sfrm=png'),
+('HIGH JEWELLERY NECKLACE', 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dwd5cc280c/images/large/1b97625136395d54b5b06a15c042c1ee.png?sw=350&sh=350&sm=fit&sfrm=png'),
+('HIGH JEWELLERY NECKLACE', 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dwe9bcd418/images/large/53dba1afd1595a53b508412270b30e2b.png?sw=350&sh=350&sm=fit&sfrm=png'),
+('ESSENTIAL LINES NECKLACE', 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw5f9f8a78/images/large/666f7a6d40ba57faa14e04d6c171c9d2.png?sw=350&sh=350&sm=fit&sfrm=png'),
+('CREATIVE COLLECTION NECKLACE', 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dwe9bcd418/images/large/53dba1afd1595a53b508412270b30e2b.png?sw=350&sh=350&sm=fit&sfrm=png'),
+('NATURAL NECKLACE', 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw5d4cf56c/images/large/0ba43057d9665138b65bb0d9089d0228.png?sw=350&sh=350&sm=fit&sfrm=png'),
+('WHITE GOLD CARTIER NECKLACE', 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw0268880d/images/large/8adcabe099f45e909df00c8611bb72ed.png?sw=350&sh=350&sm=fit&sfrm=png'),
+('HIGH JEWELLERY NECKLACE', 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw85bb1d04/images/large/533c17a7178e507d88f2510e3edd8405.png?sw=350&sh=350&sm=fit&sfrm=png'),
+('CACTUS CARTIER NECKLACE', 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dwe0c53b15/images/large/38c830fdb5cd5eca93a643a7bd162a1c.png?sw=350&sh=350&sm=fit&sfrm=png');
