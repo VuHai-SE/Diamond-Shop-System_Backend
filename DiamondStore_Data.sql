@@ -1,4 +1,4 @@
-﻿USE DiamondStore;
+USE DiamondStore;
 GO
 
 -- Insert sample data into Tbl_MaterialCategory
@@ -47,28 +47,39 @@ VALUES
 ('C005', 'Watches');
 
 -- Insert sample data into Tbl_Account
-INSERT INTO Tbl_Account (AccountID, Username, Password, Role)
+INSERT INTO Tbl_Account (Username, Password, Role)
 VALUES 
-('A001', 'johndoe', 'password123', 'Customer'),
-('A002', 'janedoe', 'password123', 'Customer'),
-('A003', 'staff1', 'password123', 'Staff'),
-('A004', 'admin1', 'password123', 'Admin'),
-('A005', 'staff2', 'password123', 'Staff');
+('johndoe', 'password123', 'Customer'), --1
+('janedoe', 'password123', 'Customer'), --2
+('staff1', 'password123', 'SaleStaff'), --3
+('admin1', 'password123', 'Admin'), --4
+('staff2', 'password123', 'SaleStaff'), --5
+('shipper1', 'password123', 'Shipper'),--6
+('shipper2', 'password123', 'Shipper'),--7
+('tom', 'password123', 'Customer'),--8
+('lisa', 'password123', 'Customer'),--9
+('mark', 'password123', 'Customer');--10
 
 -- Insert sample data into Tbl_Staff
-INSERT INTO Tbl_Staff (StaffID, AccountID, FirstName, LastName)
+INSERT INTO Tbl_SaleStaff (StaffID, AccountID, FirstName, LastName)
 VALUES 
-('S001', 'A003', 'Alice', 'Smith'),
-('S002', 'A005', 'Bob', 'Johnson');
+('S001', 3, 'Alice', 'Smith'),
+('S002', 5, 'Bob', 'Johnson');
+
+INSERT INTO Tbl_Shipper(ShipperID, AccountID, FirstName, LastName)
+VALUES 
+('SP001', 9, 'Jack', 'Grealish'),
+('SP002', 10, 'Marcus', 'Rashford');
+
 
 -- Insert sample data into Tbl_Customer
 INSERT INTO Tbl_Customer (CustomerID, AccountID, FirstName, LastName, Gender, Birthday, Email, PhoneNumber, Address, Ranking, DiscountRate, Status)
 VALUES 
-('C001', 'A001', 'John', 'Doe', 'Male', '1990-01-01', 'john.doe@example.com', '0123456789', '123 Main St', 'Silver', 5.0, 1),
-('C002', 'A002', 'Jane', 'Doe', 'Female', '1992-02-02', 'jane.doe@example.com', '0987654321', '456 Elm St', 'Gold', 10.0, 1),
-('C003', NULL, 'Tom', 'Smith', 'Male', '1985-03-03', 'tom.smith@example.com', '0123456788', '789 Pine St', 'Bronze', 2.0, 1),
-('C004', NULL, 'Lisa', 'Brown', 'Female', '1988-04-04', 'lisa.brown@example.com', '0987654320', '101 Oak St', 'Platinum', 15.0, 1),
-('C005', NULL, 'Mark', 'Davis', 'Male', '1995-05-05', 'mark.davis@example.com', '0123456787', '202 Cedar St', 'Silver', 5.0, 1);
+('C001', 1, 'John', 'Doe', 'Male', '1990-01-01', 'john.doe@example.com', '0123456789', '123 Main St', 'Silver', 5.0, 1),
+('C002', 2, 'Jane', 'Doe', 'Female', '1992-02-02', 'jane.doe@example.com', '0987654321', '456 Elm St', 'Gold', 10.0, 1),
+('C003', 8, 'Tom', 'Smith', 'Male', '1985-03-03', 'tom.smith@example.com', '0123456788', '789 Pine St', 'Bronze', 2.0, 1),
+('C004', 9, 'Lisa', 'Brown', 'Female', '1988-04-04', 'lisa.brown@example.com', '0987654320', '101 Oak St', 'Platinum', 15.0, 1),
+('C005', 10, 'Mark', 'Davis', 'Male', '1995-05-05', 'mark.davis@example.com', '0123456787', '202 Cedar St', 'Silver', 5.0, 1);
 
 -- Insert sample data into Tbl_Membership
 INSERT INTO Tbl_Membership (MinSpend, MaxSpend, DiscountRate, Ranking)
@@ -104,13 +115,14 @@ VALUES
 ('P004', 'G002');
 
 -- Insert sample data into Tbl_Order
-INSERT INTO Tbl_Order (OrderID, CustomerID, OrderDate, PaymentMethod, OrderStatus, ShippingDate, ReceiveDate, StaffID, ShipperID)
+INSERT INTO Tbl_Order (OrderID, CustomerID, OrderDate, PaymentMethod, OrderStatus, ShippingDate, ReceiveDate, StaffID, ShipperID, ShipStatus)
 VALUES 
-('O001', 'C001', '2024-05-01', 'Credit Card', 'Shipped', '2024-05-02', '2024-05-05', 'S001', 'SHIP01'),
-('O002', 'C002', '2024-05-02', 'Paypal', 'Delivered', '2024-05-03', '2024-05-06', 'S002', 'SHIP02'),
-('O003', 'C003', '2024-05-03', 'Cash on Delivery', 'Processing', NULL, NULL, 'S001', 'SHIP03'),
-('O004', 'C004', '2024-05-04', 'Credit Card', 'Shipped', '2024-05-05', '2024-05-08', 'S002', 'SHIP04'),
-('O005', 'C005', '2024-05-05', 'Bank Transfer', 'Delivered', '2024-05-06', '2024-05-09', 'S001', 'SHIP05');
+('O001', 'C001', '2024-05-01', 'Credit Card', 'Delivered', '2024-05-02', '2024-05-05', 'S001', 'SP001', 'Done'),
+('O002', 'C002', '2024-05-02', 'Paypal', 'Delivered', '2024-05-03', '2024-05-06', 'S002', 'SP002', 'Done'),
+('O003', 'C003', '2024-05-03', 'Cash on Delivery', 'Processing', NULL, NULL, 'S001', 'SP002', 'Pending'),
+('O004', 'C004', '2024-05-04', 'Credit Card', 'Delivered', '2024-05-05', '2024-05-08', 'S002', 'SP001', 'Done'),
+('O005', 'C005', '2024-05-05', 'Bank Transfer', 'Delivered', '2024-05-06', '2024-05-09', 'S001', 'SP002', 'Done');
+
 
 -- Insert sample data into Tbl_OrderDetail
 INSERT INTO Tbl_OrderDetail (OrderDetailID, OrderID, ProductID, CustomizedSize, CustomizedAmount, Quantity, TotalPrice, FinalPrice)

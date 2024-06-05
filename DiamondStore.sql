@@ -1,4 +1,4 @@
-﻿-- Drop Database if it exists
+-- Drop Database if it exists
 use master
 IF EXISTS (SELECT * FROM sys.databases WHERE name = 'DiamondStore')
 BEGIN
@@ -59,15 +59,23 @@ CREATE TABLE Tbl_ProductCategory (
 );
 
 CREATE TABLE Tbl_Account (
-    AccountID NVARCHAR(8) PRIMARY KEY,
+    AccountID INT IDENTITY(1,1) PRIMARY KEY,
     Username NVARCHAR(100) UNIQUE,
     Password NVARCHAR(100),
     Role NVARCHAR(50)
 );
 
-CREATE TABLE Tbl_Staff (
+CREATE TABLE Tbl_SaleStaff (
     StaffID NVARCHAR(8) PRIMARY KEY,
-    AccountID NVARCHAR(8) UNIQUE,
+    AccountID INT UNIQUE,
+    FirstName NVARCHAR(100),
+    LastName NVARCHAR(100),
+    FOREIGN KEY (AccountID) REFERENCES Tbl_Account(AccountID) ON DELETE CASCADE
+);
+
+CREATE TABLE Tbl_Shipper (
+    ShipperID NVARCHAR(8) PRIMARY KEY,
+    AccountID INT UNIQUE,
     FirstName NVARCHAR(100),
     LastName NVARCHAR(100),
     FOREIGN KEY (AccountID) REFERENCES Tbl_Account(AccountID) ON DELETE CASCADE
@@ -75,7 +83,7 @@ CREATE TABLE Tbl_Staff (
 
 CREATE TABLE Tbl_Customer (
     CustomerID NVARCHAR(8) PRIMARY KEY,
-    AccountID NVARCHAR(8),
+    AccountID INT UNIQUE,
     FirstName NVARCHAR(100),
     LastName NVARCHAR(100),
     Gender NVARCHAR(10),
@@ -113,19 +121,19 @@ CREATE TABLE Tbl_Product (
 );
 
 CREATE TABLE Tbl_ProductMaterial (
+	ID INT IDENTITY(1,1) PRIMARY KEY,
     ProductID NVARCHAR(8),
     MaterialID NVARCHAR(8),
     Weight FLOAT,
-    PRIMARY KEY (ProductID, MaterialID),
     FOREIGN KEY (ProductID) REFERENCES Tbl_Product(ProductID) ON DELETE CASCADE,
     FOREIGN KEY (MaterialID) REFERENCES Tbl_MaterialCategory(MaterialID) ON DELETE CASCADE
 );
 
 -- Tbl_ProductGem
 CREATE TABLE Tbl_ProductGem (
+	ID INT IDENTITY(1,1) PRIMARY KEY,
     ProductID NVARCHAR(8),
     GemID NVARCHAR(8),
-    PRIMARY KEY (ProductID, GemID),
     FOREIGN KEY (ProductID) REFERENCES Tbl_Product(ProductID) ON DELETE CASCADE,
     FOREIGN KEY (GemID) REFERENCES Tbl_Gem(GemID) ON DELETE CASCADE
 );
@@ -140,8 +148,10 @@ CREATE TABLE Tbl_Order (
     ReceiveDate DATETIME,
     StaffID NVARCHAR(8),
     ShipperID NVARCHAR(8),
-    FOREIGN KEY (CustomerID) REFERENCES Tbl_Customer(CustomerID) ON DELETE SET NULL,
-    FOREIGN KEY (StaffID) REFERENCES Tbl_Staff(StaffID) ON DELETE CASCADE
+	ShipStatus NVARCHAR(50),
+    FOREIGN KEY (CustomerID) REFERENCES Tbl_Customer(CustomerID),
+    FOREIGN KEY (StaffID) REFERENCES Tbl_SaleStaff(StaffID),
+	FOREIGN KEY (ShipperID) REFERENCES Tbl_Shipper(ShipperID)
 );
 
 CREATE TABLE Tbl_OrderDetail (
@@ -158,12 +168,12 @@ CREATE TABLE Tbl_OrderDetail (
 );
 
 CREATE TABLE Tbl_Payment (
+	ID INT IDENTITY(1,1) PRIMARY KEY,
     OrderID NVARCHAR(8),
     CustomerID NVARCHAR(8),
     PaymentMethod NVARCHAR(50),
     Deposits FLOAT,
     PayDetail NVARCHAR(255),
-    --PRIMARY KEY (OrderID, CustomerID),
     FOREIGN KEY (OrderID) REFERENCES Tbl_Order(OrderID) ON DELETE CASCADE,
     FOREIGN KEY (CustomerID) REFERENCES Tbl_Customer(CustomerID) ON DELETE SET NULL
 );
