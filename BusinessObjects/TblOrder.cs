@@ -23,9 +23,15 @@ public partial class TblOrder
 
     public string? ShipperId { get; set; }
 
+    public string? ShipStatus { get; set; }
+
     public virtual TblCustomer? Customer { get; set; }
 
-    public virtual TblStaff? Staff { get; set; }
+    public virtual TblShipper? Shipper { get; set; }
+
+    public virtual TblSaleStaff? Staff { get; set; }
 
     public virtual ICollection<TblOrderDetail> TblOrderDetails { get; set; } = new List<TblOrderDetail>();
+
+    public virtual ICollection<TblPayment> TblPayments { get; set; } = new List<TblPayment>();
 }

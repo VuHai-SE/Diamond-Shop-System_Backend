@@ -3,17 +3,15 @@ using System.Collections.Generic;
 
 namespace BusinessObjects;
 
-public partial class TblProductMaterial
+public partial class TblProductGem
 {
     public int Id { get; set; }
 
     public string? ProductId { get; set; }
 
-    public string? MaterialId { get; set; }
+    public string? GemId { get; set; }
 
-    public double? Weight { get; set; }
-
-    public virtual TblMaterialCategory? Material { get; set; }
+    public virtual TblGem? Gem { get; set; }
 
     public virtual TblProduct? Product { get; set; }
 }

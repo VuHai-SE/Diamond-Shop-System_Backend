@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Update.Internal;
 
 namespace DAOs
@@ -21,7 +22,7 @@ namespace DAOs
         }
 
         public List<TblProductCategory> GetProductCategories() 
-            => dbContext.TblProductCategories.ToList();
+            => dbContext.TblProductCategories.Include(cat => cat.TblProducts).ToList();
 
         public TblProductCategory AddProductCategories(TblProductCategory productCategory)
         {
@@ -31,7 +32,7 @@ namespace DAOs
         }
 
         public TblProductCategory GetProductCategory(string id)
-            => dbContext.TblProductCategories.FirstOrDefault(m => m.CategoryId.Equals(id));
+            => dbContext.TblProductCategories.Include(cat => cat.TblProducts).FirstOrDefault(m => m.CategoryId.Equals(id));
 
         public bool UpdateProductCategory(string id,  TblProductCategory productCategory)
         {
