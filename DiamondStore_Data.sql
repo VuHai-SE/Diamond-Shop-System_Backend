@@ -181,3 +181,25 @@ VALUES
 ('P022', 'White Gold Cartier Necklace', 'N022', 'White Gold Cartier Necklace', 'C002', 1200.0, 2400.0, 650.0, 2.9, 18, 'white_gold_cartier_necklace_3.png', 1),
 ('P023', 'High Jewellery Necklace', 'N023', 'High Jewellery Necklace', 'C002', 1250.0, 2500.0, 680.0, 2.95, 18, 'high_jewellery_necklace_6.png', 1),
 ('P024', 'Cactus Cartier Necklace', 'N024', 'Cactus Cartier Necklace', 'C002', 1300.0, 2600.0, 700.0, 3.0, 18, 'cactus_cartier_necklace_2.png', 1);
+
+INSERT INTO Tbl_Product (ProductID, ProductName, ProductCode, Description, CategoryID, MaterialCost, GemCost, ProductionCost, PriceRate, ProductSize, Image, Status)
+VALUES 
+('P025', 'Yellow Gold Bracelet', 'B002', 'Yellow Gold Bracelet', 'C003', 300.0, 0.0, 100.0, 1.5, 7, 'c694697eb0fe59438264df232a5bb04c.png', 1),
+('P026', 'Love Bracelet, Brushed Finish', 'B003', 'Love Bracelet, Brushed Finish', 'C003', 320.0, 0.0, 105.0, 1.6, 7, 'ce38e7d247cc55f696b9aad467fed8bb.png', 1),
+('P027', 'White Gold Bracelet', 'B004', 'White Gold Bracelet', 'C003', 340.0, 0.0, 110.0, 1.7, 7, '50ebc21a2ed6517eb65b42da4bcad436.png', 1),
+('P028', 'Trinity Bracelet', 'B005', 'Trinity Bracelet', 'C003', 360.0, 0.0, 115.0, 1.8, 7, '296992162cb055bd8a164ac42d09729e.png', 1),
+('P029', 'Cartier of Love Amour Bracelet', 'B006', 'Cartier of Love Amour Bracelet', 'C003', 380.0, 0.0, 120.0, 1.9, 7, '3a2e8f9894305450b15cae24932aeb5a.png', 1),
+('P030', 'Cartier of Love Amour Bracelet XS', 'B007', 'Cartier of Love Amour Bracelet XS', 'C003', 400.0, 0.0, 125.0, 2.0, 7, '1a3d09bb6e115a80bee1408881f8fc46.png', 1),
+('P031', 'Cartier of Love Amour Bracelet L', 'B008', 'Cartier of Love Amour Bracelet L', 'C003', 420.0, 0.0, 130.0, 2.1, 7, '067147ce0a9050729f1d2d668860707c.png', 1),
+('P032', 'Love Bracelet', 'B009', 'Love Bracelet', 'C003', 440.0, 0.0, 135.0, 2.2, 7, '7588be8cc38f5afe98eb6fbd549128c6.png', 1),
+('P033', 'Panthere Cartier Bracelet', 'B010', 'Panthere Cartier Bracelet', 'C003', 460.0, 0.0, 140.0, 2.3, 7, '9c231fd015b257c2be89e78216ed958f.png', 1),
+('P034', 'Clash Cartier Bracelet', 'B011', 'Clash Cartier Bracelet', 'C003', 480.0, 0.0, 145.0, 2.4, 7, '19c1bd747ae350358c95d6bb9ce29ee2.png', 1),
+('P035', 'Love Bracelet', 'B012', 'Love Bracelet', 'C003', 500.0, 0.0, 150.0, 2.5, 7, '0d5c7536c1355250a837ff6f105854ba.png', 1),
+('P036', 'Rose Gold Bracelet', 'B013', 'Rose Gold Bracelet', 'C003', 520.0, 0.0, 155.0, 2.6, 7, 'd0ea4f64c1e95d8caf0c7c822031bd95.png', 1),
+('P037', 'Essential Lines Bracelet', 'B014', 'Essential Lines Bracelet', 'C003', 540.0, 0.0, 160.0, 2.7, 7, '1ff3bcfd19d5593f8f47590669099f3b.png', 1),
+('P038', 'Trinity Bracelet', 'B015', 'Trinity Bracelet', 'C003', 560.0, 0.0, 165.0, 2.8, 7, 'c4d9d7ffeda25cc68600b3749a58fbe8.png', 1),
+('P039', 'White Gold Bracelet', 'B016', 'White Gold Bracelet', 'C003', 580.0, 0.0, 170.0, 2.9, 7, '65442a6e13885ba09bfe68c572935734.png', 1),
+('P040', 'Trinity Extra L Bracelet', 'B017', 'Trinity Extra L Bracelet', 'C003', 600.0, 0.0, 175.0, 3.0, 7, 'b306cb3932c450349ee98e0e3bb7c02b.png', 1),
+('P041', 'Clash Cartier Bracelet', 'B018', 'Clash Cartier Bracelet', 'C003', 620.0, 0.0, 180.0, 3.1, 7, '6a24231eca9253e881f77087839b9715.png', 1),
+('P042', 'Panthere Cartier Bracelet', 'B019', 'Panthere Cartier Bracelet', 'C003', 640.0, 0.0, 185.0, 3.2, 7, '77cd14a12d015b2485266bef49ca45b6.png', 1);
+
