@@ -139,7 +139,7 @@ CREATE TABLE Tbl_ProductGem (
 );
 
 CREATE TABLE Tbl_Order (
-    OrderID NVARCHAR(8) PRIMARY KEY,
+    OrderID INT IDENTITY(1,1) PRIMARY KEY,
     CustomerID NVARCHAR(8),
     OrderDate DATETIME,
     PaymentMethod NVARCHAR(50),
@@ -148,15 +148,15 @@ CREATE TABLE Tbl_Order (
     ReceiveDate DATETIME,
     StaffID NVARCHAR(8),
     ShipperID NVARCHAR(8),
-	ShipStatus NVARCHAR(50),
+    ShipStatus NVARCHAR(50),
     FOREIGN KEY (CustomerID) REFERENCES Tbl_Customer(CustomerID),
     FOREIGN KEY (StaffID) REFERENCES Tbl_SaleStaff(StaffID),
-	FOREIGN KEY (ShipperID) REFERENCES Tbl_Shipper(ShipperID)
+    FOREIGN KEY (ShipperID) REFERENCES Tbl_Shipper(ShipperID)
 );
 
 CREATE TABLE Tbl_OrderDetail (
-    OrderDetailID NVARCHAR(8) PRIMARY KEY,
-    OrderID NVARCHAR(8),
+    OrderDetailID INT IDENTITY(1,1) PRIMARY KEY,
+    OrderID INT,
     ProductID NVARCHAR(8),
     CustomizedSize INT,
     CustomizedAmount FLOAT,
@@ -169,7 +169,7 @@ CREATE TABLE Tbl_OrderDetail (
 
 CREATE TABLE Tbl_Payment (
 	ID INT IDENTITY(1,1) PRIMARY KEY,
-    OrderID NVARCHAR(8),
+    OrderID INT,
     CustomerID NVARCHAR(8),
     PaymentMethod NVARCHAR(50),
     Deposits FLOAT,
@@ -180,14 +180,14 @@ CREATE TABLE Tbl_Payment (
 
 CREATE TABLE Tbl_Warranty (
     WarrantyID NVARCHAR(8) PRIMARY KEY,
-    OrderDetailID NVARCHAR(8) UNIQUE,
+    OrderDetailID INT UNIQUE,
     WarrantyStartDate DATETIME,
     WarrantyEndDate DATETIME,
     FOREIGN KEY (OrderDetailID) REFERENCES Tbl_OrderDetail(OrderDetailID) ON DELETE CASCADE
 );
 
 CREATE TABLE Tbl_DiamondGradingReport (
-    ReportID NVARCHAR(8) PRIMARY KEY,
+    ReportID INT IDENTITY(1,1) PRIMARY KEY,
     GemID NVARCHAR(8) UNIQUE,
     GenerateDate DATETIME,
     Image NVARCHAR(255),
