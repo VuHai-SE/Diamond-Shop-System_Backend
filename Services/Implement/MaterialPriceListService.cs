@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects;
 using Repositories;
+using Repositories.Implement;
 
 namespace Services.Implement
 {
@@ -16,7 +17,7 @@ namespace Services.Implement
         {
             if (materialPriceListRepository == null)
             {
-                //materialPriceListRepository = new MaterialPriceListRepository();
+                materialPriceListRepository = new MaterialPriceListRepository();
             }
         }
 

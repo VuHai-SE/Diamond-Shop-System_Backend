@@ -7,7 +7,7 @@ public partial class TblStaff
 {
     public string StaffId { get; set; } = null!;
 
-    public string? AccountId { get; set; }
+    public int? AccountId { get; set; }
 
     public string? FirstName { get; set; }
 
