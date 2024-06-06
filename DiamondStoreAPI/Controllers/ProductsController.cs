@@ -22,6 +22,7 @@ namespace DiamondStoreAPI.Controllers
             _productService = productService;
         }
 
+        // GET: api/Products
         [HttpGet]
         public async Task<IActionResult> GetAllProductsAndPrices()
         {
@@ -36,6 +37,7 @@ namespace DiamondStoreAPI.Controllers
             return Ok(response);
         }
 
+        // GET: api/Products/5
         [HttpGet("{productId}")]
         public async Task<IActionResult> GetProductPrice(string productId)
         {
