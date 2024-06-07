@@ -29,6 +29,8 @@ public partial class TblProduct
 
     public bool? Status { get; set; }
 
+    public double? UnitSizePrice { get; set; }
+
     public virtual TblProductCategory? Category { get; set; }
 
     public virtual ICollection<TblOrderDetail> TblOrderDetails { get; set; } = new List<TblOrderDetail>();
