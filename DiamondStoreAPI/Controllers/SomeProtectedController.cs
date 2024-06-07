@@ -6,7 +6,7 @@ namespace DiamondStoreAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin,Manager")] // Protect this endpoint for Admin and Manager roles
+    [Authorize(Roles = "Customer")] // Protect this endpoint for Admin and Manager roles
     public class SomeProtectedController : ControllerBase
     {
         [HttpGet]

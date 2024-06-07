@@ -10,6 +10,9 @@ namespace Repositories
     public interface IAccountRepository
     {
         Task<TblAccount> GetAccountByUsernameAsync(string username);
+
         Task AddAccountAsync(TblAccount account);
+
+        Task AddAccountByManagerAsync(TblAccount account);
     }
 }

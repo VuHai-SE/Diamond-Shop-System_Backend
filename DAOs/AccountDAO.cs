@@ -27,5 +27,11 @@ namespace DAOs
             _context.TblAccounts.Add(account);
             await _context.SaveChangesAsync();
         }
+
+        public async Task AddAccountByManagerAsync(TblAccount account)
+        {
+            _context.TblAccounts.Add(account);
+            await _context.SaveChangesAsync();
+        }
     }
 }
