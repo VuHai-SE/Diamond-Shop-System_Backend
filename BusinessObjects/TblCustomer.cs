@@ -5,7 +5,7 @@ namespace BusinessObjects;
 
 public partial class TblCustomer
 {
-    public string CustomerId { get; set; } = null!;
+    public int CustomerId { get; set; }
 
     public int? AccountId { get; set; }
 

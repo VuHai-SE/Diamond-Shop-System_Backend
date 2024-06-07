@@ -9,7 +9,7 @@ public partial class TblPayment
 
     public int? OrderId { get; set; }
 
-    public string? CustomerId { get; set; }
+    public int? CustomerId { get; set; }
 
     public string? PaymentMethod { get; set; }
 
