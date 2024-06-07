@@ -82,7 +82,7 @@ CREATE TABLE Tbl_Shipper (
 );
 
 CREATE TABLE Tbl_Customer (
-    CustomerID NVARCHAR(8) PRIMARY KEY,
+    CustomerID INT IDENTITY(1,1) PRIMARY KEY,
     AccountID INT UNIQUE,
     FirstName NVARCHAR(100),
     LastName NVARCHAR(100),
@@ -117,6 +117,7 @@ CREATE TABLE Tbl_Product (
     ProductSize INT,
     Image NVARCHAR(255),
     Status BIT,
+	UnitSizePrice FLOAT, ---ADD NEW
     FOREIGN KEY (CategoryID) REFERENCES Tbl_ProductCategory(CategoryID) ON DELETE CASCADE,
 );
 
@@ -140,7 +141,7 @@ CREATE TABLE Tbl_ProductGem (
 
 CREATE TABLE Tbl_Order (
     OrderID INT IDENTITY(1,1) PRIMARY KEY,
-    CustomerID NVARCHAR(8),
+    CustomerID INT,--THAY DOI KIEUR DU LIEU
     OrderDate DATETIME,
     PaymentMethod NVARCHAR(50),
     OrderStatus NVARCHAR(50),
@@ -170,7 +171,7 @@ CREATE TABLE Tbl_OrderDetail (
 CREATE TABLE Tbl_Payment (
 	ID INT IDENTITY(1,1) PRIMARY KEY,
     OrderID INT,
-    CustomerID NVARCHAR(8),
+    CustomerID INT,
     PaymentMethod NVARCHAR(50),
     Deposits FLOAT,
     PayDetail NVARCHAR(255),
@@ -179,7 +180,7 @@ CREATE TABLE Tbl_Payment (
 );
 
 CREATE TABLE Tbl_Warranty (
-    WarrantyID NVARCHAR(8) PRIMARY KEY,
+    WarrantyID INT IDENTITY(1,1) PRIMARY KEY,
     OrderDetailID INT UNIQUE,
     WarrantyStartDate DATETIME,
     WarrantyEndDate DATETIME,
