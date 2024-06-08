@@ -91,62 +91,62 @@ namespace DiamondStoreAPI.Controllers
         [HttpPost("createorder")]
         public async Task<IActionResult> CreateOrder([FromBody] NewOrderRequest newOrderRequest)
         {
-            
-                if (newOrderRequest == null)
+
+            if (newOrderRequest == null)
+            {
+                return BadRequest();
+            }
+            TblOrder newOrder = new TblOrder()
+            {
+                CustomerId = newOrderRequest.CustomerId,
+                PaymentMethod = newOrderRequest.PaymentMethod,
+                OrderDate = newOrderRequest.OrderDate,
+                OrderStatus = newOrderRequest.PaymentMethod.Equals("Cash on Delivery") ? "Processing" : "Accepted",
+                ShipStatus = "Pending",
+            };
+            var order = iOrderService.AddOrder(newOrder);
+            //add orderdetail
+            TblCustomer customer = iCustomerService.GetCustomerByID((int)order.CustomerId);
+            OrderInfo orderInfo = new OrderInfo();
+            orderInfo.OrderID = order.OrderId;
+
+            foreach (var p in newOrderRequest.Products)
+            {
+                string productID = p.ProductID;
+                int customizedSize = p.CustomizedSize;
+                ProductWithPriceResponse productWithPrice = await iProductService.GetProductAndPriceByIdAsync(productID);
+                TblProduct product = productWithPrice.product;
+                int productSize = (int)product.ProductSize;
+                TblOrderDetail newOrderDetail = new TblOrderDetail()
                 {
-                    return BadRequest();
-                }
-                TblOrder newOrder = new TblOrder()
-                {
-                    CustomerId = newOrderRequest.CustomerId,
-                    PaymentMethod = newOrderRequest.PaymentMethod,
-                    OrderDate = newOrderRequest.OrderDate,
-                    OrderStatus = newOrderRequest.PaymentMethod.Equals("Cash on Delivery") ? "Processing" : "Accepted",
-                    ShipStatus = "Pending",
+                    OrderId = order.OrderId,
+                    ProductId = productID,
+                    CustomizedSize = customizedSize,
+                    CustomizedAmount = (p.CustomizedSize == productSize) ? 0 :
+                        (product.UnitSizePrice * (customizedSize - productSize)),
+                    Quantity = p.Quantity,
                 };
-                var order = iOrderService.AddOrder(newOrder);
-                TblCustomer customer = iCustomerService.GetCustomerByID((int)order.CustomerId);
-                OrderInfo orderInfo = new OrderInfo();
-                orderInfo.OrderID = order.OrderId;
+                newOrderDetail.TotalPrice = productWithPrice.price * p.Quantity + newOrderDetail.CustomizedAmount;
 
-                foreach (var p in newOrderRequest.Products)
-                {
-                    string productID = p.ProductID;
-                    int customizedSize = p.CustomizedSize;
-                    ProductWithPriceResponse productWithPrice = await iProductService.GetProductAndPriceByIdAsync(productID);
-                    TblProduct product = productWithPrice.product;
-                    int productSize = (int)product.ProductSize;
-                    TblOrderDetail newOrderDetail = new TblOrderDetail()
-                    {
-                        OrderId = order.OrderId,
-                        ProductId = productID,
-                        CustomizedSize = customizedSize,
-                        CustomizedAmount = (p.CustomizedSize == productSize) ? 0 :
-                            (product.UnitSizePrice * (customizedSize - productSize)),
-                        Quantity = p.Quantity,
-                    };
-                    newOrderDetail.TotalPrice = productWithPrice.price * p.Quantity + newOrderDetail.CustomizedAmount;
+                newOrderDetail.FinalPrice = (1 - customer.DiscountRate) * newOrderDetail.TotalPrice;
+                var orderDetail = iOrderDetailService.AddOrderDetail(newOrderDetail);
+                orderInfo.products.Add(p);
+                orderInfo.TotalPrice = orderInfo.TotalPrice += (double)orderDetail.TotalPrice;
 
-                    newOrderDetail.FinalPrice = (1 - customer.DiscountRate) * newOrderDetail.TotalPrice;
-                    var orderDetail = iOrderDetailService.AddOrderDetail(newOrderDetail);
-                    TblPayment newPayMent = new TblPayment()
-                    {
-                        OrderId = order.OrderId,
-                        CustomerId = customer.CustomerId,
-                        PaymentMethod = order.PaymentMethod,
-                        Deposits = newOrderRequest.Deposits,
+                orderInfo.FinalPrice = orderInfo.FinalPrice += (double)orderDetail.FinalPrice;
+            }
+            orderInfo.DiscountRate = (double)customer.DiscountRate;
+            //add new Payment
+            TblPayment newPayMent = new TblPayment()
+            {
+                OrderId = order.OrderId,
+                CustomerId = customer.CustomerId,
+                PaymentMethod = order.PaymentMethod,
+                Deposits = newOrderRequest.Deposits,
+            };
+            newPayMent.PayDetail = newPayMent.PaymentMethod + "-Deposits: " + newPayMent.Deposits;
+            iPaymentService.AddPayment(newPayMent);
 
-                    };
-                    newPayMent.PayDetail = newPayMent.PaymentMethod + "-Deposits: " + newPayMent.Deposits;
-                    iPaymentService.AddPayment(newPayMent);
-                    orderInfo.products.Add(p);
-                    orderInfo.TotalPrice = orderInfo.TotalPrice += (double)orderDetail.TotalPrice;
-
-                    orderInfo.FinalPrice = orderInfo.FinalPrice += (double)orderDetail.FinalPrice;
-                }
-                orderInfo.DiscountRate = (double)customer.DiscountRate;
-           
-            
             return Ok(orderInfo);
         }
 
