@@ -247,3 +247,18 @@ VALUES
 ('P079', 'LES BERLINGOTS DE CARTIER RING', 'R020', 'LES BERLINGOTS DE CARTIER RING', 'C001', 160.0, 0.0, 80.0, 1.6, 6, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw55d1d773/images/large/36271f0714b6516894a660839b58ca49.png?sw=350&sh=350&sm=fit&sfrm=png', 1),
 ('P080', 'C DE CARTIER WEDDING RING', 'R021', 'C DE CARTIER WEDDING RING', 'C001', 160.0, 0.0, 80.0, 1.7, 5, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dwca57c4fb/images/large/e55fe55015e351be8e7c6213a8e1cb3b.png?sw=350&sh=350&sm=fit&sfrm=png', 1);
 
+UPDATE Tbl_Customer
+set DiscountRate = 0.05
+where CustomerID = 1
+UPDATE Tbl_Customer
+set DiscountRate = 0.1
+where CustomerID = 2
+UPDATE Tbl_Customer
+set DiscountRate = 0.02
+where CustomerID = 3
+UPDATE Tbl_Customer
+set DiscountRate = 0.15
+where CustomerID = 4
+UPDATE Tbl_Customer
+set DiscountRate = 0.05
+where CustomerID = 5
