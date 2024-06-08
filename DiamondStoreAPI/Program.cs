@@ -11,6 +11,7 @@ using System.Text;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+var services = builder.Services;
 
 // Add services to the container.
 builder.Services.AddDbContext<DiamondStoreContext>(options =>
@@ -23,6 +24,12 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.PropertyNamingPolicy = null;
     options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
 });
+
+services.AddScoped<IOrderService, OrderService>();
+services.AddScoped<IOrderDetailService, OrderDetailService>();
+services.AddScoped<IProductService, ProductService>();
+services.AddScoped<ICustomerService, CustomerService>();
+services.AddScoped<IPaymentService, PaymentService>();
 
 //builder.Services.AddControllers().AddJsonOptions(options =>
 //{

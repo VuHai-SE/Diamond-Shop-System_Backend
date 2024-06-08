@@ -19,5 +19,7 @@ namespace Services
         Task<List<(TblProduct product, double price)>> GetAllProductsAndPricesAsync();
 
         Task<ProductWithPriceResponse> GetProductAndPriceByIdAsync(string productId);
+
+        public TblProduct GetProduct(string id);
     }
 }

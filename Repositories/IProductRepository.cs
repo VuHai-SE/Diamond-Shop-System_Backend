@@ -19,5 +19,6 @@ namespace Repositories
         Task<List<(TblProduct product, double price)>> GetAllProductsAndPricesAsync();
 
         Task<TblProduct> GetProductByIdAsync(string productId);
+        public TblProduct GetProduct(string id);
     }
 }

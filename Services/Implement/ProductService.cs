@@ -12,7 +12,7 @@ namespace Services.Implement
 {
     public class ProductService : IProductService
     {
-        private readonly IProductRepository productRepository;
+        private readonly IProductRepository productRepository = null;
 
         public ProductService()
         {
@@ -50,5 +50,8 @@ namespace Services.Implement
                 price = price
             };
         }
+
+        public TblProduct GetProduct(string id)
+            => productRepository.GetProduct(id);
     }
 }
