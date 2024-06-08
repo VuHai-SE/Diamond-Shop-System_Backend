@@ -10,7 +10,7 @@ namespace DAOs
 {
     public class ProductDAO
     {
-        private readonly DiamondStoreContext _context;
+        private readonly DiamondStoreContext _context = null;
 
         public ProductDAO()
         {

@@ -11,7 +11,7 @@ namespace Repositories.Implement
 {
     public class ProductRepository : IProductRepository
     {
-        private readonly ProductDAO productDAO;
+        private readonly ProductDAO productDAO = null;
 
         public ProductRepository()
         {
@@ -62,6 +62,9 @@ namespace Repositories.Implement
 
             return productPrices;
         }
+
+        public TblProduct GetProduct(string id)
+            =>productDAO.GetProduct(id);
 
         public async Task<TblProduct> GetProductByIdAsync(string productId)
         {
