@@ -24,5 +24,14 @@ namespace DAOs
         public TblCustomer GetCustomerByID(int customerID)
             => dbContext.TblCustomers.FirstOrDefault(c => c.CustomerId.Equals(customerID));
 
+        public TblCustomer GetCustomerByAccount(int accountID)
+            => dbContext.TblCustomers.FirstOrDefault(c => c.AccountId.Equals(accountID));
+
+        public TblCustomer AddCustomer(TblCustomer customer)
+        {
+            dbContext.TblCustomers.Add(customer);
+            dbContext.SaveChanges();
+            return customer;
+        }
     }
 }
