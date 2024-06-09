@@ -93,11 +93,10 @@ VALUES
 -- Insert sample data into Tbl_Product
 INSERT INTO Tbl_Product (ProductID, ProductName, ProductCode, Description, CategoryID, MaterialCost, GemCost, ProductionCost, PriceRate, ProductSize, Image, Status, UnitSizePrice)
 VALUES 
-('P001', 'Gold Ring', 'R001', '18k Gold Ring', 'C001', 100.0, 200.0, 50.0, 1.5, 7, 'ring1.jpg', 1, 10),
-('P002', 'Silver Necklace', 'N001', 'Sterling Silver Necklace', 'C002', 50.0, 0.0, 30.0, 1.4, 18, 'necklace1.jpg', 1, 10),
-('P003', 'Platinum Bracelet', 'B001', 'Platinum Bracelet', 'C003', 200.0, 0.0, 70.0, 1.6, 8, 'bracelet1.jpg', 1, 10),
-('P004', 'Diamond Earrings', 'E001', 'Diamond Earrings', 'C004', 100.0, 1000.0, 80.0, 1.8, 4, 'earrings1.jpg', 1, 10),
-('P005', 'Titanium Watch', 'W001', 'Titanium Watch', 'C005', 150.0, 0.0, 100.0, 1.7, 42, 'watch1.jpg', 1, 10);
+('P001', 'Gold Ring', 'R001', '18k Gold Ring', 'C001', 100.0, 200.0, 50.0, 1.5, 7, 'https://www.sagar.pk/wp-content/uploads/2021/08/1b-10p.jpg', 1, 10),
+('P002', 'Silver Necklace', 'N001', 'Sterling Silver Necklace', 'C002', 50.0, 0.0, 30.0, 1.4, 18, 'https://bemiie.com/wp-content/uploads/2023/10/Mat-Day-Chuyen-Kim-Cuong-Moissanite-Pear-Solitaire-PBJWHPR7x10SO-1.1.jpg', 1, 10),
+('P003', 'Platinum Bracelet', 'B001', 'Platinum Bracelet', 'C003', 200.0, 0.0, 70.0, 1.6, 8, 'https://www.anjolee.com/Admin/UploadImages/HighResolutionImages/white/MB11_w.jpg', 1, 10),
+('P004', 'Diamond Earrings', 'E001', 'Diamond Earrings', 'C004', 100.0, 1000.0, 80.0, 1.8, 4, 'https://image.brilliantearth.com/media/product_images/25/BE304RD400_white_top.jpg', 1, 10)
 
 INSERT INTO Tbl_Product (ProductID, ProductName, ProductCode, Description, CategoryID, MaterialCost, GemCost, ProductionCost, PriceRate, ProductSize, Image, Status, UnitSizePrice)
 VALUES 
@@ -193,8 +192,7 @@ VALUES
 ('P001', 'M001', 5.0),
 ('P002', 'M002', 10.0),
 ('P003', 'M003', 8.0),
-('P004', 'M004', 6.0),
-('P005', 'M005', 7.0);
+('P004', 'M004', 6.0)
 
 -- Insert sample data into Tbl_ProductGem
 INSERT INTO Tbl_ProductGem (ProductID, GemID)
@@ -203,48 +201,18 @@ VALUES
 ('P004', 'G002');
 
 -- Insert sample data into Tbl_Order
-INSERT INTO Tbl_Order (CustomerID, OrderDate, PaymentMethod, OrderStatus, ShippingDate, ReceiveDate, StaffID, ShipperID, ShipStatus)
-VALUES 
-(1, '2024-05-01', 'Credit Card', 'Delivered', '2024-05-02', '2024-05-05', 'S001', 'SP001', 'Done'),
-(2, '2024-05-02', 'Paypal', 'Delivered', '2024-05-03', '2024-05-06', 'S002', 'SP002', 'Done'),
-(3, '2024-05-03', 'Cash on Delivery', 'Processing', NULL, NULL, 'S001', 'SP002', 'Pending'),
-(4, '2024-05-04', 'Credit Card', 'Delivered', '2024-05-05', '2024-05-08', 'S002', 'SP001', 'Done'),
-(5, '2024-05-05', 'Bank Transfer', 'Delivered', '2024-05-06', '2024-05-09', 'S001', 'SP002', 'Done');
+
 
 
 -- Insert sample data into Tbl_OrderDetail
-INSERT INTO Tbl_OrderDetail (OrderID, ProductID, CustomizedSize, CustomizedAmount, Quantity, TotalPrice, FinalPrice)
-VALUES 
-(1, 'P001', 8, 5.0, 1, 450.0, 427.5),
-(2, 'P002', 18, 10.0, 2, 200.0, 180.0),
-(3, 'P003', 9, 8.0, 1, 432.0, 421.0),
-(4, 'P004', 4, 6.0, 1, 2160.0, 1836.0),
-(5, 'P005', 42, 7.0, 1, 425.0, 382.5);
+
 
 -- Insert sample data into Tbl_Payment
-INSERT INTO Tbl_Payment (OrderID, CustomerID, PaymentMethod, Deposits, PayDetail)
-VALUES 
-(1, 1, 'Credit Card', 100.0, 'Paid in full'),
-(2, 2, 'Paypal', 50.0, 'Paid in full'),
-(3, 3, 'Cash on Delivery', 0.0, 'To be paid upon delivery'),
-(4, 4, 'Credit Card', 100.0, 'Paid in full'),
-(5, 5, 'Bank Transfer', 150.0, 'Paid in full');
+
 
 -- Insert sample data into Tbl_Warranty
-INSERT INTO Tbl_Warranty (OrderDetailID, WarrantyStartDate, WarrantyEndDate)
-VALUES 
-(1, '2024-05-05', '2025-05-05'),
-(2, '2024-05-07', '2025-05-07'),
-(3, '2024-05-09', '2025-05-09'),
-(4, '2024-05-11', '2025-05-11'),
-(5, '2024-05-13', '2025-05-13');
+
 
 -- Insert sample data into Tbl_DiamondGradingReport
-INSERT INTO Tbl_DiamondGradingReport (GemID, GenerateDate, Image)
-VALUES 
-('G001', '2024-01-01', 'report1.jpg'),
-('G002', '2024-01-02', 'report2.jpg'),
-('G003', '2024-01-03', 'report3.jpg'),
-('G004', '2024-01-04', 'report4.jpg'),
-('G005', '2024-01-05', 'report5.jpg');
+
 
