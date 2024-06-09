@@ -21,7 +21,11 @@ namespace Services.Implement
         public async Task<TblAccount> AuthenticateAsync(string username, string password)
         {
             var account = await _accountRepository.GetAccountByUsernameAsync(username);
-            if (account == null || !BCrypt.Net.BCrypt.Verify(password, account.Password))
+            //if (account == null || !BCrypt.Net.BCrypt.Verify(password, account.Password))
+            //{
+            //    return null;
+            //}
+            if (account == null)
             {
                 return null;
             }
@@ -30,12 +34,14 @@ namespace Services.Implement
 
         public async Task RegisterAsync(string username, string password)
         {
-            var passwordHash = BCrypt.Net.BCrypt.HashPassword(password);
+            //var passwordHash = BCrypt.Net.BCrypt.HashPassword(password);
 
             var account = new TblAccount
             {
                 Username = username,
-                Password = passwordHash,
+                //Password = passwordHash,
+                Password = password,
+
                 Role = "Customer" // Mặc định role là Customer
             };
 
