@@ -22,14 +22,14 @@ namespace DiamondStoreAPI.Controllers
     public class AccountsController : ControllerBase
     {
         private readonly IAccountService _accountService;
-        private readonly string _jwtSecret;
-        private readonly IConfiguration _configuration;
+        //private readonly string _jwtSecret;
+        //private readonly IConfiguration _configuration;
 
         public AccountsController(IAccountService accountService, IConfiguration configuration)
         {
             _accountService = accountService;
-            _configuration = configuration;
-            _jwtSecret = _configuration.GetValue<string>("Jwt:Day_la_key_cua_Hai");
+            //_configuration = configuration;
+            //_jwtSecret = _configuration.GetValue<string>("Jwt:Day_la_key_cua_Hai");
         }
 
         [HttpPost("login")]
@@ -41,9 +41,10 @@ namespace DiamondStoreAPI.Controllers
                 return Unauthorized();
             }
 
-            var token = GenerateJwtToken(account);
+            //var token = GenerateJwtToken(account);
 
-            return Ok(new { Token = token });
+            //return Ok(new { Token = token });
+            return Ok(account);
         }
 
         [HttpPost("register")]
@@ -54,23 +55,23 @@ namespace DiamondStoreAPI.Controllers
         }
 
 
-        private string GenerateJwtToken(TblAccount account)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_jwtSecret);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim(ClaimTypes.Name, account.Username),
-                    new Claim(ClaimTypes.Role, account.Role)
-                }),
-                Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
-        }
+        //private string GenerateJwtToken(TblAccount account)
+        //{
+        //    var tokenHandler = new JwtSecurityTokenHandler();
+        //    var key = Encoding.ASCII.GetBytes(_jwtSecret);
+        //    var tokenDescriptor = new SecurityTokenDescriptor
+        //    {
+        //        Subject = new ClaimsIdentity(new[]
+        //        {
+        //            new Claim(ClaimTypes.Name, account.Username),
+        //            new Claim(ClaimTypes.Role, account.Role)
+        //        }),
+        //        Expires = DateTime.UtcNow.AddDays(7),
+        //        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+        //    };
+        //    var token = tokenHandler.CreateToken(tokenDescriptor);
+        //    return tokenHandler.WriteToken(token);
+        //}
     }
     //{
     //    private readonly DiamondStoreContext _context;

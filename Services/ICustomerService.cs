@@ -11,5 +11,6 @@ namespace Services
     {
         public List<TblCustomer> GetCustomers();
         public TblCustomer GetCustomerByID(int customerID);
+        public TblCustomer GetCustomerByAccount(int accountID);
     }
 }
