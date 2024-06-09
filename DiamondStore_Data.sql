@@ -93,6 +93,14 @@ VALUES
 -- Insert sample data into Tbl_Product
 INSERT INTO Tbl_Product (ProductID, ProductName, ProductCode, Description, CategoryID, MaterialCost, GemCost, ProductionCost, PriceRate, ProductSize, Image, Status, UnitSizePrice)
 VALUES 
+('P001', 'Gold Ring', 'R001', '18k Gold Ring', 'C001', 100.0, 200.0, 50.0, 1.5, 7, 'ring1.jpg', 1, 10),
+('P002', 'Silver Necklace', 'N001', 'Sterling Silver Necklace', 'C002', 50.0, 0.0, 30.0, 1.4, 18, 'necklace1.jpg', 1, 10),
+('P003', 'Platinum Bracelet', 'B001', 'Platinum Bracelet', 'C003', 200.0, 0.0, 70.0, 1.6, 8, 'bracelet1.jpg', 1, 10),
+('P004', 'Diamond Earrings', 'E001', 'Diamond Earrings', 'C004', 100.0, 1000.0, 80.0, 1.8, 4, 'earrings1.jpg', 1, 10),
+('P005', 'Titanium Watch', 'W001', 'Titanium Watch', 'C005', 150.0, 0.0, 100.0, 1.7, 42, 'watch1.jpg', 1, 10);
+
+INSERT INTO Tbl_Product (ProductID, ProductName, ProductCode, Description, CategoryID, MaterialCost, GemCost, ProductionCost, PriceRate, ProductSize, Image, Status, UnitSizePrice)
+VALUES 
 ('P006', 'High Jewellery Necklace', 'N006', 'High Jewellery Necklace', 'C002', 500.0, 1000.0, 300.0, 2.0, 18, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw47181d40/images/large/0173c18084d351718d0a9e48cbf37bf4.png?sw=350&sh=350&sm=fit&sfrm=png', 1, 10),
 ('P007', 'White Gold Cartier Necklace', 'N007', 'White Gold Cartier Necklace', 'C002', 400.0, 800.0, 250.0, 1.9, 18, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dwffda1a5e/images/large/a7cde65b34e85f8d81ac915d458c5f9c.png?sw=350&sh=350&sm=fit&sfrm=png', 1, 10),
 ('P008', 'High Jewellery Necklace', 'N008', 'High Jewellery Necklace', 'C002', 550.0, 1100.0, 320.0, 2.1, 18, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw1a70f15f/images/large/f1d14e7bda6653d094c29e0e8e0c255d.png?sw=750&sh=750&sm=fit&sfrm=png', 1, 10),
@@ -216,20 +224,20 @@ VALUES
 -- Insert sample data into Tbl_Payment
 INSERT INTO Tbl_Payment (OrderID, CustomerID, PaymentMethod, Deposits, PayDetail)
 VALUES 
-(1, 'C001', 'Credit Card', 100.0, 'Paid in full'),
-(2, 'C002', 'Paypal', 50.0, 'Paid in full'),
-(3, 'C003', 'Cash on Delivery', 0.0, 'To be paid upon delivery'),
-(4, 'C004', 'Credit Card', 100.0, 'Paid in full'),
-(5, 'C005', 'Bank Transfer', 150.0, 'Paid in full');
+(1, 1, 'Credit Card', 100.0, 'Paid in full'),
+(2, 2, 'Paypal', 50.0, 'Paid in full'),
+(3, 3, 'Cash on Delivery', 0.0, 'To be paid upon delivery'),
+(4, 4, 'Credit Card', 100.0, 'Paid in full'),
+(5, 5, 'Bank Transfer', 150.0, 'Paid in full');
 
 -- Insert sample data into Tbl_Warranty
-INSERT INTO Tbl_Warranty (WarrantyID, OrderDetailID, WarrantyStartDate, WarrantyEndDate)
+INSERT INTO Tbl_Warranty (OrderDetailID, WarrantyStartDate, WarrantyEndDate)
 VALUES 
-('W001', 1, '2024-05-05', '2025-05-05'),
-('W002', 2, '2024-05-07', '2025-05-07'),
-('W003', 3, '2024-05-09', '2025-05-09'),
-('W004', 4, '2024-05-11', '2025-05-11'),
-('W005', 5, '2024-05-13', '2025-05-13');
+(1, '2024-05-05', '2025-05-05'),
+(2, '2024-05-07', '2025-05-07'),
+(3, '2024-05-09', '2025-05-09'),
+(4, '2024-05-11', '2025-05-11'),
+(5, '2024-05-13', '2025-05-13');
 
 -- Insert sample data into Tbl_DiamondGradingReport
 INSERT INTO Tbl_DiamondGradingReport (GemID, GenerateDate, Image)
