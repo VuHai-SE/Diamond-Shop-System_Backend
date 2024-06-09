@@ -32,30 +32,6 @@ services.AddScoped<ICustomerService, CustomerService>();
 services.AddScoped<IPaymentService, PaymentService>();
 services.AddScoped<IGemPriceListService, GemPriceListService>();
 
-//builder.Services.AddControllers().AddJsonOptions(options =>
-//{
-//    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
-//});
-
-// Configure JWT authentication
-//var key = Encoding.ASCII.GetBytes(builder.Configuration.GetValue<string>("Jwt:Day_la_key_cua_Hai"));
-//builder.Services.AddAuthentication(options =>
-//{
-//    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-//    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-//})
-//.AddJwtBearer(options =>
-//{
-//    options.RequireHttpsMetadata = false;
-//    options.SaveToken = true;
-//    options.TokenValidationParameters = new TokenValidationParameters
-//    {
-//        ValidateIssuerSigningKey = true,
-//        IssuerSigningKey = new SymmetricSecurityKey(key),
-//        ValidateIssuer = false,
-//        ValidateAudience = false
-//    };
-//});
 
 // Add dependencies
 builder.Services.AddScoped<AccountDAO>();
