@@ -22,7 +22,7 @@ namespace DiamondStoreAPI.Controllers
     public class AccountsController : ControllerBase
     {
         private readonly IAccountService _accountService;
-        //private readonly IConfiguration _configuration;
+
         
         public AccountsController(IAccountService accountService)
         {
@@ -39,7 +39,6 @@ namespace DiamondStoreAPI.Controllers
                 return Unauthorized();
             }
 
-           
             return Ok(account);
         }
 
@@ -49,9 +48,6 @@ namespace DiamondStoreAPI.Controllers
             await _accountService.RegisterAsync(request.Username, request.Password);
             return Ok();
         }
-
-
-        
 
     //{
     //    private readonly DiamondStoreContext _context;

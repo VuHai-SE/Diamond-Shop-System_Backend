@@ -21,7 +21,7 @@ namespace Services.Implement
         public async Task<TblAccount> AuthenticateAsync(string username, string password)
         {
             var account = await _accountRepository.GetAccountByUsernameAsync(username);
-            
+
             if (account == null)
             {
                 return null;
@@ -32,6 +32,7 @@ namespace Services.Implement
         public async Task RegisterAsync(string username, string password)
         {
             
+
             var account = new TblAccount
             {
                 Username = username,
