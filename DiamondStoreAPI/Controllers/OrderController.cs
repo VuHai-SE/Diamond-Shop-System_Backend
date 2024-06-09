@@ -96,12 +96,15 @@ namespace DiamondStoreAPI.Controllers
             {
                 return BadRequest();
             }
+
+            var customerIDToOrder = iCustomerService.GetCustomerByAccount(newOrderRequest.AccountID).CustomerId;
+
             TblOrder newOrder = new TblOrder()
             {
-                CustomerId = newOrderRequest.CustomerId,
+                CustomerId = customerIDToOrder,
                 PaymentMethod = newOrderRequest.PaymentMethod,
                 OrderDate = newOrderRequest.OrderDate,
-                OrderStatus = newOrderRequest.PaymentMethod.Equals("Cash on Delivery") ? "Processing" : "Accepted",
+                OrderStatus = newOrderRequest.PaymentMethod.Equals("Received") ? "Processing" : "Accepted",
                 ShipStatus = "Pending",
             };
             var order = iOrderService.AddOrder(newOrder);

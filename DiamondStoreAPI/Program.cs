@@ -30,6 +30,7 @@ services.AddScoped<IOrderDetailService, OrderDetailService>();
 services.AddScoped<IProductService, ProductService>();
 services.AddScoped<ICustomerService, CustomerService>();
 services.AddScoped<IPaymentService, PaymentService>();
+services.AddScoped<IGemPriceListService, GemPriceListService>();
 
 //builder.Services.AddControllers().AddJsonOptions(options =>
 //{
@@ -103,6 +104,18 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+// Add CORS policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReact",
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:3000")
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        });
+});
+
 // Build the app
 var app = builder.Build();
 
@@ -116,7 +129,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseCors("AllowReact");
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {

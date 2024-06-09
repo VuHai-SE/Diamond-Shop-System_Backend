@@ -19,7 +19,7 @@ namespace DAOs
 
         public async Task<TblAccount> GetAccountByUsernameAsync(string username)
         {
-            return await _context.TblAccounts.AsNoTracking().FirstOrDefaultAsync(a => a.Username == username);
+            return await _context.TblAccounts.AsNoTracking().FirstOrDefaultAsync(a => a.Username.Equals(username));
         }
 
         public async Task AddAccountAsync(TblAccount account)
