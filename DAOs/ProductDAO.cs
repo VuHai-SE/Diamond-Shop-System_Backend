@@ -69,6 +69,9 @@ namespace DAOs
             return _context.TblProducts.ToList();
         }
 
+        public List<TblProduct> filterProductsByCategoryID(string categoryID)
+            => _context.TblProducts.Where(p => p.CategoryId.Equals(categoryID)).ToList();
+
         //Get product detail
         public TblProduct GetProduct(string id)
         {

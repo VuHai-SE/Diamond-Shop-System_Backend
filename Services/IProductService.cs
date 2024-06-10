@@ -21,5 +21,6 @@ namespace Services
         Task<ProductWithPriceResponse> GetProductAndPriceByIdAsync(string productId);
 
         public TblProduct GetProduct(string id);
+        public List<TblProduct> filterProductsByCategoryID(string categoryID);
     }
 }

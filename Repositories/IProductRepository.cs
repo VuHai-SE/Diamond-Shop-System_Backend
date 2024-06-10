@@ -20,5 +20,6 @@ namespace Repositories
 
         Task<TblProduct> GetProductByIdAsync(string productId);
         public TblProduct GetProduct(string id);
+        public List<TblProduct> filterProductsByCategoryID(string categoryID);
     }
 }

@@ -16,10 +16,12 @@ namespace DiamondStoreAPI.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly IProductService _productService;
+        private readonly IProductCategoryService _productCategoryService;
 
-        public ProductsController(IProductService productService)
+        public ProductsController(IProductService productService, IProductCategoryService productCategoryService)
         {
             _productService = productService;
+            _productCategoryService = productCategoryService;
         }
 
         // GET: api/Products
@@ -47,6 +49,20 @@ namespace DiamondStoreAPI.Controllers
                 return NotFound();
             }
             return Ok(response);
+        }
+
+        // GET: api/Products/CategoryName
+        [HttpGet("Category/{categoryName}")]
+        public async Task<IActionResult> GetProductsByCategory(string categoryName)
+        {
+            var category = _productCategoryService.GetCategoryByName(categoryName);
+            var pruductList = _productService.filterProductsByCategoryID(category.CategoryId);
+            
+            if (pruductList == null)
+            {
+                return NotFound();
+            }
+            return Ok(pruductList);
         }
 
         //[HttpGet("{productId}/price")]

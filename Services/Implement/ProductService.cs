@@ -53,5 +53,8 @@ namespace Services.Implement
 
         public TblProduct GetProduct(string id)
             => productRepository.GetProduct(id);
+
+        public List<TblProduct> filterProductsByCategoryID(string categoryID)
+            => productRepository.filterProductsByCategoryID(categoryID);
     }
 }

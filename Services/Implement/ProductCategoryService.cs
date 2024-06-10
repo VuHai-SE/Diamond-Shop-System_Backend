@@ -27,6 +27,9 @@ namespace Services.Implement
         public bool DeleteProductCategory(string id)
             => productCategoryRepository.DeleteProductCategory(id);
 
+        public TblProductCategory GetCategoryByName(string name)
+            => productCategoryRepository.GetCategoryByName(name);
+
         public List<TblProductCategory> GetProductCategories()
             => productCategoryRepository.GetProductCategories();
 
