@@ -31,11 +31,11 @@ VALUES
 -- Insert sample data into Tbl_Gem
 INSERT INTO Tbl_Gem (GemID, GemName, Polish, Symmetry, Fluorescence, Origin, CaratWeight, Color, Cut, Clarity, Shape)
 VALUES 
-('G001', 'Diamond', 'Excellent', 'Excellent', 'None', 'South Africa', 1.0, 'D', 'Excellent', 'IF', 'Round'),
-('G002', 'Diamond', 'Very Good', 'Very Good', 'Faint', 'Russia', 0.8, 'E', 'Very Good', 'VVS1', 'Princess'),
-('G003', 'Diamond', 'Good', 'Good', 'Medium', 'Australia', 0.5, 'F', 'Good', 'VS1', 'Oval'),
-('G004', 'Diamond', 'Excellent', 'Excellent', 'Strong', 'Canada', 1.2, 'G', 'Excellent', 'SI1', 'Cushion'),
-('G005', 'Diamond', 'Very Good', 'Very Good', 'None', 'Brazil', 0.9, 'H', 'Very Good', 'I1', 'Emerald');
+('G001', 'Diamond', 'Excellent', 'Excellent', 'None', 'Synthetic', 1.0, 'D', 'Excellent', 'IF', 'Round'),
+('G002', 'Diamond', 'Very Good', 'Very Good', 'Faint', 'Natural', 0.8, 'E', 'Very Good', 'VVS1', 'Princess'),
+('G003', 'Diamond', 'Good', 'Good', 'Medium', 'Synthetic', 0.5, 'F', 'Good', 'VS1', 'Oval'),
+('G004', 'Diamond', 'Excellent', 'Excellent', 'Strong', 'Natural', 1.2, 'G', 'Excellent', 'SI1', 'Cushion'),
+('G005', 'Diamond', 'Very Good', 'Very Good', 'None', 'Natural', 0.9, 'H', 'Very Good', 'I1', 'Emerald');
 
 -- Insert sample data into Tbl_ProductCategory
 INSERT INTO Tbl_ProductCategory (CategoryID, CategoryName)
@@ -75,11 +75,11 @@ VALUES
 -- Insert sample data into Tbl_Customer
 INSERT INTO Tbl_Customer (AccountID, FirstName, LastName, Gender, Birthday, Email, PhoneNumber, Address, Ranking, DiscountRate, Status)
 VALUES 
-(1, 'John', 'Doe', 'Male', '1990-01-01', 'john.doe@example.com', '0123456789', '123 Main St', 'Silver', 5.0, 1),
-(2, 'Jane', 'Doe', 'Female', '1992-02-02', 'jane.doe@example.com', '0987654321', '456 Elm St', 'Gold', 10.0, 1),
-(8, 'Tom', 'Smith', 'Male', '1985-03-03', 'tom.smith@example.com', '0123456788', '789 Pine St', 'Bronze', 2.0, 1),
-(9, 'Lisa', 'Brown', 'Female', '1988-04-04', 'lisa.brown@example.com', '0987654320', '101 Oak St', 'Platinum', 15.0, 1),
-(10, 'Mark', 'Davis', 'Male', '1995-05-05', 'mark.davis@example.com', '0123456787', '202 Cedar St', 'Silver', 5.0, 1);
+(1, 'John', 'Doe', 'Male', '1990-01-01', 'john.doe@example.com', '0123456789', '123 Main St', 'Silver', 0.05, 1),
+(2, 'Jane', 'Doe', 'Female', '1992-02-02', 'jane.doe@example.com', '0987654321', '456 Elm St', 'Gold', 0.1, 1),
+(8, 'Tom', 'Smith', 'Male', '1985-03-03', 'tom.smith@example.com', '0123456788', '789 Pine St', 'Bronze', 0.02, 1),
+(9, 'Lisa', 'Brown', 'Female', '1988-04-04', 'lisa.brown@example.com', '0987654320', '101 Oak St', 'Platinum', 0.15, 1),
+(10, 'Mark', 'Davis', 'Male', '1995-05-05', 'mark.davis@example.com', '0123456787', '202 Cedar St', 'Silver', 0.05, 1);
 
 -- Insert sample data into Tbl_Membership
 INSERT INTO Tbl_Membership (MinSpend, MaxSpend, DiscountRate, Ranking)
@@ -93,72 +93,10 @@ VALUES
 -- Insert sample data into Tbl_Product
 INSERT INTO Tbl_Product (ProductID, ProductName, ProductCode, Description, CategoryID, MaterialCost, GemCost, ProductionCost, PriceRate, ProductSize, Image, Status, UnitSizePrice)
 VALUES 
-('P001', 'Gold Ring', 'R001', '18k Gold Ring', 'C001', 100.0, 200.0, 50.0, 1.5, 7, 'ring1.jpg', 1, 10),
-('P002', 'Silver Necklace', 'N001', 'Sterling Silver Necklace', 'C002', 50.0, 0.0, 30.0, 1.4, 18, 'necklace1.jpg', 1, 10),
-('P003', 'Platinum Bracelet', 'B001', 'Platinum Bracelet', 'C003', 200.0, 0.0, 70.0, 1.6, 8, 'bracelet1.jpg', 1, 10),
-('P004', 'Diamond Earrings', 'E001', 'Diamond Earrings', 'C004', 100.0, 1000.0, 80.0, 1.8, 4, 'earrings1.jpg', 1, 10),
-('P005', 'Titanium Watch', 'W001', 'Titanium Watch', 'C005', 150.0, 0.0, 100.0, 1.7, 42, 'watch1.jpg', 1, 10);
-
--- Insert sample data into Tbl_ProductMaterial
-INSERT INTO Tbl_ProductMaterial (ProductID, MaterialID, Weight)
-VALUES 
-('P001', 'M001', 5.0),
-('P002', 'M002', 10.0),
-('P003', 'M003', 8.0),
-('P004', 'M004', 6.0),
-('P005', 'M005', 7.0);
-
--- Insert sample data into Tbl_ProductGem
-INSERT INTO Tbl_ProductGem (ProductID, GemID)
-VALUES 
-('P001', 'G001'),
-('P004', 'G002');
-
--- Insert sample data into Tbl_Order
-INSERT INTO Tbl_Order (CustomerID, OrderDate, PaymentMethod, OrderStatus, ShippingDate, ReceiveDate, StaffID, ShipperID, ShipStatus)
-VALUES 
-(1, '2024-05-01', 'Credit Card', 'Delivered', '2024-05-02', '2024-05-05', 'S001', 'SP001', 'Done'),
-(2, '2024-05-02', 'Paypal', 'Delivered', '2024-05-03', '2024-05-06', 'S002', 'SP002', 'Done'),
-(3, '2024-05-03', 'Cash on Delivery', 'Processing', NULL, NULL, 'S001', 'SP002', 'Pending'),
-(4, '2024-05-04', 'Credit Card', 'Delivered', '2024-05-05', '2024-05-08', 'S002', 'SP001', 'Done'),
-(5, '2024-05-05', 'Bank Transfer', 'Delivered', '2024-05-06', '2024-05-09', 'S001', 'SP002', 'Done');
-
-
--- Insert sample data into Tbl_OrderDetail
-INSERT INTO Tbl_OrderDetail (OrderID, ProductID, CustomizedSize, CustomizedAmount, Quantity, TotalPrice, FinalPrice)
-VALUES 
-(1, 'P001', 8, 5.0, 1, 450.0, 427.5),
-(2, 'P002', 18, 10.0, 2, 200.0, 180.0),
-(3, 'P003', 9, 8.0, 1, 432.0, 421.0),
-(4, 'P004', 4, 6.0, 1, 2160.0, 1836.0),
-(5, 'P005', 42, 7.0, 1, 425.0, 382.5);
-
--- Insert sample data into Tbl_Payment
-INSERT INTO Tbl_Payment (OrderID, CustomerID, PaymentMethod, Deposits, PayDetail)
-VALUES 
-(1, 'C001', 'Credit Card', 100.0, 'Paid in full'),
-(2, 'C002', 'Paypal', 50.0, 'Paid in full'),
-(3, 'C003', 'Cash on Delivery', 0.0, 'To be paid upon delivery'),
-(4, 'C004', 'Credit Card', 100.0, 'Paid in full'),
-(5, 'C005', 'Bank Transfer', 150.0, 'Paid in full');
-
--- Insert sample data into Tbl_Warranty
-INSERT INTO Tbl_Warranty (WarrantyID, OrderDetailID, WarrantyStartDate, WarrantyEndDate)
-VALUES 
-('W001', 1, '2024-05-05', '2025-05-05'),
-('W002', 2, '2024-05-07', '2025-05-07'),
-('W003', 3, '2024-05-09', '2025-05-09'),
-('W004', 4, '2024-05-11', '2025-05-11'),
-('W005', 5, '2024-05-13', '2025-05-13');
-
--- Insert sample data into Tbl_DiamondGradingReport
-INSERT INTO Tbl_DiamondGradingReport (GemID, GenerateDate, Image)
-VALUES 
-('G001', '2024-01-01', 'report1.jpg'),
-('G002', '2024-01-02', 'report2.jpg'),
-('G003', '2024-01-03', 'report3.jpg'),
-('G004', '2024-01-04', 'report4.jpg'),
-('G005', '2024-01-05', 'report5.jpg');
+('P001', 'Gold Ring', 'R001', '18k Gold Ring', 'C001', 100.0, 200.0, 50.0, 1.5, 7, 'https://www.sagar.pk/wp-content/uploads/2021/08/1b-10p.jpg', 1, 10),
+('P002', 'Silver Necklace', 'N001', 'Sterling Silver Necklace', 'C002', 50.0, 0.0, 30.0, 1.4, 18, 'https://bemiie.com/wp-content/uploads/2023/10/Mat-Day-Chuyen-Kim-Cuong-Moissanite-Pear-Solitaire-PBJWHPR7x10SO-1.1.jpg', 1, 10),
+('P003', 'Platinum Bracelet', 'B001', 'Platinum Bracelet', 'C003', 200.0, 0.0, 70.0, 1.6, 8, 'https://www.anjolee.com/Admin/UploadImages/HighResolutionImages/white/MB11_w.jpg', 1, 10),
+('P004', 'Diamond Earrings', 'E001', 'Diamond Earrings', 'C004', 100.0, 1000.0, 80.0, 1.8, 4, 'https://image.brilliantearth.com/media/product_images/25/BE304RD400_white_top.jpg', 1, 10)
 
 INSERT INTO Tbl_Product (ProductID, ProductName, ProductCode, Description, CategoryID, MaterialCost, GemCost, ProductionCost, PriceRate, ProductSize, Image, Status, UnitSizePrice)
 VALUES 
@@ -201,4 +139,83 @@ VALUES
 ('P038', 'Trinity Bracelet', 'B015', 'Trinity Bracelet', 'C003', 560.0, 0.0, 165.0, 2.8, 7, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw2d2d994e/images/large/c4d9d7ffeda25cc68600b3749a58fbe8.png?sw=350&sh=350&sm=fit&sfrm=png', 1, 10),
 ('P039', 'White Gold Bracelet', 'B016', 'White Gold Bracelet', 'C003', 580.0, 0.0, 170.0, 2.9, 7, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw4fa4af11/images/large/65442a6e13885ba09bfe68c572935734.png?sw=350&sh=350&sm=fit&sfrm=png', 1, 10),
 ('P040', 'Trinity Extra L Bracelet', 'B017', 'Trinity Extra L Bracelet', 'C003', 600.0, 0.0, 175.0, 3.0, 7, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw372eebb6/images/large/b306cb3932c450349ee98e0e3', 1, 10);
+
+
+INSERT INTO Tbl_Product (ProductID, ProductName, ProductCode, Description, CategoryID, MaterialCost, GemCost, ProductionCost, PriceRate, ProductSize, Image, Status, UnitSizePrice)
+VALUES
+('P041', 'LOVE EARINGS', 'E001', 'LOVE EARINGS', 'C004', 100.0, 0.0, 50.0, 1.5, 4, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw9de442d2/images/large/e97f27c9b22755a997b558374c202ae7.png?sw=350&sh=350&sm=fit&sfrm=png', 1, 10),
+('P042', 'LOVE SINGLE EARING', 'E002', 'LOVE SINGLE EARING', 'C004', 80.0, 0.0, 40.0, 1.4, 2, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw890932a7/images/large/53bc8587ab985f3289842ce088948bff.png?sw=350&sh=350&sm=fit&sfrm=png', 1, 10),
+('P043', 'ROSE GOLD LOVE EARINGS', 'E003', 'ROSE GOLD LOVE EARINGS', 'C004', 120.0, 0.0, 60.0, 1.6, 4, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dwd6e04d21/images/large/b1d93c9e6eec5057a6f876214ba156be.png?sw=350&sh=350&sm=fit&sfrm=png', 1, 10),
+('P044', 'YELLOW GOLD LOVE EARINGS', 'E004', 'YELLOW GOLD LOVE EARINGS', 'C004', 110.0, 0.0, 55.0, 1.5, 4, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw9aeeae8e/images/large/d23ba87205a0518ab35a72586cb4d9c0.png?sw=350&sh=350&sm=fit&sfrm=png', 1, 10),
+('P045', 'CARTIER OF LOVE EARINGS XS', 'E005', 'CARTIER OF LOVE EARINGS XS', 'C004', 90.0, 0.0, 45.0, 1.4, 2, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dwde84f3f3/images/large/e3296e25e12557c58b29a83618ae91ab.png?sw=350&sh=350&sm=fit&sfrm=png', 1, 10),
+('P046', 'CARIER OF LOVE EARINGS', 'E006', 'CARIER OF LOVE EARINGS', 'C004', 100.0, 0.0, 50.0, 1.5, 4, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw5ad07a20/images/large/9ede5fdaa4ed5828b2add5fb6c28e333.png?sw=350&sh=350&sm=fit&sfrm=png', 1, 10),
+('P047', 'YELLOW GOLD LOVE EARINGS', 'E007', 'YELLOW GOLD LOVE EARINGS', 'C004', 110.0, 0.0, 55.0, 1.5, 4, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw448be5b3/images/large/f89bb062f6c95cb6890306ddd0fea5a1.png?sw=350&sh=350&sm=fit&sfrm=png', 1, 10),
+('P048', 'ETINCELLE CARTIER EARINGS', 'E008', 'ETINCELLE CARTIER EARINGS', 'C004', 130.0, 200.0, 65.0, 1.7, 4, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw6a5d4eda/images/large/2e4d9ce2e418521983a1ac9d6becf3e6.png?sw=350&sh=350&sm=fit&sfrm=png', 1, 10),
+('P049', 'JUSTE UN CLOU EARRINGS', 'E009', 'JUSTE UN CLOU EARRINGS', 'C004', 150.0, 0.0, 75.0, 1.6, 4, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw4ddff1f2/images/large/ee61383c3ae753a1aa818da18239b489.png?sw=350&sh=350&sm=fit&sfrm=png', 1, 10),
+('P050', 'LOVE SINGLE EARINGS', 'E010', 'LOVE SINGLE EARINGS', 'C004', 80.0, 0.0, 40.0, 1.4, 2, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw3427ce18/images/large/7c38c5535df55cd8a163993c08722be8.png?sw=350&sh=350&sm=fit&sfrm=png', 1, 10),
+('P051', 'CARTIER D''AMOUR EARINGS', 'E011', 'CARTIER D''AMOUR EARINGS', 'C004', 120.0, 0.0, 60.0, 1.6, 4, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw98465cd8/images/large/41a246cd665f531db097f9f89323a341.png?sw=350&sh=350&sm=fit&sfrm=png', 1, 10),
+('P052', 'CLASH DE CARTIER EARRINGS SMALL MODEL', 'E012', 'CLASH DE CARTIER EARRINGS SMALL MODEL', 'C004', 170.0, 0.0, 85.0, 1.7, 3, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw1c95e576/images/large/9b91716d746953dea61f7c7d7cbb9861.png?sw=350&sh=350&sm=fit&sfrm=png', 1, 10),
+('P053', 'JUSTE UN CLOU EARRINGS', 'E013', 'JUSTE UN CLOU EARRINGS', 'C004', 150.0, 0.0, 75.0, 1.6, 4, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw621d9c33/images/large/2986e697ea135269b46a36cf01adb876.png?sw=350&sh=350&sm=fit&sfrm=png', 1, 10),
+('P054', 'LOVE SINGLE EARING', 'E014', 'LOVE SINGLE EARING', 'C004', 80.0, 0.0, 40.0, 1.4, 2, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw032e3a5c/images/large/19177f49973d5236af09b0782b492bd0.png?sw=350&sh=350&sm=fit&sfrm=png', 1, 10),
+('P055', 'ETINCELLE DE CARTIER EARRINGS', 'E015', 'ETINCELLE DE CARTIER EARRINGS', 'C004', 130.0, 200.0, 65.0, 1.7, 4, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dwed2b6918/images/large/0027d0e4f9b45938b578e767e9d0d67e.png?sw=350&sh=350&sm=fit&sfrm=png', 1, 10),
+('P056', 'JUSTE UN CLOU EARRINGS', 'E016', 'JUSTE UN CLOU EARRINGS', 'C004', 150.0, 0.0, 75.0, 1.6, 4, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dwe95f037c/images/large/21b86e0a57e35ec68dd66e56c5125ec2.png?sw=350&sh=350&sm=fit&sfrm=png', 1, 10),
+('P057', 'TRINITY EARINGS', 'E017', 'TRINITY EARINGS', 'C004', 180.0, 0.0, 90.0, 1.8, 4, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dwe7b6621b/images/large/84166e4cc8655859bf60bce0ad35dd57.png?sw=350&sh=350&sm=fit&sfrm=png', 1, 10),
+('P058', 'CLASH DE CARTIER EARINGS', 'E018', 'CLASH DE CARTIER EARINGS', 'C004', 200.0, 0.0, 100.0, 1.9, 4, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw981cbaa2/images/large/4234fc61a5f252da93c11df7d0cf8645.png?sw=350&sh=350&sm=fit&sfrm=png', 1, 10),
+('P059', 'C DE CARTIER EARINGS', 'E019', 'C DE CARTIER EARINGS', 'C004', 160.0, 0.0, 80.0, 1.7, 3, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw6a5d4eda/images/large/2e4d9ce2e418521983a1ac9d6becf3e6.png?sw=350&sh=350&sm=fit&sfrm=png', 1, 10),
+('P060', 'CARTIER DE AMOUR EARINGS', 'E020', 'CARTIER DE AMOUR EARINGS', 'C004', 120.0, 0.0, 60.0, 1.6, 4, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw2cd28779/images/large/983b93c35a2c55c7a75c1db5acbd1363.png?sw=350&sh=350&sm=fit&sfrm=png', 1, 10);
+
+INSERT INTO Tbl_Product (ProductID, ProductName, ProductCode, Description, CategoryID, MaterialCost, GemCost, ProductionCost, PriceRate, ProductSize, Image, Status, UnitSizePrice)
+VALUES
+('P061', 'LOVE WEDDING RING', 'R002', 'LOVE WEDDING RING', 'C001', 150.0, 0.0, 75.0, 1.6, 5, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dwd402bde3/images/large/509efad81d12569981abebf66c433720.png?sw=350&sh=350&sm=fit&sfrm=png', 1, 10),
+('P062', 'LOVE RING', 'R003', 'LOVE RING', 'C001', 120.0, 0.0, 60.0, 1.5, 6, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dwd4e6a50c/images/large/41bb20649b985d5ea6fc0a93c60b78e4.png?sw=350&sh=350&sm=fit&sfrm=png', 1, 10),
+('P063', 'JUSTE UN CLOU RING', 'R004', 'JUSTE UN CLOU RING', 'C001', 180.0, 0.0, 90.0, 1.7, 7, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dwf5469b9e/images/large/bf9dfa2bb0c851eabf8bb3bb3b71bb51.png?sw=350&sh=350&sm=fit&sfrm=png', 1, 10),
+('P064', 'CLASSIC TRINITY RING', 'R005', 'CLASSIC TRINITY RING', 'C001', 200.0, 0.0, 100.0, 1.8, 6, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw09ee40f1/images/large/a5b15a29b0ff58b59bd59da81e8df880.png?sw=350&sh=350&sm=fit&sfrm=png', 1, 10),
+('P065', 'C DE CARTIER WEDDING RING', 'R006', 'C DE CARTIER WEDDING RING', 'C001', 160.0, 0.0, 80.0, 1.7, 5, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw892af08e/images/large/90fd2fc2e7755fa2937548e88f432689.png?sw=350&sh=350&sm=fit&sfrm=png', 1, 10),
+('P066', 'PANTHÈRE DE CARTIER RING', 'R007', 'PANTHÈRE DE CARTIER RING', 'C001', 220.0, 0.0, 110.0, 1.9, 7, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw3cd6cdb5/images/large/f4acd110455e5cd6bd59f727faa18167.png?sw=350&sh=350&sm=fit&sfrm=png', 1, 10),
+('P067', '1895 WEDDING RING', 'R008', '1895 WEDDING RING', 'C001', 140.0, 0.0, 70.0, 1.6, 5, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw52a6acef/images/large/eec1cd1a831e59e2a15d84636f6e6e1e.png?sw=350&sh=350&sm=fit&sfrm=png', 1, 10),
+('P068', 'CLASSIC TRINITY CERAMIC RING', 'R009', 'CLASSIC TRINITY CERAMIC RING', 'C001', 180.0, 0.0, 90.0, 1.7, 6, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dwea86e359/images/large/db7e25dc70785975b94e8b99ba23ab63.png?sw=350&sh=350&sm=fit&sfrm=png', 1, 10),
+('P069', 'VENDÔME LOUIS CARTIER WEDDING RING', 'R010', 'VENDÔME LOUIS CARTIER WEDDING RING', 'C001', 170.0, 0.0, 85.0, 1.7, 5, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw917abdf8/images/large/17aede18007657958850cb22b84106d9.png?sw=350&sh=350&sm=fit&sfrm=png', 1, 10),
+('P070', 'CLASH DE CARTIER RING', 'R011', 'CLASH DE CARTIER RING', 'C001', 190.0, 0.0, 95.0, 1.8, 7, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dwef7c1597/images/large/076f10e21cdb537aaa79b68216507b77.png?sw=350&sh=350&sm=fit&sfrm=png', 1, 10),
+('P071', 'LOVE RING', 'R012', 'LOVE RING', 'C001', 120.0, 0.0, 60.0, 1.5, 6, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw937228b5/images/large/8c37fbe71a4152b0a024219ce53d5dbe.png?sw=350&sh=350&sm=fit&sfrm=png', 1, 10),
+('P072', 'GRAIN DE CAFE RING', 'R013', 'GRAIN DE CAFE RING', 'C001', 180.0, 0.0, 90.0, 1.7, 6, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw49884b63/images/large/1add28981c8551e7802707f446dc2141.png?sw=350&sh=350&sm=fit&sfrm=png', 1, 10),
+('P073', 'PANTHÈRE DE CARTIER RING', 'R014', 'PANTHÈRE DE CARTIER RING', 'C001', 220.0, 0.0, 110.0, 1.9, 7, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dwfb029409/images/large/8c78df80514b55b6b814d2abc8e0a1ae.png?sw=350&sh=350&sm=fit&sfrm=png', 1, 10),
+('P074', 'ETINCELLE DE CARTIER RING', 'R015', 'ETINCELLE DE CARTIER RING', 'C001', 130.0, 200.0, 65.0, 1.7, 6, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw49ac0398/images/large/4d6275f9a3f15c92a8633a6146d890b2.png?sw=350&sh=350&sm=fit&sfrm=png', 1, 10),
+('P075', 'LOVE RING', 'R016', 'LOVE RING', 'C001', 120.0, 0.0, 60.0, 1.5, 6, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw73815751/images/large/699f4a8aa8b854398b026fd917ec3bf5.png?sw=350&sh=350&sm=fit&sfrm=png', 1, 10),
+('P076', 'PANTHÈRE DE CARTIER RING', 'R017', 'PANTHÈRE DE CARTIER RING', 'C001', 220.0, 0.0, 110.0, 1.9, 7, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw68becd31/images/large/cd8eec7fd3065f1b992a0e4d295a79e3.png?sw=350&sh=350&sm=fit&sfrm=png', 1, 10),
+('P077', 'REFLECTION DE CARTIER RING', 'R018', 'REFLECTION DE CARTIER RING', 'C001', 190.0, 0.0, 95.0, 1.8, 6, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dwdbc66fa9/images/large/a2524f59983451d18e7a9633cc8b93a5.png?sw=350&sh=350&sm=fit&sfrm=png', 1, 10),
+('P078', 'ÉCROU DE CARTIER RING', 'R019', 'ÉCROU DE CARTIER RING', 'C001', 170.0, 0.0, 85.0, 1.7, 7, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw751eca6f/images/large/2847f0f83bce5684a028226607e825de.png?sw=350&sh=350&sm=fit&sfrm=png', 1, 10),
+('P079', 'LES BERLINGOTS DE CARTIER RING', 'R020', 'LES BERLINGOTS DE CARTIER RING', 'C001', 160.0, 0.0, 80.0, 1.6, 6, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dw55d1d773/images/large/36271f0714b6516894a660839b58ca49.png?sw=350&sh=350&sm=fit&sfrm=png', 1, 10),
+('P080', 'C DE CARTIER WEDDING RING', 'R021', 'C DE CARTIER WEDDING RING', 'C001', 160.0, 0.0, 80.0, 1.7, 5, 'https://www.cartier.com/dw/image/v2/BGTJ_PRD/on/demandware.static/-/Sites-cartier-master/default/dwca57c4fb/images/large/e55fe55015e351be8e7c6213a8e1cb3b.png?sw=350&sh=350&sm=fit&sfrm=png', 1, 10);
+
+
+-- Insert sample data into Tbl_ProductMaterial
+INSERT INTO Tbl_ProductMaterial (ProductID, MaterialID, Weight)
+VALUES 
+('P001', 'M001', 5.0),
+('P002', 'M002', 10.0),
+('P003', 'M003', 8.0),
+('P004', 'M004', 6.0)
+
+-- Insert sample data into Tbl_ProductGem
+INSERT INTO Tbl_ProductGem (ProductID, GemID)
+VALUES 
+('P001', 'G001'),
+('P004', 'G002');
+
+-- Insert sample data into Tbl_Order
+
+
+
+-- Insert sample data into Tbl_OrderDetail
+
+
+-- Insert sample data into Tbl_Payment
+
+
+-- Insert sample data into Tbl_Warranty
+
+
+-- Insert sample data into Tbl_DiamondGradingReport
+
+
 
