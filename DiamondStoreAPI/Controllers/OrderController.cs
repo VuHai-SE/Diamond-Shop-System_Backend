@@ -24,14 +24,17 @@ namespace DiamondStoreAPI.Controllers
         private readonly IProductService iProductService;
         private readonly ICustomerService iCustomerService;
         private readonly IPaymentService iPaymentService;
-
-        public OrderController(IOrderService orderService, IOrderDetailService orderDetailService, IProductService productService, ICustomerService customerService, IPaymentService paymentService)
+        private readonly IProductMaterialService iProductMaterialService;
+        private readonly IMaterialCategoryService iMaterialCategoryService;
+        public OrderController(IOrderService orderService, IOrderDetailService orderDetailService, IProductService productService, ICustomerService customerService, IPaymentService paymentService, IProductMaterialService productMaterialService, IMaterialCategoryService materialCategoryService)
         {
             iOrderService = orderService;
             iOrderDetailService = orderDetailService;
             iProductService = productService;
             iCustomerService = customerService;
             iPaymentService = paymentService;
+            iProductMaterialService = productMaterialService;
+            iMaterialCategoryService = materialCategoryService;
         }
 
         //GET: api/Order
@@ -117,8 +120,8 @@ namespace DiamondStoreAPI.Controllers
             {
                 string productID = p.ProductID;
                 int customizedSize = p.CustomizedSize;
-                ProductWithPriceResponse productWithPrice = await iProductService.GetProductAndPriceByIdAsync(productID);
-                TblProduct product = productWithPrice.product;
+                TblProduct product = iProductService.GetProduct(productID);
+                double productPrice = (double)((product.GemCost + product.MaterialCost + product.ProductionCost) * (1 + product.PriceRate/100));
                 int productSize = (int)product.ProductSize;
                 TblOrderDetail newOrderDetail = new TblOrderDetail()
                 {
@@ -129,11 +132,23 @@ namespace DiamondStoreAPI.Controllers
                         (product.UnitSizePrice * (customizedSize - productSize)),
                     Quantity = p.Quantity,
                 };
-                newOrderDetail.TotalPrice = productWithPrice.price * p.Quantity + newOrderDetail.CustomizedAmount;
+                newOrderDetail.TotalPrice = (productPrice + newOrderDetail.CustomizedAmount) * p.Quantity;
 
                 newOrderDetail.FinalPrice = (1 - customer.DiscountRate) * newOrderDetail.TotalPrice;
                 var orderDetail = iOrderDetailService.AddOrderDetail(newOrderDetail);
-                orderInfo.products.Add(p);
+
+                //product buying for customer after charging for order
+                ProductBuyingResponse productBuying = new ProductBuyingResponse()
+                {
+                    ProductCode = product.ProductCode,
+                    ProductName = product.ProductName,
+                    Material = iMaterialCategoryService.GetMaterialCategory(iProductMaterialService.GetProductMaterialProductID(productID).MaterialId).MaterialName,
+                    Image = product.Image,
+                    CustomizedSize = p.CustomizedSize,
+                    Quantity = p.Quantity,
+                    Price = (double)orderDetail.TotalPrice
+                };
+                orderInfo.products.Add(productBuying);
                 orderInfo.TotalPrice = orderInfo.TotalPrice += (double)orderDetail.TotalPrice;
 
                 orderInfo.FinalPrice = orderInfo.FinalPrice += (double)orderDetail.FinalPrice;

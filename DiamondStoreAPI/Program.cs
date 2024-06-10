@@ -42,6 +42,13 @@ builder.Services.AddScoped<ProductDAO>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
 
+services.AddScoped<ProductMaterialDAO>();
+services.AddScoped<IProductMaterialRepository, ProductMaterialRepository>();
+services.AddScoped<IProductMaterialService, ProductMaterialService>();
+
+services.AddScoped<MaterialCategoryDAO>();
+services.AddScoped<IMaterialCategoryRepository, MaterialCategoryRepository>();
+services.AddScoped<IMaterialCategoryService, MaterialCategoryService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
