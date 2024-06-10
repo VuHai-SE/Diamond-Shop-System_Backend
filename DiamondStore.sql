@@ -92,7 +92,7 @@ CREATE TABLE Tbl_Customer (
     PhoneNumber NVARCHAR(10),
     Address NVARCHAR(200),
     Ranking NVARCHAR(10),
-	DiscountRate FLOAT,
+    DiscountRate FLOAT,
     Status BIT,
     FOREIGN KEY (AccountID) REFERENCES Tbl_Account(AccountID) ON DELETE SET NULL
 );
@@ -111,14 +111,14 @@ CREATE TABLE Tbl_Product (
     Description NVARCHAR(255),
     CategoryID NVARCHAR(8),
     MaterialCost FLOAT,
-	GemCost FLOAT,
+    GemCost FLOAT,
     ProductionCost FLOAT,
     PriceRate FLOAT,
     ProductSize INT,
     Image NVARCHAR(255),
     Status BIT,
-	UnitSizePrice FLOAT, ---ADD NEW
-    FOREIGN KEY (CategoryID) REFERENCES Tbl_ProductCategory(CategoryID) ON DELETE CASCADE,
+    UnitSizePrice FLOAT, ---ADD NEW
+    FOREIGN KEY (CategoryID) REFERENCES Tbl_ProductCategory(CategoryID) ON DELETE CASCADE
 );
 
 CREATE TABLE Tbl_ProductMaterial (
