@@ -4,12 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects;
+using Services.DTOs.Response;
 
 namespace Services
 {
     public interface IOrderService
     {
         public TblOrder AddOrder(TblOrder order);
-        public List<TblOrder> getOrderByCustomerID(string customerID);
+        public List<TblOrder> getOrderByCustomerID(int customerID);
+        public List<OrderInfo> GetOrderHistory(int AccountID);
     }
 }

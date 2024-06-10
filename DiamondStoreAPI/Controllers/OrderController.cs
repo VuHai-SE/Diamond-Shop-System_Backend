@@ -154,6 +154,8 @@ namespace DiamondStoreAPI.Controllers
                 orderInfo.FinalPrice = orderInfo.FinalPrice += (double)orderDetail.FinalPrice;
             }
             orderInfo.DiscountRate = (double)customer.DiscountRate;
+            orderInfo.OrderDate = newOrderRequest.OrderDate;
+            orderInfo.OrderStatus = order.OrderStatus;
             //add new Payment
             TblPayment newPayMent = new TblPayment()
             {
@@ -166,6 +168,13 @@ namespace DiamondStoreAPI.Controllers
             iPaymentService.AddPayment(newPayMent);
 
             return Ok(orderInfo);
+        }
+
+        [HttpGet("OrderHistory")]
+        public async Task<ActionResult<IEnumerable<TblOrder>>> GetOrderHistory(int accountID)
+        {
+            var orderHistory = iOrderService.GetOrderHistory(accountID);
+            return Ok(orderHistory);
         }
 
         // DELETE: api/Order/5

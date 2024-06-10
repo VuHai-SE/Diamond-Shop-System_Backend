@@ -26,14 +26,9 @@ namespace DAOs
             return order;
         }
 
-        public List<TblOrder> getOrderByCustomerID(string customerID)
+        public List<TblOrder> getOrderByCustomerID(int customerID)
         {
-            if (!string.IsNullOrEmpty(customerID))
-            {
-                dbContext.TblOrders.Where(o => o.CustomerId.Equals(customerID)).ToList();
-            }
-            return new List<TblOrder>();
+            return dbContext.TblOrders.Where(o => o.CustomerId.Equals(customerID)).ToList();
         }
-
     }
 }

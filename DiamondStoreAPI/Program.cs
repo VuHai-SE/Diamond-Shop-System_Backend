@@ -25,10 +25,10 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
 });
 
-services.AddScoped<IOrderService, OrderService>();
-services.AddScoped<IOrderDetailService, OrderDetailService>();
-services.AddScoped<IProductService, ProductService>();
-services.AddScoped<ICustomerService, CustomerService>();
+
+
+
+
 services.AddScoped<IPaymentService, PaymentService>();
 services.AddScoped<IGemPriceListService, GemPriceListService>();
 
@@ -53,6 +53,18 @@ services.AddScoped<IMaterialCategoryService, MaterialCategoryService>();
 services.AddScoped<ProductCategoryDAO>();
 services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
 services.AddScoped<IProductCategoryService, ProductCategoryService>();
+
+services.AddScoped<OrderDAO>();
+services.AddScoped<IOrderRepository, OrderRepository>();
+services.AddScoped<IOrderService, OrderService>();
+
+services.AddScoped<OrderDetailDAO>();
+services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
+services.AddScoped<IOrderDetailService, OrderDetailService>();
+
+services.AddScoped<CustomerDAO>();
+services.AddScoped<ICustomerRepository, CustomerRepository>();
+services.AddScoped<ICustomerService, CustomerService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

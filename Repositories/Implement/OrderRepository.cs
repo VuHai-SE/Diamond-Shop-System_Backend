@@ -23,7 +23,7 @@ namespace Repositories.Implement
         public TblOrder AddOrder(TblOrder order)
             => orderDAO.AddOrder(order);
 
-        public List<TblOrder> getOrderByCustomerID(string customerID)
+        public List<TblOrder> getOrderByCustomerID(int customerID)
             => orderDAO.getOrderByCustomerID(customerID);
     }
 }
