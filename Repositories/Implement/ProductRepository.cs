@@ -49,6 +49,9 @@ namespace Repositories.Implement
             return gemTotalPrice + materialTotalPrice + (product.ProductionCost ?? 0);
         }
 
+        public List<TblProduct> filterProductsByCategoryID(string categoryID)
+            => productDAO.filterProductsByCategoryID(categoryID);
+
         public async Task<List<(TblProduct product, double price)>> GetAllProductsAndPricesAsync()
         {
             var products = productDAO.GetAllProducts();

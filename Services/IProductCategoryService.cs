@@ -15,5 +15,6 @@ namespace Services
 
         public bool UpdateProductCategory(string id, TblProductCategory productCategory);
         public bool DeleteProductCategory(string id);
+        public TblProductCategory GetCategoryByName(string name);
     }
 }
