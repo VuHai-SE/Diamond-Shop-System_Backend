@@ -11,6 +11,6 @@ namespace Repositories
     public interface IOrderRepository
     {
         public TblOrder AddOrder(TblOrder order);
-        public List<TblOrder> getOrderByCustomerID(string customerID);
+        public List<TblOrder> getOrderByCustomerID(int customerID);
     }
 }
