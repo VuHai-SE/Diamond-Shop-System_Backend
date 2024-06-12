@@ -8,7 +8,7 @@ namespace Services.DTOs.Response
 {
     public class ProductBuyingResponse
     {
-        public string ProductCode {  get; set; }
+        public string ProductID {  get; set; }
         public string ProductName { get; set; }
         public string Material {  get; set; }
         public string Image { get; set; }

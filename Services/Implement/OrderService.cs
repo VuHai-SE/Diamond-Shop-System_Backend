@@ -66,7 +66,7 @@ namespace Services.Implement
                         var productMaterial = _productMaterialRepository.GetProductMaterialProductID(product.ProductId);
                         orderInfo.products.Add(new ProductBuyingResponse()
                         {
-                            ProductCode = product.ProductCode,
+                            ProductID = product.ProductId,
                             ProductName = product.ProductName,
                             Material = _materialCategoryRepository.GetMaterialCategory(productMaterial.MaterialId).MaterialName,
                             Image = product.Image,
