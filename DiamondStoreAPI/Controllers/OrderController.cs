@@ -45,17 +45,17 @@ namespace DiamondStoreAPI.Controllers
         //}
 
         //GET: api/Order/5
-        [HttpGet("getOrderByID")]
+        [HttpGet("getOrderInfo")]
         public async Task<ActionResult<TblOrder>> GetTblOrder(int id)
         {
-            var tblOrder = iOrderService.getOrderByOrderID(id);
+            var orderInfo = iOrderService.GetOrderInfo(id);
 
-            if (tblOrder == null)
+            if (orderInfo == null)
             {
                 return NotFound();
             }
 
-            return tblOrder;
+            return Ok(orderInfo);
         }
 
         // PUT: api/Order/5
