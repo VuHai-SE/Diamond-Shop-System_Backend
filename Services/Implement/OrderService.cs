@@ -5,6 +5,7 @@ using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects;
+using Microsoft.Identity.Client;
 using Repositories;
 using Repositories.Implement;
 using Services.DTOs.Response;
@@ -52,34 +53,46 @@ namespace Services.Implement
             {
                 foreach (var order in orders)
                 {
-                    var orderInfo = new OrderInfo();
-                    orderInfo.OrderID = order.OrderId;
-                    orderInfo.DiscountRate = (double)customer.DiscountRate;
-                    orderInfo.OrderDate = (DateTime)order.OrderDate;
-                    orderInfo.OrderStatus = (string)order.OrderStatus;
-                    var OrderDetail = _orderDetailRepository.GetOrderDetailsByOrderID(order.OrderId);
-                    foreach (var orderDetail in OrderDetail)
-                    {
-                        orderInfo.TotalPrice += (double)orderDetail.TotalPrice;
-                        orderInfo.FinalPrice += (double)orderDetail.FinalPrice;
-                        var product = _productRepository.GetProduct(orderDetail.ProductId);
-                        var productMaterial = _productMaterialRepository.GetProductMaterialProductID(product.ProductId);
-                        orderInfo.products.Add(new ProductBuyingResponse()
-                        {
-                            ProductID = product.ProductId,
-                            ProductName = product.ProductName,
-                            Material = _materialCategoryRepository.GetMaterialCategory(productMaterial.MaterialId).MaterialName,
-                            Image = product.Image,
-                            CustomizedSize = (int)orderDetail.CustomizedSize,
-                            Quantity = (int)orderDetail.Quantity,
-                            Price = (double)orderDetail.TotalPrice
-                        }
-                            );
-                    }
+                    var orderInfo = GetOrderInfo(order.OrderId);
                     orderHistory.Add(orderInfo);
                 }
             }
             return orderHistory;
+        }
+
+        public OrderInfo GetOrderInfo(int orderID)
+        {
+            var orderInfo = new OrderInfo();
+            var order = _orderRepository.getOrderByOrderID(orderID);
+            if (order != null)
+            {
+                var customer = _customerRepository.GetCustomerByID((int)order.CustomerId);
+                
+                orderInfo.OrderID = order.OrderId;
+                orderInfo.DiscountRate = (double)customer.DiscountRate;
+                orderInfo.OrderDate = (DateTime)order.OrderDate;
+                orderInfo.OrderStatus = (string)order.OrderStatus;
+                var OrderDetail = _orderDetailRepository.GetOrderDetailsByOrderID(order.OrderId);
+                foreach (var orderDetail in OrderDetail)
+                {
+                    orderInfo.TotalPrice += (double)orderDetail.TotalPrice;
+                    orderInfo.FinalPrice += (double)orderDetail.FinalPrice;
+                    var product = _productRepository.GetProduct(orderDetail.ProductId);
+                    var productMaterial = _productMaterialRepository.GetProductMaterialProductID(product.ProductId);
+                    orderInfo.products.Add(new ProductBuyingResponse()
+                    {
+                        ProductID = product.ProductId,
+                        ProductName = product.ProductName,
+                        Material = _materialCategoryRepository.GetMaterialCategory(productMaterial.MaterialId).MaterialName,
+                        Image = product.Image,
+                        CustomizedSize = (int)orderDetail.CustomizedSize,
+                        Quantity = (int)orderDetail.Quantity,
+                        Price = (double)orderDetail.TotalPrice
+                    }
+                        );
+                }
+            }
+            return orderInfo;
         }
     }
 }
