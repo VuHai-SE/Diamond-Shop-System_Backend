@@ -30,5 +30,23 @@ namespace DAOs
         {
             return dbContext.TblOrders.Where(o => o.CustomerId.Equals(customerID)).ToList();
         }
+
+        public TblOrder getOrderByOrderID(int orderID)
+        {
+            var order = dbContext.TblOrders.FirstOrDefault(o => o.OrderId.Equals(orderID));
+            return order;
+        }
+           
+
+        public void CancelOrder(int orderID)
+        {
+            TblOrder oldOrder = getOrderByOrderID(orderID);
+            if (oldOrder != null)
+            {
+                oldOrder.OrderStatus = "Cancelled";
+                dbContext.TblOrders.Update(oldOrder);
+                dbContext.SaveChanges();
+            }
+        }
     }
 }

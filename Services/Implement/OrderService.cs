@@ -33,8 +33,14 @@ namespace Services.Implement
         public TblOrder AddOrder(TblOrder order)
             => _orderRepository.AddOrder(order);
 
+        public void CancelOrder(int orderID)
+            => _orderRepository.CancelOrder(orderID);
+
         public List<TblOrder> getOrderByCustomerID(int customerID)
             => _orderRepository.getOrderByCustomerID(customerID);
+
+        public TblOrder getOrderByOrderID(int orderID)
+            => _orderRepository.getOrderByOrderID(orderID);
 
         public List<OrderInfo> GetOrderHistory(int AccountID)
         {
