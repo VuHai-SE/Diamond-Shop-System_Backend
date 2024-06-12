@@ -44,19 +44,19 @@ namespace DiamondStoreAPI.Controllers
         //    return Ok();
         //}
 
-        // GET: api/Order/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<TblOrder>> GetTblOrder(int id)
-        //{
-        //    var tblOrder = await iOrderService.TblOrders.FindAsync(id);
+        //GET: api/Order/5
+        [HttpGet("getOrderByID")]
+        public async Task<ActionResult<TblOrder>> GetTblOrder(int id)
+        {
+            var tblOrder = iOrderService.getOrderByOrderID(id);
 
-        //    if (tblOrder == null)
-        //    {
-        //        return NotFound();
-        //    }
+            if (tblOrder == null)
+            {
+                return NotFound();
+            }
 
-        //    return tblOrder;
-        //}
+            return tblOrder;
+        }
 
         // PUT: api/Order/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -140,7 +140,7 @@ namespace DiamondStoreAPI.Controllers
                 //product buying for customer after charging for order
                 ProductBuyingResponse productBuying = new ProductBuyingResponse()
                 {
-                    ProductCode = product.ProductCode,
+                    ProductID = product.ProductId,
                     ProductName = product.ProductName,
                     Material = iMaterialCategoryService.GetMaterialCategory(iProductMaterialService.GetProductMaterialProductID(productID).MaterialId).MaterialName,
                     Image = product.Image,
