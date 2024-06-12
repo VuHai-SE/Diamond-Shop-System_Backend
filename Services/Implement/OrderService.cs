@@ -52,30 +52,7 @@ namespace Services.Implement
             {
                 foreach (var order in orders)
                 {
-                    var orderInfo = new OrderInfo();
-                    orderInfo.OrderID = order.OrderId;
-                    orderInfo.DiscountRate = (double)customer.DiscountRate;
-                    orderInfo.OrderDate = (DateTime)order.OrderDate;
-                    orderInfo.OrderStatus = (string)order.OrderStatus;
-                    var OrderDetail = _orderDetailRepository.GetOrderDetailsByOrderID(order.OrderId);
-                    foreach (var orderDetail in OrderDetail)
-                    {
-                        orderInfo.TotalPrice += (double)orderDetail.TotalPrice;
-                        orderInfo.FinalPrice += (double)orderDetail.FinalPrice;
-                        var product = _productRepository.GetProduct(orderDetail.ProductId);
-                        var productMaterial = _productMaterialRepository.GetProductMaterialProductID(product.ProductId);
-                        orderInfo.products.Add(new ProductBuyingResponse()
-                        {
-                            ProductID = product.ProductId,
-                            ProductName = product.ProductName,
-                            Material = _materialCategoryRepository.GetMaterialCategory(productMaterial.MaterialId).MaterialName,
-                            Image = product.Image,
-                            CustomizedSize = (int)orderDetail.CustomizedSize,
-                            Quantity = (int)orderDetail.Quantity,
-                            Price = (double)orderDetail.TotalPrice
-                        }
-                            );
-                    }
+                    var orderInfo = GetOrderInfo(order.OrderId);
                     orderHistory.Add(orderInfo);
                 }
             }
@@ -84,5 +61,7 @@ namespace Services.Implement
 
         public List<TblOrder> GetOrders()
             => _orderRepository.GetOrders();
+        public OrderInfo GetOrderInfo(int orderID)
+        {
     }
 }
