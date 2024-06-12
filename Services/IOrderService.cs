@@ -13,5 +13,7 @@ namespace Services
         public TblOrder AddOrder(TblOrder order);
         public List<TblOrder> getOrderByCustomerID(int customerID);
         public List<OrderInfo> GetOrderHistory(int AccountID);
+        public TblOrder getOrderByOrderID(int orderID);
+        public void CancelOrder(int orderID);
     }
 }

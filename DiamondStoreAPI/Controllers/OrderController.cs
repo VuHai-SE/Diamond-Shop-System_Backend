@@ -177,6 +177,18 @@ namespace DiamondStoreAPI.Controllers
             return Ok(orderHistory);
         }
 
+        [HttpPut("CancelOrder")]
+        public async Task<IActionResult> CancelOrder(int id)
+        {
+            var orderToUpdate = iOrderService.getOrderByOrderID(id);
+            if (orderToUpdate == null)
+            {
+                return NotFound();
+            }
+
+            iOrderService.CancelOrder(id);
+            return Ok();
+        }
         // DELETE: api/Order/5
         //[HttpDelete("{id}")]
         //public async Task<IActionResult> DeleteTblOrder(int id)

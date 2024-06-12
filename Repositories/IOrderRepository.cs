@@ -12,5 +12,7 @@ namespace Repositories
     {
         public TblOrder AddOrder(TblOrder order);
         public List<TblOrder> getOrderByCustomerID(int customerID);
+        public TblOrder getOrderByOrderID(int orderID);
+        public void CancelOrder(int orderID);
     }
 }
