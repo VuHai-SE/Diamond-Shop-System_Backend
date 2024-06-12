@@ -60,6 +60,8 @@ namespace Services.Implement
             return orderHistory;
         }
 
+        public List<TblOrder> GetOrders()
+            => _orderRepository.GetOrders();
         public OrderInfo GetOrderInfo(int orderID)
         {
             var orderInfo = new OrderInfo();

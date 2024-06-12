@@ -19,6 +19,11 @@ namespace DAOs
             }
         }
 
+        public List<TblOrder> GetOrders()
+        {
+            return dbContext.TblOrders.ToList();
+        }
+
         public TblOrder AddOrder(TblOrder order)
         {
             dbContext.TblOrders.Add(order);
