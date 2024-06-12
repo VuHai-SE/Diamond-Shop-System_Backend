@@ -10,6 +10,7 @@ namespace Services
 {
     public interface IOrderService
     {
+        public List<TblOrder> GetOrders();
         public TblOrder AddOrder(TblOrder order);
         public List<TblOrder> getOrderByCustomerID(int customerID);
         public List<OrderInfo> GetOrderHistory(int AccountID);

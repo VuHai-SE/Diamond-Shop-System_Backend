@@ -38,11 +38,11 @@ namespace DiamondStoreAPI.Controllers
         }
 
         //GET: api/Order
-        //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<TblOrder>>> GetTblOrders()
-        //{
-        //    return Ok();
-        //}
+        [HttpGet]
+        public List<TblOrder> GetOrders()
+        {
+            return iOrderService.GetOrders();
+        }
 
         //GET: api/Order/5
         [HttpGet("getOrderByID")]

@@ -81,5 +81,8 @@ namespace Services.Implement
             }
             return orderHistory;
         }
+
+        public List<TblOrder> GetOrders()
+            => _orderRepository.GetOrders();
     }
 }
