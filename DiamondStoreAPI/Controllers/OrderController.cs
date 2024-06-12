@@ -186,8 +186,14 @@ namespace DiamondStoreAPI.Controllers
                 return NotFound();
             }
 
-            iOrderService.CancelOrder(id);
-            return Ok();
+            if (orderToUpdate.OrderStatus.Equals("Deliverying") || orderToUpdate.OrderStatus.Equals("Deliveried") || orderToUpdate.Equals("Cancelled"))
+            {
+                return BadRequest("Cannot cancel");
+            } else
+            {
+                iOrderService.CancelOrder(id);
+                return Ok();
+            }
         }
         // DELETE: api/Order/5
         //[HttpDelete("{id}")]
