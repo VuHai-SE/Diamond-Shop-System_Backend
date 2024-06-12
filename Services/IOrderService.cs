@@ -16,5 +16,6 @@ namespace Services
         public List<OrderInfo> GetOrderHistory(int AccountID);
         public TblOrder getOrderByOrderID(int orderID);
         public void CancelOrder(int orderID);
+        public OrderInfo GetOrderInfo(int orderID);
     }
 }
