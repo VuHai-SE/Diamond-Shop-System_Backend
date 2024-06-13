@@ -37,6 +37,61 @@ namespace DiamondStoreAPI.Controllers
             iMaterialCategoryService = materialCategoryService;
         }
 
+        [HttpPost("{orderId}/accept")]
+        public async Task<IActionResult> AcceptOrder(int orderId)
+        {
+            var result = await iOrderService.UpdateOrderStatus(orderId, "Accepted");
+            if (result)
+            {
+                return Ok(new { Message = "Order accepted successfully." });
+            }
+            return BadRequest(new { Message = "Failed to accept order." });
+        }
+
+        [HttpPost("{orderId}/pickup")]
+        public async Task<IActionResult> PickupOrder(int orderId)
+        {
+            var result = await iOrderService.UpdateOrderStatus(orderId, "Delivering");
+            if (result)
+            {
+                return Ok(new { Message = "Order status updated to Delivering." });
+            }
+            return BadRequest(new { Message = "Failed to update order status." });
+        }
+
+        [HttpPost("{orderId}/delivered")]
+        public async Task<IActionResult> DeliverOrder(int orderId)
+        {
+            var result = await iOrderService.UpdateOrderStatus(orderId, "Delivered");
+            if (result)
+            {
+                return Ok(new { Message = "Order status updated to Delivered." });
+            }
+            return BadRequest(new { Message = "Failed to update order status." });
+        }
+
+        [HttpPost("{orderId}/usercancel")]
+        public async Task<IActionResult> UserCancelOrder(int orderId)
+        {
+            var result = await iOrderService.UpdateOrderStatus(orderId, "Canceled");
+            if (result)
+            {
+                return Ok(new { Message = "Order status updated to Canceled." });
+            }
+            return BadRequest(new { Message = "Failed to update order status." });
+        }
+
+        //[HttpPost("{orderId}/cancel")]
+        //public async Task<IActionResult> CancelOrder(int orderId)
+        //{
+        //    var result = await iOrderService.UpdateOrderStatus(orderId, "Canceled");
+        //    if (result)
+        //    {
+        //        return Ok(new { Message = "Order canceled successfully." });
+        //    }
+        //    return BadRequest(new { Message = "Failed to cancel order." });
+        //}
+
         //GET: api/Order
         [HttpGet]
         public List<TblOrder> GetOrders()

@@ -15,5 +15,7 @@ namespace Repositories
         public List<TblOrder> getOrderByCustomerID(int customerID);
         public TblOrder getOrderByOrderID(int orderID);
         public void CancelOrder(int orderID);
+        Task<TblOrder> GetOrderById(int orderId);
+        Task<bool> UpdateOrder(TblOrder order);
     }
 }

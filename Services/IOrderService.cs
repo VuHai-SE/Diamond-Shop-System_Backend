@@ -17,5 +17,6 @@ namespace Services
         public TblOrder getOrderByOrderID(int orderID);
         public void CancelOrder(int orderID);
         public OrderInfo GetOrderInfo(int orderID);
+        Task<bool> UpdateOrderStatus(int orderId, string status);
     }
 }
