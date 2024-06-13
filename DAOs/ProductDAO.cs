@@ -77,5 +77,8 @@ namespace DAOs
         {
             return _context.TblProducts.FirstOrDefault(m => m.ProductId.Equals(id));
         }
+
+        public List<TblProduct> GetProductsByName(string name)
+            => _context.TblProducts.Where(p => p.ProductName.ToLower().Contains(name.ToLower())).ToList();
     }
 }
