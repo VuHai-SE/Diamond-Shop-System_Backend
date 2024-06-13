@@ -20,7 +20,7 @@ namespace Repositories.Implement
                 orderDAO = new OrderDAO();
             }
         }
-        
+
         public TblOrder AddOrder(TblOrder order)
             => orderDAO.AddOrder(order);
 
@@ -35,5 +35,15 @@ namespace Repositories.Implement
 
         public List<TblOrder> GetOrders()
             => orderDAO.GetOrders();
+
+        public async Task<TblOrder> GetOrderById(int orderId)
+        {
+            return await orderDAO.GetOrderById(orderId);
+        }
+
+        public async Task<bool> UpdateOrder(TblOrder order)
+        {
+            return await orderDAO.UpdateOrder(order);
+        }
     }
 }

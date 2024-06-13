@@ -37,6 +37,28 @@ namespace DiamondStoreAPI.Controllers
             iMaterialCategoryService = materialCategoryService;
         }
 
+        [HttpPost("{orderId}/accept")]
+        public async Task<IActionResult> AcceptOrder(int orderId)
+        {
+            var result = await iOrderService.UpdateOrderStatus(orderId, "Accepted");
+            if (result)
+            {
+                return Ok(new { Message = "Order accepted successfully." });
+            }
+            return BadRequest(new { Message = "Failed to accept order." });
+        }
+
+        //[HttpPost("{orderId}/cancel")]
+        //public async Task<IActionResult> CancelOrder(int orderId)
+        //{
+        //    var result = await iOrderService.UpdateOrderStatus(orderId, "Canceled");
+        //    if (result)
+        //    {
+        //        return Ok(new { Message = "Order canceled successfully." });
+        //    }
+        //    return BadRequest(new { Message = "Failed to cancel order." });
+        //}
+
         //GET: api/Order
         [HttpGet]
         public List<TblOrder> GetOrders()
