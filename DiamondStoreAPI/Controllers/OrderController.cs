@@ -211,6 +211,10 @@ namespace DiamondStoreAPI.Controllers
             orderInfo.DiscountRate = (double)customer.DiscountRate;
             orderInfo.OrderDate = newOrderRequest.OrderDate;
             orderInfo.OrderStatus = order.OrderStatus;
+            orderInfo.CustomerID = customer.CustomerId;
+            orderInfo.CustomerName = customer.FirstName + " " + customer.LastName;
+            orderInfo.CustomerPhone = customer.PhoneNumber;
+            orderInfo.Address = customer.Address;
             //add new Payment
             TblPayment newPayMent = new TblPayment()
             {
@@ -250,6 +254,7 @@ namespace DiamondStoreAPI.Controllers
                 return Ok();
             }
         }
+
         // DELETE: api/Order/5
         //[HttpDelete("{id}")]
         //public async Task<IActionResult> DeleteTblOrder(int id)

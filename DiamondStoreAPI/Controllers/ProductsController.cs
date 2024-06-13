@@ -65,6 +65,18 @@ namespace DiamondStoreAPI.Controllers
             return Ok(pruductList);
         }
 
+        [HttpGet("ProductName/{name}")]
+        public async Task<IActionResult> GetProductsByName(string name)
+        {
+            
+            var pruductList = _productService.GetProductsByName(name);
+
+            if (pruductList == null)
+            {
+                return NotFound();
+            }
+            return Ok(pruductList);
+        }
         //[HttpGet("{productId}/price")]
         //public async Task<IActionResult> GetProductPrice(string productId)
         //{

@@ -73,5 +73,8 @@ namespace Repositories.Implement
         {
             return await productDAO.GetProductByIdAsync(productId);
         }
+
+        public List<TblProduct> GetProductsByName(string name)
+            => productDAO.GetProductsByName(name);
     }
 }

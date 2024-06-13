@@ -82,6 +82,10 @@ namespace Services.Implement
                 var customer = _customerRepository.GetCustomerByID((int)order.CustomerId);
                 
                 orderInfo.OrderID = order.OrderId;
+                orderInfo.CustomerID = customer.CustomerId;
+                orderInfo.CustomerName = customer.FirstName + " " + customer.LastName;
+                orderInfo.CustomerPhone = customer.PhoneNumber;
+                orderInfo.Address = customer.Address;
                 orderInfo.DiscountRate = (double)customer.DiscountRate;
                 orderInfo.OrderDate = (DateTime)order.OrderDate;
                 orderInfo.OrderStatus = (string)order.OrderStatus;
