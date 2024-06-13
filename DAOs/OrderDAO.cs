@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects;
+using Microsoft.EntityFrameworkCore;
 
 namespace DAOs
 {
@@ -17,6 +18,22 @@ namespace DAOs
             {
                 dbContext = new DiamondStoreContext();
             }
+        }
+
+        public async Task<TblOrder> GetOrderById(int orderId)
+        {
+            return await dbContext.TblOrders.FindAsync(orderId);
+        }
+
+        public async Task<bool> UpdateOrder(TblOrder order)
+        {
+            dbContext.TblOrders.Update(order);
+            return await dbContext.SaveChangesAsync() > 0;
+        }
+
+        public List<TblOrder> GetOrders()
+        {
+            return dbContext.TblOrders.ToList();
         }
 
         public TblOrder AddOrder(TblOrder order)

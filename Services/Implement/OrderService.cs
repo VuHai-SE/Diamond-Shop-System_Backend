@@ -31,6 +31,17 @@ namespace Services.Implement
             _materialCategoryRepository = materialCategoryRepository;
         }
 
+        public async Task<bool> UpdateOrderStatus(int orderId, string status)
+        {
+            var order = await _orderRepository.GetOrderById(orderId);
+            if (order == null)
+            {
+                return false;
+            }
+            order.OrderStatus = status;
+            return await _orderRepository.UpdateOrder(order);
+        }
+
         public TblOrder AddOrder(TblOrder order)
             => _orderRepository.AddOrder(order);
 
@@ -60,6 +71,8 @@ namespace Services.Implement
             return orderHistory;
         }
 
+        public List<TblOrder> GetOrders()
+            => _orderRepository.GetOrders();
         public OrderInfo GetOrderInfo(int orderID)
         {
             var orderInfo = new OrderInfo();
