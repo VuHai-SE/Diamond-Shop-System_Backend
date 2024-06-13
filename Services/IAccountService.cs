@@ -11,5 +11,6 @@ namespace Services
     {
         Task<TblAccount> AuthenticateAsync(string username, string password);
         Task RegisterAsync(string username, string password);
+        Task<TblAccount> GetAccountByUsernameAsync(string username);
     }
 }

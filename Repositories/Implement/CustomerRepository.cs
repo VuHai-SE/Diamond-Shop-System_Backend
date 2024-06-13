@@ -20,8 +20,8 @@ namespace Repositories.Implement
             }
         }
 
-        public TblCustomer GetCustomerByAccount(int accountID)
-            => customerDAO.GetCustomerByAccount(accountID);
+        public TblCustomer GetCustomerByAccount(string username)
+            => customerDAO.GetCustomerByAccount(username);
 
         public TblCustomer GetCustomerByID(int customerID)
             => customerDAO.GetCustomerByID(customerID);

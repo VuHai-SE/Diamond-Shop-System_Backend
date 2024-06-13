@@ -21,8 +21,8 @@ namespace Services.Implement
             }
         }
 
-        public TblCustomer GetCustomerByAccount(int accountID)
-            => customerRepository.GetCustomerByAccount(accountID);
+        public TblCustomer GetCustomerByAccount(string username)
+            => customerRepository.GetCustomerByAccount(username);
 
         public TblCustomer GetCustomerByID(int customerID)
             => customerRepository.GetCustomerByID(customerID);
