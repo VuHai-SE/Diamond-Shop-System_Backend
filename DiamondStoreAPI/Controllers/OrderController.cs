@@ -155,7 +155,7 @@ namespace DiamondStoreAPI.Controllers
                 return BadRequest();
             }
 
-            var customerIDToOrder = iCustomerService.GetCustomerByAccount(newOrderRequest.AccountID).CustomerId;
+            var customerIDToOrder = iCustomerService.GetCustomerByAccount(newOrderRequest.Username).CustomerId;
 
             TblOrder newOrder = new TblOrder()
             {
@@ -230,9 +230,9 @@ namespace DiamondStoreAPI.Controllers
         }
 
         [HttpGet("OrderHistory")]
-        public async Task<ActionResult<IEnumerable<TblOrder>>> GetOrderHistory(int accountID)
+        public async Task<ActionResult<IEnumerable<TblOrder>>> GetOrderHistory(string username)
         {
-            var orderHistory = iOrderService.GetOrderHistory(accountID);
+            var orderHistory = iOrderService.GetOrderHistory(username);
             return Ok(orderHistory);
         }
 

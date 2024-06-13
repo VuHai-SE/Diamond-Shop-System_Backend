@@ -13,6 +13,6 @@ namespace Repositories
         public List<TblCustomer> GetCustomers();
         public TblCustomer GetCustomerByID(int customerID);
 
-        public TblCustomer GetCustomerByAccount(int accountID);
+        public TblCustomer GetCustomerByAccount(string username);
     }
 }

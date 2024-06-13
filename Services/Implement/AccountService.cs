@@ -29,6 +29,9 @@ namespace Services.Implement
             return account;
         }
 
+        public async Task<TblAccount> GetAccountByUsernameAsync(string username)
+            => await _accountRepository.GetAccountByUsernameAsync(username);
+
         public async Task RegisterAsync(string username, string password)
         {
             

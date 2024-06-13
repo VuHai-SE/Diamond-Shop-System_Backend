@@ -54,10 +54,10 @@ namespace Services.Implement
         public TblOrder getOrderByOrderID(int orderID)
             => _orderRepository.getOrderByOrderID(orderID);
 
-        public List<OrderInfo> GetOrderHistory(int AccountID)
+        public List<OrderInfo> GetOrderHistory(string username)
         {
             var orderHistory = new List<OrderInfo>();
-            var customer = _customerRepository.GetCustomerByAccount(AccountID);
+            var customer = _customerRepository.GetCustomerByAccount(username);
             int customerID = customer.CustomerId;
             var orders = getOrderByCustomerID(customerID);
             if (orders != null)
