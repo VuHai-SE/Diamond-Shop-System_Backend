@@ -254,6 +254,7 @@ namespace DiamondStoreAPI.Controllers
                 return Ok();
             }
         }
+
         // DELETE: api/Order/5
         //[HttpDelete("{id}")]
         //public async Task<IActionResult> DeleteTblOrder(int id)

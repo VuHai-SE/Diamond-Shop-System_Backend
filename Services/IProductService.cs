@@ -22,5 +22,6 @@ namespace Services
 
         public TblProduct GetProduct(string id);
         public List<TblProduct> filterProductsByCategoryID(string categoryID);
+        public List<TblProduct> GetProductsByName(string name);
     }
 }

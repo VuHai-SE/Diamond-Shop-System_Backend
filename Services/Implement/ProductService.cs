@@ -56,5 +56,8 @@ namespace Services.Implement
 
         public List<TblProduct> filterProductsByCategoryID(string categoryID)
             => productRepository.filterProductsByCategoryID(categoryID);
+
+        public List<TblProduct> GetProductsByName(string name)
+            => productRepository.GetProductsByName(name);
     }
 }
