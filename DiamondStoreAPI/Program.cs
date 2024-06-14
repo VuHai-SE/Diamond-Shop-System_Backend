@@ -29,11 +29,12 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 
 
 
-services.AddScoped<IPaymentService, PaymentService>();
+
 services.AddScoped<IGemPriceListService, GemPriceListService>();
 
 
 // Add dependencies
+
 builder.Services.AddScoped<AccountDAO>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IAccountService, AccountService>();
@@ -77,6 +78,7 @@ services.AddScoped<ISaleStaffService, SaleStaffService>();
 services.AddScoped<ShipperDAO>();
 services.AddScoped<IShipperRepository, ShipperRepository>();
 services.AddScoped<IShipperService, ShipperService>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

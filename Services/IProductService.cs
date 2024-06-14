@@ -10,18 +10,17 @@ namespace Services
 {
     public interface IProductService
     {
-        //public List<TblProduct> GetProducts();
-        //public TblProduct GetProduct(string id);
         public TblProduct AddProduct(TblProduct product);
 
         Task<double> CalculateProductPriceAsync(string productId);
 
-        Task<List<(TblProduct product, double price)>> GetAllProductsAndPricesAsync();
+        Task<List<ProductWithPriceResponse>> GetAllProductsAndPricesAsync();
 
         Task<ProductWithPriceResponse> GetProductAndPriceByIdAsync(string productId);
 
         public TblProduct GetProduct(string id);
         public List<TblProduct> filterProductsByCategoryID(string categoryID);
         public List<TblProduct> GetProductsByName(string name);
+        public List<TblProduct> GetAllProducts();
     }
 }
