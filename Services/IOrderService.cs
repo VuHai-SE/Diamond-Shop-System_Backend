@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects;
+using Services.DTOs.Request;
 using Services.DTOs.Response;
 
 namespace Services
@@ -19,5 +20,6 @@ namespace Services
         public OrderInfo GetOrderInfo(int orderID);
         Task<bool> UpdateOrderStatus(int orderId, string status);
         public List<OrderInfo> GetOrderInfoList();
+        public List<OrderInfo> GetAcceptedOrderInforList();
     }
 }

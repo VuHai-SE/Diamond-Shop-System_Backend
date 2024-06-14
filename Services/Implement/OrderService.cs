@@ -6,8 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects;
 using Microsoft.Identity.Client;
+using PayPal.Api;
 using Repositories;
 using Repositories.Implement;
+using Services.DTOs.Request;
 using Services.DTOs.Response;
 
 namespace Services.Implement
@@ -138,6 +140,24 @@ namespace Services.Implement
                 {
                     var orderInfo = GetOrderInfo(order.OrderId);
                     orderInforList.Add(orderInfo);
+                }
+            }
+            return orderInforList;
+        }
+
+        public List<OrderInfo> GetAcceptedOrderInforList()
+        {
+            var orderInforList = new List<OrderInfo>();
+            var orders = _orderRepository.GetOrders();
+            if (orders != null)
+            {
+                foreach (var order in orders)
+                {
+                    if (order.OrderStatus.Equals("Accepted"))
+                    {
+                        var orderInfo = GetOrderInfo(order.OrderId);
+                        orderInforList.Add(orderInfo);
+                    }
                 }
             }
             return orderInforList;
