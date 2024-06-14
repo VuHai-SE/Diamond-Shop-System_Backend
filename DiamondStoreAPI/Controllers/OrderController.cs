@@ -226,7 +226,7 @@ namespace DiamondStoreAPI.Controllers
             }
         }
 
-        [HttpGet("OrderInfoList")]
+        [HttpGet("GetOrderInfoList")]
         public async Task<ActionResult<IEnumerable<TblOrder>>> GetOrderInforList()
         {
             var orderInfoList = iOrderService.GetOrderInfoList();
