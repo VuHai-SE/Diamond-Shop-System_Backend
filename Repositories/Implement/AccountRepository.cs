@@ -31,5 +31,11 @@ namespace Repositories.Implement
         {
             await _accountDAO.AddAccountAsync(account);
         }
+
+        public TblAccount GetAccountSaleStaff(string saleStaffID)
+            => _accountDAO.GetAccountSaleStaff(saleStaffID);
+
+        public TblAccount GetAccountShipper(string shipperID)
+            => _accountDAO.GetAccountShipper(shipperID);
     }
 }
