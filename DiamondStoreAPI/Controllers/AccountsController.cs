@@ -14,6 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Text;
 using System.Configuration;
+using Services.DTOs.Response;
 
 namespace DiamondStoreAPI.Controllers
 {
@@ -38,8 +39,8 @@ namespace DiamondStoreAPI.Controllers
             {
                 return Unauthorized();
             }
-
-            return Ok(account);
+            var loginResponse = new LoginResponse() { Username = account.Username, Role = account.Role };
+            return Ok(loginResponse);
         }
 
         [HttpPost("register")]

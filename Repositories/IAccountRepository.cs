@@ -1,4 +1,5 @@
 ﻿using BusinessObjects;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,7 @@ namespace Repositories
         Task AddAccountAsync(TblAccount account);
 
         Task AddAccountByManagerAsync(TblAccount account);
+        public TblAccount GetAccountSaleStaff(string saleStaffID);
+        public TblAccount GetAccountShipper(string shipperID);
     }
 }

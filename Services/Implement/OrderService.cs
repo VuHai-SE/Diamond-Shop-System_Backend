@@ -20,8 +20,10 @@ namespace Services.Implement
         private readonly IProductRepository _productRepository;
         private readonly IProductMaterialRepository _productMaterialRepository;
         private readonly IMaterialCategoryRepository _materialCategoryRepository;
+        private readonly IPaymentRepository _paymentRepository;
+        private readonly IAccountRepository _accountRepository;
 
-        public OrderService(IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository, ICustomerRepository customerRepository, IProductRepository productRepository, IProductMaterialRepository productMaterialRepository, IMaterialCategoryRepository materialCategoryRepository)
+        public OrderService(IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository, ICustomerRepository customerRepository, IProductRepository productRepository, IProductMaterialRepository productMaterialRepository, IMaterialCategoryRepository materialCategoryRepository, IPaymentRepository paymentRepository, IAccountRepository accountRepository)
         {
             _orderDetailRepository = orderDetailRepository;
             _customerRepository = customerRepository;
@@ -29,6 +31,8 @@ namespace Services.Implement
             _productRepository = productRepository;
             _productMaterialRepository = productMaterialRepository;
             _materialCategoryRepository = materialCategoryRepository;
+            _paymentRepository = paymentRepository;
+            _accountRepository = accountRepository;
         }
 
         public async Task<bool> UpdateOrderStatus(int orderId, string status)
@@ -48,18 +52,18 @@ namespace Services.Implement
         public void CancelOrder(int orderID)
             => _orderRepository.CancelOrder(orderID);
 
-        public List<TblOrder> getOrderByCustomerID(int customerID)
+        public List<TblOrder> GetOrdersByCustomerID(int customerID)
             => _orderRepository.getOrderByCustomerID(customerID);
 
         public TblOrder getOrderByOrderID(int orderID)
             => _orderRepository.getOrderByOrderID(orderID);
 
-        public List<OrderInfo> GetOrderHistory(int AccountID)
+        public List<OrderInfo> GetOrderHistory(string username)
         {
             var orderHistory = new List<OrderInfo>();
-            var customer = _customerRepository.GetCustomerByAccount(AccountID);
+            var customer = _customerRepository.GetCustomerByAccount(username);
             int customerID = customer.CustomerId;
-            var orders = getOrderByCustomerID(customerID);
+            var orders = GetOrdersByCustomerID(customerID);
             if (orders != null)
             {
                 foreach (var order in orders)
@@ -86,6 +90,18 @@ namespace Services.Implement
                 orderInfo.CustomerName = customer.FirstName + " " + customer.LastName;
                 orderInfo.CustomerPhone = customer.PhoneNumber;
                 orderInfo.Address = customer.Address;
+                orderInfo.Payment = order.PaymentMethod;
+                orderInfo.Deposits = (double)_paymentRepository.GetPaymentByCustomerAndOrder(orderID, customer.CustomerId).Deposits;
+                if (order.StaffId != null)
+                {
+                    var accSaleStaff = _accountRepository.GetAccountSaleStaff(order.StaffId);
+                    orderInfo.SaleStaff = accSaleStaff.Username;
+                }
+                if (order.ShipperId != null)
+                {
+                    var accShipper = _accountRepository.GetAccountShipper(order.ShipperId);
+                    orderInfo.Shipper = accShipper.Username;
+                }
                 orderInfo.DiscountRate = (double)customer.DiscountRate;
                 orderInfo.OrderDate = (DateTime)order.OrderDate;
                 orderInfo.OrderStatus = (string)order.OrderStatus;
@@ -110,6 +126,21 @@ namespace Services.Implement
                 }
             }
             return orderInfo;
+        }
+
+        public List<OrderInfo> GetOrderInfoList()
+        {
+            var orderInforList = new List<OrderInfo>();
+            var orders = _orderRepository.GetOrders();
+            if (orders != null)
+            {
+                foreach (var order in orders)
+                {
+                    var orderInfo = GetOrderInfo(order.OrderId);
+                    orderInforList.Add(orderInfo);
+                }
+            }
+            return orderInforList;
         }
     }
 }

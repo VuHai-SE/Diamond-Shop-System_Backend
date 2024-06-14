@@ -12,6 +12,7 @@ using Services.DTOs.Request;
 using Microsoft.Identity.Client;
 using Services.DTOs.Response;
 using Humanizer;
+using Microsoft.IdentityModel.Tokens;
 
 namespace DiamondStoreAPI.Controllers
 {
@@ -113,36 +114,6 @@ namespace DiamondStoreAPI.Controllers
             return Ok(orderInfo);
         }
 
-        // PUT: api/Order/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutTblOrder(int id, TblOrder tblOrder)
-        //{
-        //    if (id != tblOrder.OrderId)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    iOrderService.Entry(tblOrder).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await iOrderService.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!TblOrderExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
 
         // POST: api/Order
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -155,7 +126,7 @@ namespace DiamondStoreAPI.Controllers
                 return BadRequest();
             }
 
-            var customerIDToOrder = iCustomerService.GetCustomerByAccount(newOrderRequest.AccountID).CustomerId;
+            var customerIDToOrder = iCustomerService.GetCustomerByAccount(newOrderRequest.Username).CustomerId;
 
             TblOrder newOrder = new TblOrder()
             {
@@ -224,15 +195,15 @@ namespace DiamondStoreAPI.Controllers
                 Deposits = newOrderRequest.Deposits,
             };
             newPayMent.PayDetail = newPayMent.PaymentMethod + "-Deposits: " + newPayMent.Deposits;
-            iPaymentService.AddPayment(newPayMent);
-
+            var payment = iPaymentService.AddPayment(newPayMent);
+            orderInfo.Deposits = (double)payment.Deposits;
             return Ok(orderInfo);
         }
 
         [HttpGet("OrderHistory")]
-        public async Task<ActionResult<IEnumerable<TblOrder>>> GetOrderHistory(int accountID)
+        public async Task<ActionResult<IEnumerable<TblOrder>>> GetOrderHistory(string username)
         {
-            var orderHistory = iOrderService.GetOrderHistory(accountID);
+            var orderHistory = iOrderService.GetOrderHistory(username);
             return Ok(orderHistory);
         }
 
@@ -255,25 +226,15 @@ namespace DiamondStoreAPI.Controllers
             }
         }
 
-        // DELETE: api/Order/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteTblOrder(int id)
-        //{
-        //    var tblOrder = await iOrderService.TblOrders.FindAsync(id);
-        //    if (tblOrder == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    iOrderService.TblOrders.Remove(tblOrder);
-        //    await iOrderService.SaveChangesAsync();
-
-        //    return NoContent();
-        //}
-
-        //private bool TblOrderExists(int id)
-        //{
-        //    return iOrderService.TblOrders.Any(e => e.OrderId == id);
-        //}
+        [HttpGet("GetOrderInfoList")]
+        public async Task<ActionResult<IEnumerable<TblOrder>>> GetOrderInforList()
+        {
+            var orderInfoList = iOrderService.GetOrderInfoList();
+            if (orderInfoList.IsNullOrEmpty())
+            {
+                return NotFound();
+            }
+            return Ok(orderInfoList);
+        }
     }
 }

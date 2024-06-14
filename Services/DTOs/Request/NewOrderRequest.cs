@@ -8,7 +8,7 @@ namespace Services.DTOs.Request
 {
     public class NewOrderRequest
     {
-        public int AccountID { get; set; }
+        public string Username { get; set; }
         public DateTime OrderDate { get; set; }
         public string PaymentMethod { get; set; }
         public List<ProductRequest> Products { get; set; } = new List<ProductRequest>();

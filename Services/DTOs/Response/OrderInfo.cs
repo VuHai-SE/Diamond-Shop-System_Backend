@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BusinessObjects;
 using Services.DTOs.Request;
 
 namespace Services.DTOs.Response
@@ -14,6 +15,10 @@ namespace Services.DTOs.Response
         public string CustomerName { get; set; }
         public string CustomerPhone { get; set; }
         public string Address { get; set; }
+        public string Payment {  get; set; }
+        public double Deposits { get; set; } = 0;
+        public string? SaleStaff { get; set; } = null;
+        public string? Shipper { get; set; } = null;
         public List<ProductBuyingResponse> products { get; set; } = new List<ProductBuyingResponse>();
         public double TotalPrice { get; set; } = 0;
         public double DiscountRate { get; set; }
