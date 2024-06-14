@@ -78,11 +78,29 @@ namespace Services.Implement
         public TblProduct GetProduct(string id)
             => productRepository.GetProduct(id);
 
-        public List<TblProduct> filterProductsByCategoryID(string categoryID)
-            => productRepository.filterProductsByCategoryID(categoryID);
+        public async Task<List<ProductWithPriceResponse>> filterProductsByCategoryID(string categoryID)
+        {
+            var productWithPriceList = new List<ProductWithPriceResponse>();
+            var productList = productRepository.filterProductsByCategoryID(categoryID);
+            foreach (var product in productList)
+            {
+                var productWithPrice = await GetProductAndPriceByIdAsync(product.ProductId);
+                productWithPriceList.Add(productWithPrice);
+            }
+            return productWithPriceList;
+        }
 
-        public List<TblProduct> GetProductsByName(string name)
-            => productRepository.GetProductsByName(name);
+        public async Task<List<ProductWithPriceResponse>> GetProductsByName(string name)
+        {
+            var productWithPriceList = new List<ProductWithPriceResponse>();
+            var productList = productRepository.GetProductsByName(name);
+            foreach (var product in productList)
+            {
+                var productWithPrice = await GetProductAndPriceByIdAsync(product.ProductId);
+                productWithPriceList.Add(productWithPrice);
+            }
+            return productWithPriceList;
+        }
 
         public List<TblProduct> GetAllProducts()
             => productRepository.GetAllProducts();
