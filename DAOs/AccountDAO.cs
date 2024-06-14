@@ -33,5 +33,18 @@ namespace DAOs
             _context.TblAccounts.Add(account);
             await _context.SaveChangesAsync();
         }
+
+        public TblAccount GetAccountSaleStaff(string saleStaffID)
+        {
+            var saleStaff = _context.TblSaleStaffs.FirstOrDefault(ss => ss.StaffId.Equals(saleStaffID));
+            return _context.TblAccounts.FirstOrDefault(a => a.AccountId.Equals(saleStaff.AccountId));
+        }
+
+        public TblAccount GetAccountShipper(string shipperID)
+        {
+            var shipper = _context.TblShippers.FirstOrDefault(sh => sh.ShipperId.Equals(shipperID));
+            return _context.TblAccounts.FirstOrDefault(a => a.AccountId.Equals(shipper.AccountId));
+        }
+
     }
 }
