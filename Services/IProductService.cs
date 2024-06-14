@@ -19,8 +19,8 @@ namespace Services
         Task<ProductWithPriceResponse> GetProductAndPriceByIdAsync(string productId);
 
         public TblProduct GetProduct(string id);
-        public List<TblProduct> filterProductsByCategoryID(string categoryID);
-        public List<TblProduct> GetProductsByName(string name);
+        public Task<List<ProductWithPriceResponse>> filterProductsByCategoryID(string categoryID);
+        public Task<List<ProductWithPriceResponse>> GetProductsByName(string name);
         public List<TblProduct> GetAllProducts();
     }
 }

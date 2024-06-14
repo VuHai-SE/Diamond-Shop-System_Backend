@@ -54,7 +54,7 @@ namespace DiamondStoreAPI.Controllers
         public async Task<IActionResult> GetProductsByCategory(string categoryName)
         {
             var category = _productCategoryService.GetCategoryByName(categoryName);
-            var pruductList = _productService.filterProductsByCategoryID(category.CategoryId);
+            var pruductList = await _productService.filterProductsByCategoryID(category.CategoryId);
             
             if (pruductList == null)
             {
@@ -67,7 +67,7 @@ namespace DiamondStoreAPI.Controllers
         public async Task<IActionResult> GetProductsByName(string name)
         {
             
-            var pruductList = _productService.GetProductsByName(name);
+            var pruductList = await _productService.GetProductsByName(name);
 
             if (pruductList == null)
             {
