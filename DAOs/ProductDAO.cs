@@ -80,5 +80,6 @@ namespace DAOs
 
         public List<TblProduct> GetProductsByName(string name)
             => _context.TblProducts.Where(p => p.ProductName.ToLower().Contains(name.ToLower())).ToList();
+
     }
 }

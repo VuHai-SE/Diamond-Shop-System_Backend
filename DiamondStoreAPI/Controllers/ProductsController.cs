@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BusinessObjects;
 using Services;
 using Services.DTOs.Response;
+using Microsoft.IdentityModel.Tokens;
 
 namespace DiamondStoreAPI.Controllers
 {
@@ -28,15 +29,12 @@ namespace DiamondStoreAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllProductsAndPrices()
         {
-            var productsAndPrices = await _productService.GetAllProductsAndPricesAsync();
-            var result = productsAndPrices.Select(pp => new ProductWithPriceResponse
+            var productWithPriceList = await _productService.GetAllProductsAndPricesAsync();
+            if (productWithPriceList.IsNullOrEmpty())
             {
-                product = pp.product,
-                price = pp.price
-            }).ToList();
-
-            var response = new { products = result };
-            return Ok(response);
+                return NotFound();
+            }
+            return Ok(productWithPriceList);
         }
 
         // GET: api/Products/5
