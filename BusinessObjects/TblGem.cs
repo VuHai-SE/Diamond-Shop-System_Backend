@@ -15,7 +15,7 @@ public partial class TblGem
 
     public string? Fluorescence { get; set; }
 
-    public string? Origin { get; set; }
+    public bool? Origin { get; set; }
 
     public double? CaratWeight { get; set; }
 
@@ -29,5 +29,5 @@ public partial class TblGem
 
     public virtual TblDiamondGradingReport? TblDiamondGradingReport { get; set; }
 
-    public virtual ICollection<TblProductGem> TblProductGems { get; set; } = new List<TblProductGem>();
+    public virtual TblProductGem? TblProductGem { get; set; }
 }

@@ -15,5 +15,6 @@ namespace Repositories
         public TblGem AddGem(TblGem gem);
         public bool UpdateGem(string id, TblGem gem);
         public bool DeleteGem(string id);
+        public TblGem GetGemByProduct(string productId);
     }
 }

@@ -11,14 +11,11 @@ namespace Services.Implement
 {
     public class GemService : IGemService
     {
-        public readonly IGemRepository gemRepository = null;
+        public readonly IGemRepository gemRepository;
 
-        public GemService()
+        public GemService(IGemRepository _gemRepository)
         {
-            if (gemRepository == null)
-            {
-                gemRepository = new GemRepository();
-            }
+            gemRepository = _gemRepository;
         }
 
         public TblGem AddGem(TblGem gem)
@@ -29,6 +26,9 @@ namespace Services.Implement
 
         public TblGem GetGem(string id)
             => gemRepository.GetGem(id);
+
+        public TblGem GetGemByProduct(string productId)
+            => gemRepository.GetGemByProduct(productId);
 
         public List<TblGem> GetGems()
             => gemRepository.GetGems();
