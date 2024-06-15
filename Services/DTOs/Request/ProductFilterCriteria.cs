@@ -8,9 +8,14 @@ namespace Services.DTOs.Request
 {
     public class ProductFilterCriteria
     {
-        public FourC? FourC { get; set; }
-        public List<string> materialList = new List<string>();
-        public List<string> genders = new List<string>();
-        public List<string> origins = new List<string>();
+        public string? GemOrigin { get; set; }
+        public double? MinCaratWeight { get; set; }
+        public double? MaxCaratWeight { get; set; }
+        public string? Color {  get; set; }
+        public string? Clarity { get; set; }
+        public string? Cut { get; set; }
+        public string? Material { get; set; }
+        public string? Category { get; set; }
+        public string? Gender { get; set; }
     }
 }

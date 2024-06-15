@@ -9,6 +9,7 @@ using BusinessObjects;
 using Services;
 using Services.DTOs.Response;
 using Microsoft.IdentityModel.Tokens;
+using Services.DTOs.Request;
 
 namespace DiamondStoreAPI.Controllers
 {
@@ -27,9 +28,9 @@ namespace DiamondStoreAPI.Controllers
 
         // GET: api/Products
         [HttpGet]
-        public async Task<IActionResult> GetAllProductsAndPrices()
+        public async Task<IActionResult> GetProductsAndPrices([FromQuery] ProductFilterCriteria criteria)
         {
-            var productWithPriceList = await _productService.GetAllProductsAndPricesAsync();
+            var productWithPriceList = await _productService.FilterProducts(criteria);
             if (productWithPriceList.IsNullOrEmpty())
             {
                 return NotFound();
