@@ -5,8 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects;
+using Microsoft.IdentityModel.Tokens;
 using Repositories;
 using Repositories.Implement;
+using Services.DTOs.Request;
 using Services.DTOs.Response;
 
 namespace Services.Implement
@@ -47,6 +49,57 @@ namespace Services.Implement
             return productWithPriceList;
         }
 
+        public async Task<List<ProductWithPriceResponse>> FilterProducts(ProductFilterCriteria criteria)
+        {
+            var productWithPriceList = await GetAllProductsAndPricesAsync();
+            if (!string.IsNullOrEmpty(criteria.Category))
+            {
+                productWithPriceList = productWithPriceList.Where(p => p.Category != null && p.Category.Contains(criteria.Category, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(criteria.Material))
+            {
+                productWithPriceList = productWithPriceList.Where(p => p.Material != null && p.Material.Contains(criteria.Material, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(criteria.GemOrigin))
+            {
+                productWithPriceList = productWithPriceList.Where(p => p.GemOrigin != null && p.GemOrigin.Contains(criteria.GemOrigin, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            if (criteria.MinCaratWeight.HasValue)
+            {
+                productWithPriceList = productWithPriceList.Where(p => p.CaratWeight.HasValue && p.CaratWeight >= criteria.MinCaratWeight).ToList();
+            }
+
+            if (criteria.MaxCaratWeight.HasValue)
+            {
+                productWithPriceList = productWithPriceList.Where(p => p.CaratWeight.HasValue && p.CaratWeight <= criteria.MaxCaratWeight).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(criteria.Cut))
+            {
+                productWithPriceList = productWithPriceList.Where(p => p.Cut != null && p.Cut.Contains(criteria.Cut, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(criteria.Clarity))
+            {
+                productWithPriceList = productWithPriceList.Where(p => p.Clarity != null && p.Clarity.Contains(criteria.Clarity, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(criteria.Color))
+            {
+                productWithPriceList = productWithPriceList.Where(p => p.Color != null && p.Color.Contains(criteria.Color, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(criteria.Gender))
+            {
+                productWithPriceList = productWithPriceList.Where(p => p.Gender != null && p.Gender.Equals(criteria.Gender, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            return productWithPriceList;
+        }
+
         public async Task<ProductWithPriceResponse> GetProductAndPriceByIdAsync(string productId)
         {
             var product = await productRepository.GetProductByIdAsync(productId);
@@ -74,7 +127,7 @@ namespace Services.Implement
                 Image = product.Image,
                 Status = product.Status,
                 UnitSizePrice = product.UnitSizePrice,
-                Gender = product.Gender == 1 ? "Male" : (product.Gender == 0 ? "Male and Female" : "Female"),
+                Gender = product.Gender == 1 ? "Male" : (product.Gender == 0 ? "Both" : "Female"),
                 ProductPrice = price
             };
         }
