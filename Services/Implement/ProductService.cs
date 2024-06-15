@@ -127,7 +127,7 @@ namespace Services.Implement
                 Image = product.Image,
                 Status = product.Status,
                 UnitSizePrice = product.UnitSizePrice,
-                Gender = product.Gender == 1 ? "Male" : (product.Gender == 0 ? "Both" : "Female"),
+                Gender = product.Gender == 1 ? "Male" : (product.Gender == 0 ? "Unisex" : "Female"),
                 ProductPrice = price
             };
         }
