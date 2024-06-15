@@ -29,7 +29,7 @@ CREATE TABLE Tbl_MaterialPriceList (
 
 CREATE TABLE Tbl_GemPriceList (
     ID INT IDENTITY(1,1) PRIMARY KEY,
-    Origin NVARCHAR(100),
+    Origin BIT,
     CaratWeight FLOAT,
     Color NVARCHAR(50),
     Cut NVARCHAR(50),
@@ -45,7 +45,7 @@ CREATE TABLE Tbl_Gem (
     Polish NVARCHAR(50),
     Symmetry NVARCHAR(50),
     Fluorescence NVARCHAR(50),
-    Origin NVARCHAR(100),
+    Origin BIT,
     CaratWeight FLOAT,
     Color NVARCHAR(50),
     Cut NVARCHAR(50),
@@ -86,7 +86,7 @@ CREATE TABLE Tbl_Customer (
     AccountID INT UNIQUE,
     FirstName NVARCHAR(100),
     LastName NVARCHAR(100),
-    Gender NVARCHAR(10),
+    Gender BIT,
     Birthday DATETIME,
     Email NVARCHAR(100),
     PhoneNumber NVARCHAR(10),
@@ -117,7 +117,8 @@ CREATE TABLE Tbl_Product (
     ProductSize INT,
     Image NVARCHAR(255),
     Status BIT,
-    UnitSizePrice FLOAT, ---ADD NEW
+    UnitSizePrice FLOAT,
+	Gender INT, --  -1 Female, 1 Male, 0 Both
     FOREIGN KEY (CategoryID) REFERENCES Tbl_ProductCategory(CategoryID) ON DELETE CASCADE
 );
 
@@ -133,8 +134,8 @@ CREATE TABLE Tbl_ProductMaterial (
 -- Tbl_ProductGem
 CREATE TABLE Tbl_ProductGem (
 	ID INT IDENTITY(1,1) PRIMARY KEY,
-    ProductID NVARCHAR(8),
-    GemID NVARCHAR(8),
+    ProductID NVARCHAR(8) UNIQUE,
+    GemID NVARCHAR(8) UNIQUE,
     FOREIGN KEY (ProductID) REFERENCES Tbl_Product(ProductID) ON DELETE CASCADE,
     FOREIGN KEY (GemID) REFERENCES Tbl_Gem(GemID) ON DELETE CASCADE
 );
