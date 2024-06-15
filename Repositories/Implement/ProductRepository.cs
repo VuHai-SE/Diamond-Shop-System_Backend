@@ -43,8 +43,8 @@ namespace Repositories.Implement
                 var latestMaterialPrice = materialPriceList.FirstOrDefault()?.UnitPrice ?? 0;
                 materialTotalPrice += (pm.Weight ?? 0) * latestMaterialPrice;
             }
-
-            return gemTotalPrice + materialTotalPrice + (product.ProductionCost ?? 0);
+            var priceRate = 1 + (double)product.PriceRate / 100;
+            return (gemTotalPrice + materialTotalPrice + (product.ProductionCost ?? 0)) * priceRate;
         }
 
         public List<TblProduct> filterProductsByCategoryID(string categoryID)

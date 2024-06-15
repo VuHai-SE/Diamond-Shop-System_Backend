@@ -17,12 +17,14 @@ namespace Services.Implement
         private readonly IProductCategoryRepository productCategoryRepository;
         private readonly IProductMaterialRepository productMaterialRepository;
         private readonly IMaterialCategoryRepository materialCategoryRepository;
-        public ProductService(IProductRepository _productRepository, IProductCategoryRepository _productCategoryRepository, IProductMaterialRepository _productMaterialRepository, IMaterialCategoryRepository _materialCategoryRepository)
+        private readonly IGemRepository gemRepository;
+        public ProductService(IProductRepository _productRepository, IProductCategoryRepository _productCategoryRepository, IProductMaterialRepository _productMaterialRepository, IMaterialCategoryRepository _materialCategoryRepository, IGemRepository _gemRepository)
         {
             productRepository = _productRepository;
             productCategoryRepository = _productCategoryRepository;
             productMaterialRepository = _productMaterialRepository;
             materialCategoryRepository = _materialCategoryRepository;
+            gemRepository = _gemRepository;
         }
 
         public async Task<double> CalculateProductPriceAsync(string productId)
@@ -55,6 +57,7 @@ namespace Services.Implement
 
             var price = await productRepository.CalculateProductPriceAsync(productId);
             var productMaterial = productMaterialRepository.GetProductMaterialProductID(productId);
+            var gem = gemRepository.GetGemByProduct(productId);
             return new ProductWithPriceResponse
             {
                 ProductId = product.ProductId,
@@ -63,14 +66,15 @@ namespace Services.Implement
                 Description = product.Description,
                 Category = productCategoryRepository.GetProductCategory(product.CategoryId).CategoryName,
                 Material = materialCategoryRepository.GetMaterialCategory(productMaterial.MaterialId).MaterialName,
-                MaterialCost = product.MaterialCost,
-                GemCost = product.GemCost,
-                ProductionCost = product.ProductionCost,
-                PriceRate = product.PriceRate,
+                GemOrigin = (gem.Origin == true) ? "Natural" : "Synthetic",
+                CaratWeight = gem.CaratWeight,
+                Clarity = gem.Clarity,
+                Color = gem.Color,
                 ProductSize = product.ProductSize,
                 Image = product.Image,
                 Status = product.Status,
                 UnitSizePrice = product.UnitSizePrice,
+                Gender = product.Gender == 1 ? "Male" : (product.Gender == 0 ? "Male and Female" : "Female"),
                 ProductPrice = price
             };
         }

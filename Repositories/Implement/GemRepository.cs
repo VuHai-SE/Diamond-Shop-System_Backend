@@ -10,14 +10,11 @@ namespace Repositories.Implement
 {
     public class GemRepository : IGemRepository
     {
-        public readonly GemDAO gemDAO = null;
+        public readonly GemDAO gemDAO;
 
-        public GemRepository()
+        public GemRepository(GemDAO _gemDAO)
         {
-            if (gemDAO == null)
-            {
-                gemDAO = new GemDAO();
-            }
+            gemDAO = _gemDAO;
         }
 
         public TblGem AddGem(TblGem gem)
@@ -28,6 +25,9 @@ namespace Repositories.Implement
 
         public TblGem GetGem(string id)
             => gemDAO.GetGem(id);
+
+        public TblGem GetGemByProduct(string productId)
+            => gemDAO.GetGemByProduct(productId);
 
         public List<TblGem> GetGems()
             => gemDAO.GetGems();

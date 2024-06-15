@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BusinessObjects.Migrations
 {
     [DbContext(typeof(DiamondStoreContext))]
-    [Migration("20240607074551_UpdateModels")]
+    [Migration("20240615100951_UpdateModels")]
     partial class UpdateModels
     {
         /// <inheritdoc />
@@ -47,9 +47,9 @@ namespace BusinessObjects.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("AccountId")
-                        .HasName("PK__Tbl_Acco__349DA5867A3CB22A");
+                        .HasName("PK__Tbl_Acco__349DA58609E534F8");
 
-                    b.HasIndex(new[] { "Username" }, "UQ__Tbl_Acco__536C85E4899DDF6C")
+                    b.HasIndex(new[] { "Username" }, "UQ__Tbl_Acco__536C85E41BFA36AF")
                         .IsUnique()
                         .HasFilter("[Username] IS NOT NULL");
 
@@ -87,9 +87,8 @@ namespace BusinessObjects.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("Gender")
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                    b.Property<bool?>("Gender")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LastName")
                         .HasMaxLength(100)
@@ -107,9 +106,9 @@ namespace BusinessObjects.Migrations
                         .HasColumnType("bit");
 
                     b.HasKey("CustomerId")
-                        .HasName("PK__Tbl_Cust__A4AE64B8D4574B2B");
+                        .HasName("PK__Tbl_Cust__A4AE64B8C76863DC");
 
-                    b.HasIndex(new[] { "AccountId" }, "UQ__Tbl_Cust__349DA58781A0120F")
+                    b.HasIndex(new[] { "AccountId" }, "UQ__Tbl_Cust__349DA58770E38A22")
                         .IsUnique()
                         .HasFilter("[AccountID] IS NOT NULL");
 
@@ -138,9 +137,9 @@ namespace BusinessObjects.Migrations
                         .HasColumnType("nvarchar(255)");
 
                     b.HasKey("ReportId")
-                        .HasName("PK__Tbl_Diam__D5BD48E559EBAA91");
+                        .HasName("PK__Tbl_Diam__D5BD48E52E336E34");
 
-                    b.HasIndex(new[] { "GemId" }, "UQ__Tbl_Diam__F101D5A16B2514C0")
+                    b.HasIndex(new[] { "GemId" }, "UQ__Tbl_Diam__F101D5A1ADE3DE48")
                         .IsUnique()
                         .HasFilter("[GemID] IS NOT NULL");
 
@@ -177,9 +176,8 @@ namespace BusinessObjects.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("Origin")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                    b.Property<bool?>("Origin")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Polish")
                         .HasMaxLength(50)
@@ -194,7 +192,7 @@ namespace BusinessObjects.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("GemId")
-                        .HasName("PK__Tbl_Gem__F101D5A07B278F9C");
+                        .HasName("PK__Tbl_Gem__F101D5A015C1ADDA");
 
                     b.ToTable("Tbl_Gem", (string)null);
                 });
@@ -226,9 +224,8 @@ namespace BusinessObjects.Migrations
                     b.Property<DateTime?>("EffDate")
                         .HasColumnType("datetime");
 
-                    b.Property<string>("Origin")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                    b.Property<bool?>("Origin")
+                        .HasColumnType("bit");
 
                     b.Property<double?>("Price")
                         .HasColumnType("float");
@@ -237,7 +234,7 @@ namespace BusinessObjects.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("Id")
-                        .HasName("PK__Tbl_GemP__3214EC27470D111A");
+                        .HasName("PK__Tbl_GemP__3214EC27348C24BE");
 
                     b.ToTable("Tbl_GemPriceList", (string)null);
                 });
@@ -254,7 +251,7 @@ namespace BusinessObjects.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("MaterialId")
-                        .HasName("PK__Tbl_Mate__C5061317FB365EFA");
+                        .HasName("PK__Tbl_Mate__C50613170572B2E9");
 
                     b.ToTable("Tbl_MaterialCategory", (string)null);
                 });
@@ -280,9 +277,9 @@ namespace BusinessObjects.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("Id")
-                        .HasName("PK__Tbl_Mate__3214EC2776484C8F");
+                        .HasName("PK__Tbl_Mate__3214EC2733CA32F6");
 
-                    b.HasIndex(new[] { "MaterialId" }, "UQ__Tbl_Mate__C5061316C58730F9")
+                    b.HasIndex(new[] { "MaterialId" }, "UQ__Tbl_Mate__C50613165F43B652")
                         .IsUnique()
                         .HasFilter("[MaterialID] IS NOT NULL");
 
@@ -352,7 +349,7 @@ namespace BusinessObjects.Migrations
                         .HasColumnName("StaffID");
 
                     b.HasKey("OrderId")
-                        .HasName("PK__Tbl_Orde__C3905BAF083B2DB2");
+                        .HasName("PK__Tbl_Orde__C3905BAFC20CF98E");
 
                     b.HasIndex("CustomerId");
 
@@ -397,7 +394,7 @@ namespace BusinessObjects.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("OrderDetailId")
-                        .HasName("PK__Tbl_Orde__D3B9D30C4F6CA3BC");
+                        .HasName("PK__Tbl_Orde__D3B9D30CBFB0BB31");
 
                     b.HasIndex("OrderId");
 
@@ -435,7 +432,7 @@ namespace BusinessObjects.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id")
-                        .HasName("PK__Tbl_Paym__3214EC276FBDE05C");
+                        .HasName("PK__Tbl_Paym__3214EC27C0CCA6F0");
 
                     b.HasIndex("CustomerId");
 
@@ -462,6 +459,9 @@ namespace BusinessObjects.Migrations
 
                     b.Property<double?>("GemCost")
                         .HasColumnType("float");
+
+                    b.Property<int?>("Gender")
+                        .HasColumnType("int");
 
                     b.Property<string>("Image")
                         .HasMaxLength(255)
@@ -494,7 +494,7 @@ namespace BusinessObjects.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("ProductId")
-                        .HasName("PK__Tbl_Prod__B40CC6ED10614BBF");
+                        .HasName("PK__Tbl_Prod__B40CC6ED155971E4");
 
                     b.HasIndex("CategoryId");
 
@@ -513,7 +513,7 @@ namespace BusinessObjects.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("CategoryId")
-                        .HasName("PK__Tbl_Prod__19093A2B30F8D990");
+                        .HasName("PK__Tbl_Prod__19093A2B32299BF5");
 
                     b.ToTable("Tbl_ProductCategory", (string)null);
                 });
@@ -538,11 +538,15 @@ namespace BusinessObjects.Migrations
                         .HasColumnName("ProductID");
 
                     b.HasKey("Id")
-                        .HasName("PK__Tbl_Prod__3214EC275E5C27AB");
+                        .HasName("PK__Tbl_Prod__3214EC27942C9E1C");
 
-                    b.HasIndex("GemId");
+                    b.HasIndex(new[] { "ProductId" }, "UQ__Tbl_Prod__B40CC6EC1F7E9BD5")
+                        .IsUnique()
+                        .HasFilter("[ProductID] IS NOT NULL");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex(new[] { "GemId" }, "UQ__Tbl_Prod__F101D5A1A6E8002C")
+                        .IsUnique()
+                        .HasFilter("[GemID] IS NOT NULL");
 
                     b.ToTable("Tbl_ProductGem", (string)null);
                 });
@@ -570,7 +574,7 @@ namespace BusinessObjects.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("Id")
-                        .HasName("PK__Tbl_Prod__3214EC27CAEDCFDB");
+                        .HasName("PK__Tbl_Prod__3214EC277BCBCBB9");
 
                     b.HasIndex("MaterialId");
 
@@ -599,9 +603,9 @@ namespace BusinessObjects.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("StaffId")
-                        .HasName("PK__Tbl_Sale__96D4AAF7753BDD16");
+                        .HasName("PK__Tbl_Sale__96D4AAF7DEF1C585");
 
-                    b.HasIndex(new[] { "AccountId" }, "UQ__Tbl_Sale__349DA587C3FA4ED5")
+                    b.HasIndex(new[] { "AccountId" }, "UQ__Tbl_Sale__349DA587A9D9823E")
                         .IsUnique()
                         .HasFilter("[AccountID] IS NOT NULL");
 
@@ -628,9 +632,9 @@ namespace BusinessObjects.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("ShipperId")
-                        .HasName("PK__Tbl_Ship__1F8AFFB98E0FC68D");
+                        .HasName("PK__Tbl_Ship__1F8AFFB9884AFCE1");
 
-                    b.HasIndex(new[] { "AccountId" }, "UQ__Tbl_Ship__349DA5871E3B5E50")
+                    b.HasIndex(new[] { "AccountId" }, "UQ__Tbl_Ship__349DA587C27466AD")
                         .IsUnique()
                         .HasFilter("[AccountID] IS NOT NULL");
 
@@ -657,9 +661,9 @@ namespace BusinessObjects.Migrations
                         .HasColumnType("datetime");
 
                     b.HasKey("WarrantyId")
-                        .HasName("PK__Tbl_Warr__2ED318F39E89CE68");
+                        .HasName("PK__Tbl_Warr__2ED318F348B52C11");
 
-                    b.HasIndex(new[] { "OrderDetailId" }, "UQ__Tbl_Warr__D3B9D30DAED36541")
+                    b.HasIndex(new[] { "OrderDetailId" }, "UQ__Tbl_Warr__D3B9D30D6EAA58F2")
                         .IsUnique()
                         .HasFilter("[OrderDetailID] IS NOT NULL");
 
@@ -683,7 +687,7 @@ namespace BusinessObjects.Migrations
                         .WithOne("TblDiamondGradingReport")
                         .HasForeignKey("BusinessObjects.TblDiamondGradingReport", "GemId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .HasConstraintName("FK__Tbl_Diamo__GemID__5AEE82B9");
+                        .HasConstraintName("FK__Tbl_Diamo__GemID__5CD6CB2B");
 
                     b.Navigation("Gem");
                 });
@@ -704,17 +708,17 @@ namespace BusinessObjects.Migrations
                     b.HasOne("BusinessObjects.TblCustomer", "Customer")
                         .WithMany("TblOrders")
                         .HasForeignKey("CustomerId")
-                        .HasConstraintName("FK__Tbl_Order__Custo__49C3F6B7");
+                        .HasConstraintName("FK__Tbl_Order__Custo__4BAC3F29");
 
                     b.HasOne("BusinessObjects.TblShipper", "Shipper")
                         .WithMany("TblOrders")
                         .HasForeignKey("ShipperId")
-                        .HasConstraintName("FK__Tbl_Order__Shipp__4BAC3F29");
+                        .HasConstraintName("FK__Tbl_Order__Shipp__4D94879B");
 
                     b.HasOne("BusinessObjects.TblSaleStaff", "Staff")
                         .WithMany("TblOrders")
                         .HasForeignKey("StaffId")
-                        .HasConstraintName("FK__Tbl_Order__Staff__4AB81AF0");
+                        .HasConstraintName("FK__Tbl_Order__Staff__4CA06362");
 
                     b.Navigation("Customer");
 
@@ -729,13 +733,13 @@ namespace BusinessObjects.Migrations
                         .WithMany("TblOrderDetails")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.SetNull)
-                        .HasConstraintName("FK__Tbl_Order__Order__4E88ABD4");
+                        .HasConstraintName("FK__Tbl_Order__Order__5070F446");
 
                     b.HasOne("BusinessObjects.TblProduct", "Product")
                         .WithMany("TblOrderDetails")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .HasConstraintName("FK__Tbl_Order__Produ__4F7CD00D");
+                        .HasConstraintName("FK__Tbl_Order__Produ__5165187F");
 
                     b.Navigation("Order");
 
@@ -748,13 +752,13 @@ namespace BusinessObjects.Migrations
                         .WithMany("TblPayments")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.SetNull)
-                        .HasConstraintName("FK__Tbl_Payme__Custo__534D60F1");
+                        .HasConstraintName("FK__Tbl_Payme__Custo__5535A963");
 
                     b.HasOne("BusinessObjects.TblOrder", "Order")
                         .WithMany("TblPayments")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .HasConstraintName("FK__Tbl_Payme__Order__52593CB8");
+                        .HasConstraintName("FK__Tbl_Payme__Order__5441852A");
 
                     b.Navigation("Customer");
 
@@ -775,16 +779,16 @@ namespace BusinessObjects.Migrations
             modelBuilder.Entity("BusinessObjects.TblProductGem", b =>
                 {
                     b.HasOne("BusinessObjects.TblGem", "Gem")
-                        .WithMany("TblProductGems")
-                        .HasForeignKey("GemId")
+                        .WithOne("TblProductGem")
+                        .HasForeignKey("BusinessObjects.TblProductGem", "GemId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .HasConstraintName("FK__Tbl_Produ__GemID__46E78A0C");
+                        .HasConstraintName("FK__Tbl_Produ__GemID__48CFD27E");
 
                     b.HasOne("BusinessObjects.TblProduct", "Product")
-                        .WithMany("TblProductGems")
-                        .HasForeignKey("ProductId")
+                        .WithOne("TblProductGem")
+                        .HasForeignKey("BusinessObjects.TblProductGem", "ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .HasConstraintName("FK__Tbl_Produ__Produ__45F365D3");
+                        .HasConstraintName("FK__Tbl_Produ__Produ__47DBAE45");
 
                     b.Navigation("Gem");
 
@@ -838,7 +842,7 @@ namespace BusinessObjects.Migrations
                         .WithOne("TblWarranty")
                         .HasForeignKey("BusinessObjects.TblWarranty", "OrderDetailId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .HasConstraintName("FK__Tbl_Warra__Order__571DF1D5");
+                        .HasConstraintName("FK__Tbl_Warra__Order__59063A47");
 
                     b.Navigation("OrderDetail");
                 });
@@ -863,7 +867,7 @@ namespace BusinessObjects.Migrations
                 {
                     b.Navigation("TblDiamondGradingReport");
 
-                    b.Navigation("TblProductGems");
+                    b.Navigation("TblProductGem");
                 });
 
             modelBuilder.Entity("BusinessObjects.TblMaterialCategory", b =>
@@ -889,7 +893,7 @@ namespace BusinessObjects.Migrations
                 {
                     b.Navigation("TblOrderDetails");
 
-                    b.Navigation("TblProductGems");
+                    b.Navigation("TblProductGem");
 
                     b.Navigation("TblProductMaterials");
                 });
