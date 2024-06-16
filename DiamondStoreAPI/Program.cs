@@ -79,6 +79,10 @@ services.AddScoped<ShipperDAO>();
 services.AddScoped<IShipperRepository, ShipperRepository>();
 services.AddScoped<IShipperService, ShipperService>();
 
+services.AddScoped<GemDAO>();
+services.AddScoped<IGemRepository, GemRepository>();
+services.AddScoped<IGemService, GemService>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
