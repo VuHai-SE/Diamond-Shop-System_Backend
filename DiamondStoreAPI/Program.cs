@@ -29,11 +29,12 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 
 
 
-services.AddScoped<IPaymentService, PaymentService>();
+
 services.AddScoped<IGemPriceListService, GemPriceListService>();
 
 
 // Add dependencies
+
 builder.Services.AddScoped<AccountDAO>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IAccountService, AccountService>();
@@ -65,6 +66,19 @@ services.AddScoped<IOrderDetailService, OrderDetailService>();
 services.AddScoped<CustomerDAO>();
 services.AddScoped<ICustomerRepository, CustomerRepository>();
 services.AddScoped<ICustomerService, CustomerService>();
+
+services.AddScoped<PaymentDAO>();
+services.AddScoped<IPaymentRepository, PaymentRepository>();
+services.AddScoped<IPaymentService, PaymentService>();
+
+services.AddScoped<SaleStaffDAO>();
+services.AddScoped<ISaleStaffRepository, SaleStaffRepository>();
+services.AddScoped<ISaleStaffService, SaleStaffService>();
+
+services.AddScoped<ShipperDAO>();
+services.AddScoped<IShipperRepository, ShipperRepository>();
+services.AddScoped<IShipperService, ShipperService>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -109,7 +123,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowReact",
         builder =>
         {
-            builder.WithOrigins("http://localhost:5173")
+            builder.WithOrigins("http://localhost:3000", "http://localhost:5173")
                    .AllowAnyHeader()
                    .AllowAnyMethod();
         });
