@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using BusinessObjects;
 using Services;
 using Services.DTOs.Response;
+using Microsoft.IdentityModel.Tokens;
+using Services.DTOs.Request;
 
 namespace DiamondStoreAPI.Controllers
 {
@@ -26,17 +28,14 @@ namespace DiamondStoreAPI.Controllers
 
         // GET: api/Products
         [HttpGet]
-        public async Task<IActionResult> GetAllProductsAndPrices()
+        public async Task<IActionResult> GetProductsAndPrices([FromQuery] ProductFilterCriteria criteria)
         {
-            var productsAndPrices = await _productService.GetAllProductsAndPricesAsync();
-            var result = productsAndPrices.Select(pp => new ProductWithPriceResponse
+            var productWithPriceList = await _productService.FilterProducts(criteria);
+            if (productWithPriceList.IsNullOrEmpty())
             {
-                product = pp.product,
-                price = pp.price
-            }).ToList();
-
-            var response = new { products = result };
-            return Ok(response);
+                return NotFound();
+            }
+            return Ok(productWithPriceList);
         }
 
         // GET: api/Products/5
@@ -56,7 +55,7 @@ namespace DiamondStoreAPI.Controllers
         public async Task<IActionResult> GetProductsByCategory(string categoryName)
         {
             var category = _productCategoryService.GetCategoryByName(categoryName);
-            var pruductList = _productService.filterProductsByCategoryID(category.CategoryId);
+            var pruductList = await _productService.filterProductsByCategoryID(category.CategoryId);
             
             if (pruductList == null)
             {
@@ -69,7 +68,7 @@ namespace DiamondStoreAPI.Controllers
         public async Task<IActionResult> GetProductsByName(string name)
         {
             
-            var pruductList = _productService.GetProductsByName(name);
+            var pruductList = await _productService.GetProductsByName(name);
 
             if (pruductList == null)
             {

@@ -13,7 +13,7 @@ public partial class TblCustomer
 
     public string? LastName { get; set; }
 
-    public string? Gender { get; set; }
+    public bool? Gender { get; set; }
 
     public DateTime? Birthday { get; set; }
 

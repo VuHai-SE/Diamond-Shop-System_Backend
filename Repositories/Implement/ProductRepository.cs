@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects;
@@ -11,14 +12,11 @@ namespace Repositories.Implement
 {
     public class ProductRepository : IProductRepository
     {
-        private readonly ProductDAO productDAO = null;
+        private readonly ProductDAO productDAO;
 
-        public ProductRepository()
+        public ProductRepository(ProductDAO _productDAO)
         {
-            if (productDAO == null)
-            {
-                productDAO = new ProductDAO();
-            }
+           productDAO = _productDAO;
         }
         public TblProduct AddProduct(TblProduct product)
             => productDAO.AddProduct(product);
@@ -45,26 +43,29 @@ namespace Repositories.Implement
                 var latestMaterialPrice = materialPriceList.FirstOrDefault()?.UnitPrice ?? 0;
                 materialTotalPrice += (pm.Weight ?? 0) * latestMaterialPrice;
             }
-
-            return gemTotalPrice + materialTotalPrice + (product.ProductionCost ?? 0);
+            var priceRate = 1 + (double)product.PriceRate / 100;
+            return (gemTotalPrice + materialTotalPrice + (product.ProductionCost ?? 0)) * priceRate;
         }
 
         public List<TblProduct> filterProductsByCategoryID(string categoryID)
             => productDAO.filterProductsByCategoryID(categoryID);
 
-        public async Task<List<(TblProduct product, double price)>> GetAllProductsAndPricesAsync()
-        {
-            var products = productDAO.GetAllProducts();
-            var productPrices = new List<(TblProduct product, double price)>();
+        public List<TblProduct> GetAllProducts()
+            => productDAO.GetAllProducts();
 
-            foreach (var product in products)
-            {
-                var price = await CalculateProductPriceAsync(product.ProductId);
-                productPrices.Add((product, price));
-            }
+        //public async Task<List<(TblProduct product, double price)>> GetAllProductsAndPricesAsync()
+        //{
+        //    var products = productDAO.GetAllProducts();
+        //    var productPrices = new List<(TblProduct product, double price)>();
 
-            return productPrices;
-        }
+        //    foreach (var product in products)
+        //    {
+        //        var price = await CalculateProductPriceAsync(product.ProductId);
+        //        productPrices.Add((product, price));
+        //    }
+
+        //    return productPrices;
+        //}
 
         public TblProduct GetProduct(string id)
             =>productDAO.GetProduct(id);

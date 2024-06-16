@@ -23,7 +23,7 @@ namespace BusinessObjects.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Tbl_Acco__349DA5867A3CB22A", x => x.AccountID);
+                    table.PrimaryKey("PK__Tbl_Acco__349DA58609E534F8", x => x.AccountID);
                 });
 
             migrationBuilder.CreateTable(
@@ -35,7 +35,7 @@ namespace BusinessObjects.Migrations
                     Polish = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     Symmetry = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     Fluorescence = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    Origin = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Origin = table.Column<bool>(type: "bit", nullable: true),
                     CaratWeight = table.Column<double>(type: "float", nullable: true),
                     Color = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     Cut = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
@@ -44,7 +44,7 @@ namespace BusinessObjects.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Tbl_Gem__F101D5A07B278F9C", x => x.GemID);
+                    table.PrimaryKey("PK__Tbl_Gem__F101D5A015C1ADDA", x => x.GemID);
                 });
 
             migrationBuilder.CreateTable(
@@ -53,7 +53,7 @@ namespace BusinessObjects.Migrations
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Origin = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Origin = table.Column<bool>(type: "bit", nullable: true),
                     CaratWeight = table.Column<double>(type: "float", nullable: true),
                     Color = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     Cut = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
@@ -64,7 +64,7 @@ namespace BusinessObjects.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Tbl_GemP__3214EC27470D111A", x => x.ID);
+                    table.PrimaryKey("PK__Tbl_GemP__3214EC27348C24BE", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -76,7 +76,7 @@ namespace BusinessObjects.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Tbl_Mate__C5061317FB365EFA", x => x.MaterialID);
+                    table.PrimaryKey("PK__Tbl_Mate__C50613170572B2E9", x => x.MaterialID);
                 });
 
             migrationBuilder.CreateTable(
@@ -101,7 +101,7 @@ namespace BusinessObjects.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Tbl_Prod__19093A2B30F8D990", x => x.CategoryID);
+                    table.PrimaryKey("PK__Tbl_Prod__19093A2B32299BF5", x => x.CategoryID);
                 });
 
             migrationBuilder.CreateTable(
@@ -113,7 +113,7 @@ namespace BusinessObjects.Migrations
                     AccountID = table.Column<int>(type: "int", nullable: true),
                     FirstName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    Gender = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
+                    Gender = table.Column<bool>(type: "bit", nullable: true),
                     Birthday = table.Column<DateTime>(type: "datetime", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     PhoneNumber = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
@@ -124,7 +124,7 @@ namespace BusinessObjects.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Tbl_Cust__A4AE64B8D4574B2B", x => x.CustomerID);
+                    table.PrimaryKey("PK__Tbl_Cust__A4AE64B8C76863DC", x => x.CustomerID);
                     table.ForeignKey(
                         name: "FK__Tbl_Custo__Accou__3B75D760",
                         column: x => x.AccountID,
@@ -144,7 +144,7 @@ namespace BusinessObjects.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Tbl_Sale__96D4AAF7753BDD16", x => x.StaffID);
+                    table.PrimaryKey("PK__Tbl_Sale__96D4AAF7DEF1C585", x => x.StaffID);
                     table.ForeignKey(
                         name: "FK__Tbl_SaleS__Accou__33D4B598",
                         column: x => x.AccountID,
@@ -164,7 +164,7 @@ namespace BusinessObjects.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Tbl_Ship__1F8AFFB98E0FC68D", x => x.ShipperID);
+                    table.PrimaryKey("PK__Tbl_Ship__1F8AFFB9884AFCE1", x => x.ShipperID);
                     table.ForeignKey(
                         name: "FK__Tbl_Shipp__Accou__37A5467C",
                         column: x => x.AccountID,
@@ -185,9 +185,9 @@ namespace BusinessObjects.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Tbl_Diam__D5BD48E559EBAA91", x => x.ReportID);
+                    table.PrimaryKey("PK__Tbl_Diam__D5BD48E52E336E34", x => x.ReportID);
                     table.ForeignKey(
-                        name: "FK__Tbl_Diamo__GemID__5AEE82B9",
+                        name: "FK__Tbl_Diamo__GemID__5CD6CB2B",
                         column: x => x.GemID,
                         principalTable: "Tbl_Gem",
                         principalColumn: "GemID",
@@ -206,7 +206,7 @@ namespace BusinessObjects.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Tbl_Mate__3214EC2776484C8F", x => x.ID);
+                    table.PrimaryKey("PK__Tbl_Mate__3214EC2733CA32F6", x => x.ID);
                     table.ForeignKey(
                         name: "FK__Tbl_Mater__Mater__276EDEB3",
                         column: x => x.MaterialID,
@@ -231,11 +231,12 @@ namespace BusinessObjects.Migrations
                     ProductSize = table.Column<int>(type: "int", nullable: true),
                     Image = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     Status = table.Column<bool>(type: "bit", nullable: true),
-                    UnitSizePrice = table.Column<double>(type: "float", nullable: true)
+                    UnitSizePrice = table.Column<double>(type: "float", nullable: true),
+                    Gender = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Tbl_Prod__B40CC6ED10614BBF", x => x.ProductID);
+                    table.PrimaryKey("PK__Tbl_Prod__B40CC6ED155971E4", x => x.ProductID);
                     table.ForeignKey(
                         name: "FK__Tbl_Produ__Categ__3F466844",
                         column: x => x.CategoryID,
@@ -262,19 +263,19 @@ namespace BusinessObjects.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Tbl_Orde__C3905BAF083B2DB2", x => x.OrderID);
+                    table.PrimaryKey("PK__Tbl_Orde__C3905BAFC20CF98E", x => x.OrderID);
                     table.ForeignKey(
-                        name: "FK__Tbl_Order__Custo__49C3F6B7",
+                        name: "FK__Tbl_Order__Custo__4BAC3F29",
                         column: x => x.CustomerID,
                         principalTable: "Tbl_Customer",
                         principalColumn: "CustomerID");
                     table.ForeignKey(
-                        name: "FK__Tbl_Order__Shipp__4BAC3F29",
+                        name: "FK__Tbl_Order__Shipp__4D94879B",
                         column: x => x.ShipperID,
                         principalTable: "Tbl_Shipper",
                         principalColumn: "ShipperID");
                     table.ForeignKey(
-                        name: "FK__Tbl_Order__Staff__4AB81AF0",
+                        name: "FK__Tbl_Order__Staff__4CA06362",
                         column: x => x.StaffID,
                         principalTable: "Tbl_SaleStaff",
                         principalColumn: "StaffID");
@@ -291,15 +292,15 @@ namespace BusinessObjects.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Tbl_Prod__3214EC275E5C27AB", x => x.ID);
+                    table.PrimaryKey("PK__Tbl_Prod__3214EC27942C9E1C", x => x.ID);
                     table.ForeignKey(
-                        name: "FK__Tbl_Produ__GemID__46E78A0C",
+                        name: "FK__Tbl_Produ__GemID__48CFD27E",
                         column: x => x.GemID,
                         principalTable: "Tbl_Gem",
                         principalColumn: "GemID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK__Tbl_Produ__Produ__45F365D3",
+                        name: "FK__Tbl_Produ__Produ__47DBAE45",
                         column: x => x.ProductID,
                         principalTable: "Tbl_Product",
                         principalColumn: "ProductID",
@@ -318,7 +319,7 @@ namespace BusinessObjects.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Tbl_Prod__3214EC27CAEDCFDB", x => x.ID);
+                    table.PrimaryKey("PK__Tbl_Prod__3214EC277BCBCBB9", x => x.ID);
                     table.ForeignKey(
                         name: "FK__Tbl_Produ__Mater__4316F928",
                         column: x => x.MaterialID,
@@ -349,15 +350,15 @@ namespace BusinessObjects.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Tbl_Orde__D3B9D30C4F6CA3BC", x => x.OrderDetailID);
+                    table.PrimaryKey("PK__Tbl_Orde__D3B9D30CBFB0BB31", x => x.OrderDetailID);
                     table.ForeignKey(
-                        name: "FK__Tbl_Order__Order__4E88ABD4",
+                        name: "FK__Tbl_Order__Order__5070F446",
                         column: x => x.OrderID,
                         principalTable: "Tbl_Order",
                         principalColumn: "OrderID",
                         onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
-                        name: "FK__Tbl_Order__Produ__4F7CD00D",
+                        name: "FK__Tbl_Order__Produ__5165187F",
                         column: x => x.ProductID,
                         principalTable: "Tbl_Product",
                         principalColumn: "ProductID",
@@ -378,15 +379,15 @@ namespace BusinessObjects.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Tbl_Paym__3214EC276FBDE05C", x => x.ID);
+                    table.PrimaryKey("PK__Tbl_Paym__3214EC27C0CCA6F0", x => x.ID);
                     table.ForeignKey(
-                        name: "FK__Tbl_Payme__Custo__534D60F1",
+                        name: "FK__Tbl_Payme__Custo__5535A963",
                         column: x => x.CustomerID,
                         principalTable: "Tbl_Customer",
                         principalColumn: "CustomerID",
                         onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
-                        name: "FK__Tbl_Payme__Order__52593CB8",
+                        name: "FK__Tbl_Payme__Order__5441852A",
                         column: x => x.OrderID,
                         principalTable: "Tbl_Order",
                         principalColumn: "OrderID",
@@ -405,9 +406,9 @@ namespace BusinessObjects.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Tbl_Warr__2ED318F39E89CE68", x => x.WarrantyID);
+                    table.PrimaryKey("PK__Tbl_Warr__2ED318F348B52C11", x => x.WarrantyID);
                     table.ForeignKey(
-                        name: "FK__Tbl_Warra__Order__571DF1D5",
+                        name: "FK__Tbl_Warra__Order__59063A47",
                         column: x => x.OrderDetailID,
                         principalTable: "Tbl_OrderDetail",
                         principalColumn: "OrderDetailID",
@@ -415,28 +416,28 @@ namespace BusinessObjects.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "UQ__Tbl_Acco__536C85E4899DDF6C",
+                name: "UQ__Tbl_Acco__536C85E41BFA36AF",
                 table: "Tbl_Account",
                 column: "Username",
                 unique: true,
                 filter: "[Username] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "UQ__Tbl_Cust__349DA58781A0120F",
+                name: "UQ__Tbl_Cust__349DA58770E38A22",
                 table: "Tbl_Customer",
                 column: "AccountID",
                 unique: true,
                 filter: "[AccountID] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "UQ__Tbl_Diam__F101D5A16B2514C0",
+                name: "UQ__Tbl_Diam__F101D5A1ADE3DE48",
                 table: "Tbl_DiamondGradingReport",
                 column: "GemID",
                 unique: true,
                 filter: "[GemID] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "UQ__Tbl_Mate__C5061316C58730F9",
+                name: "UQ__Tbl_Mate__C50613165F43B652",
                 table: "Tbl_MaterialPriceList",
                 column: "MaterialID",
                 unique: true,
@@ -483,14 +484,18 @@ namespace BusinessObjects.Migrations
                 column: "CategoryID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tbl_ProductGem_GemID",
+                name: "UQ__Tbl_Prod__B40CC6EC1F7E9BD5",
                 table: "Tbl_ProductGem",
-                column: "GemID");
+                column: "ProductID",
+                unique: true,
+                filter: "[ProductID] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tbl_ProductGem_ProductID",
+                name: "UQ__Tbl_Prod__F101D5A1A6E8002C",
                 table: "Tbl_ProductGem",
-                column: "ProductID");
+                column: "GemID",
+                unique: true,
+                filter: "[GemID] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tbl_ProductMaterial_MaterialID",
@@ -503,21 +508,21 @@ namespace BusinessObjects.Migrations
                 column: "ProductID");
 
             migrationBuilder.CreateIndex(
-                name: "UQ__Tbl_Sale__349DA587C3FA4ED5",
+                name: "UQ__Tbl_Sale__349DA587A9D9823E",
                 table: "Tbl_SaleStaff",
                 column: "AccountID",
                 unique: true,
                 filter: "[AccountID] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "UQ__Tbl_Ship__349DA5871E3B5E50",
+                name: "UQ__Tbl_Ship__349DA587C27466AD",
                 table: "Tbl_Shipper",
                 column: "AccountID",
                 unique: true,
                 filter: "[AccountID] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "UQ__Tbl_Warr__D3B9D30DAED36541",
+                name: "UQ__Tbl_Warr__D3B9D30D6EAA58F2",
                 table: "Tbl_Warranty",
                 column: "OrderDetailID",
                 unique: true,

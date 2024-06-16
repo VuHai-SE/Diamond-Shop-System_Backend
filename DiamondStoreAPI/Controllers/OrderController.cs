@@ -146,8 +146,8 @@ namespace DiamondStoreAPI.Controllers
             {
                 string productID = p.ProductID;
                 int customizedSize = p.CustomizedSize;
-                TblProduct product = iProductService.GetProduct(productID);
-                double productPrice = (double)((product.GemCost + product.MaterialCost + product.ProductionCost) * (1 + product.PriceRate/100));
+                var product = await iProductService.GetProductAndPriceByIdAsync(productID);
+                double productPrice = (double)product.ProductPrice;
                 int productSize = (int)product.ProductSize;
                 TblOrderDetail newOrderDetail = new TblOrderDetail()
                 {
@@ -183,9 +183,9 @@ namespace DiamondStoreAPI.Controllers
             orderInfo.OrderDate = newOrderRequest.OrderDate;
             orderInfo.OrderStatus = order.OrderStatus;
             orderInfo.CustomerID = customer.CustomerId;
-            orderInfo.CustomerName = customer.FirstName + " " + customer.LastName;
-            orderInfo.CustomerPhone = customer.PhoneNumber;
-            orderInfo.Address = customer.Address;
+            //orderInfo.CustomerName = customer.FirstName + " " + customer.LastName;
+            //orderInfo.CustomerPhone = customer.PhoneNumber;
+            //orderInfo.Address = customer.Address;
             //add new Payment
             TblPayment newPayMent = new TblPayment()
             {
@@ -235,6 +235,17 @@ namespace DiamondStoreAPI.Controllers
                 return NotFound();
             }
             return Ok(orderInfoList);
+        }
+
+        [HttpGet("GetAcceptedOrderInfoList")]
+        public async Task<ActionResult<IEnumerable<TblOrder>>> GetAcceptedOrderInforList()
+        {
+            var acceptedOrderInfoList = iOrderService.GetAcceptedOrderInforList();
+            if (acceptedOrderInfoList.IsNullOrEmpty())
+            {
+                return NotFound();
+            }
+            return Ok(acceptedOrderInfoList);
         }
     }
 }

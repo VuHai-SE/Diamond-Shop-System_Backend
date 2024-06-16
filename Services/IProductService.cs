@@ -4,24 +4,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects;
+using Services.DTOs.Request;
 using Services.DTOs.Response;
 
 namespace Services
 {
     public interface IProductService
     {
-        //public List<TblProduct> GetProducts();
-        //public TblProduct GetProduct(string id);
         public TblProduct AddProduct(TblProduct product);
 
         Task<double> CalculateProductPriceAsync(string productId);
 
-        Task<List<(TblProduct product, double price)>> GetAllProductsAndPricesAsync();
-
+        Task<List<ProductWithPriceResponse>> GetAllProductsAndPricesAsync();
+        Task<List<ProductWithPriceResponse>> FilterProducts(ProductFilterCriteria criteria);
         Task<ProductWithPriceResponse> GetProductAndPriceByIdAsync(string productId);
 
         public TblProduct GetProduct(string id);
-        public List<TblProduct> filterProductsByCategoryID(string categoryID);
-        public List<TblProduct> GetProductsByName(string name);
+        public Task<List<ProductWithPriceResponse>> filterProductsByCategoryID(string categoryID);
+        public Task<List<ProductWithPriceResponse>> GetProductsByName(string name);
+        public List<TblProduct> GetAllProducts();
     }
 }
