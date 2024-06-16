@@ -54,17 +54,17 @@ namespace Services.Implement
             var productWithPriceList = await GetAllProductsAndPricesAsync();
             if (!string.IsNullOrEmpty(criteria.Category))
             {
-                productWithPriceList = productWithPriceList.Where(p => p.Category != null && p.Category.Contains(criteria.Category, StringComparison.OrdinalIgnoreCase)).ToList();
+                productWithPriceList = productWithPriceList.Where(p => p.Category != null && p.Category.Contains(criteria.Category.Trim(), StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
             if (!string.IsNullOrEmpty(criteria.Material))
             {
-                productWithPriceList = productWithPriceList.Where(p => p.Material != null && p.Material.Contains(criteria.Material, StringComparison.OrdinalIgnoreCase)).ToList();
+                productWithPriceList = productWithPriceList.Where(p => p.Material != null && p.Material.Contains(criteria.Material.Trim(), StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
             if (!string.IsNullOrEmpty(criteria.GemOrigin))
             {
-                productWithPriceList = productWithPriceList.Where(p => p.GemOrigin != null && p.GemOrigin.Contains(criteria.GemOrigin, StringComparison.OrdinalIgnoreCase)).ToList();
+                productWithPriceList = productWithPriceList.Where(p => p.GemOrigin != null && p.GemOrigin.Contains(criteria.GemOrigin.Trim(), StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
             if (criteria.MinCaratWeight.HasValue)
@@ -79,22 +79,22 @@ namespace Services.Implement
 
             if (!string.IsNullOrEmpty(criteria.Cut))
             {
-                productWithPriceList = productWithPriceList.Where(p => p.Cut != null && p.Cut.Contains(criteria.Cut, StringComparison.OrdinalIgnoreCase)).ToList();
+                productWithPriceList = productWithPriceList.Where(p => p.Cut != null && p.Cut.Contains(criteria.Cut.Trim(), StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
             if (!string.IsNullOrEmpty(criteria.Clarity))
             {
-                productWithPriceList = productWithPriceList.Where(p => p.Clarity != null && p.Clarity.Contains(criteria.Clarity, StringComparison.OrdinalIgnoreCase)).ToList();
+                productWithPriceList = productWithPriceList.Where(p => p.Clarity != null && p.Clarity.Contains(criteria.Clarity.Trim(), StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
             if (!string.IsNullOrEmpty(criteria.Color))
             {
-                productWithPriceList = productWithPriceList.Where(p => p.Color != null && p.Color.Contains(criteria.Color, StringComparison.OrdinalIgnoreCase)).ToList();
+                productWithPriceList = productWithPriceList.Where(p => p.Color != null && p.Color.Contains(criteria.Color.Trim(), StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
             if (!string.IsNullOrEmpty(criteria.Gender))
             {
-                productWithPriceList = productWithPriceList.Where(p => p.Gender != null && p.Gender.Equals(criteria.Gender, StringComparison.OrdinalIgnoreCase)).ToList();
+                productWithPriceList = productWithPriceList.Where(p => p.Gender != null && p.Gender.Equals(criteria.Gender.Trim(), StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
             return productWithPriceList;
@@ -123,6 +123,7 @@ namespace Services.Implement
                 CaratWeight = gem.CaratWeight,
                 Clarity = gem.Clarity,
                 Color = gem.Color,
+                Cut = gem.Cut,
                 ProductSize = product.ProductSize,
                 Image = product.Image,
                 Status = product.Status,
