@@ -18,8 +18,8 @@ namespace Services
         public TblOrder getOrderByOrderID(int orderID);
         public void CancelOrder(int orderID);
         public OrderInfo GetOrderInfo(int orderID);
-        Task<bool> UpdateOrderStatus(int orderId, string status);
-        public List<OrderInfo> GetOrderInfoList();
-        public List<OrderInfo> GetAcceptedOrderInforList();
+        Task<bool> UpdateOrderStatus(OrderStatusRequest request);
+        public List<OrderInfo> GetOrderInfoListForSaleStaff();
+        public List<OrderInfo> GetOrderInforListForShipper();
     }
 }

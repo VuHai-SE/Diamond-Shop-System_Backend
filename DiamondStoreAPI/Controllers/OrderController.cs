@@ -38,49 +38,60 @@ namespace DiamondStoreAPI.Controllers
             iMaterialCategoryService = materialCategoryService;
         }
 
-        [HttpPost("{orderId}/accept")]
-        public async Task<IActionResult> AcceptOrder(int orderId)
+        [HttpPost("UpdateOrderStatus")]
+        public async Task<IActionResult> AcceptOrder([FromBody] OrderStatusRequest request)
         {
-            var result = await iOrderService.UpdateOrderStatus(orderId, "Accepted");
+            var result = await iOrderService.UpdateOrderStatus(request);
             if (result)
             {
-                return Ok(new { Message = "Order accepted successfully." });
-            }
-            return BadRequest(new { Message = "Failed to accept order." });
-        }
-
-        [HttpPost("{orderId}/pickup")]
-        public async Task<IActionResult> PickupOrder(int orderId)
-        {
-            var result = await iOrderService.UpdateOrderStatus(orderId, "Delivering");
-            if (result)
-            {
-                return Ok(new { Message = "Order status updated to Delivering." });
+                return Ok(new { Message = "Order status updated successfully." });
             }
             return BadRequest(new { Message = "Failed to update order status." });
         }
 
-        [HttpPost("{orderId}/delivered")]
-        public async Task<IActionResult> DeliverOrder(int orderId)
-        {
-            var result = await iOrderService.UpdateOrderStatus(orderId, "Delivered");
-            if (result)
-            {
-                return Ok(new { Message = "Order status updated to Delivered." });
-            }
-            return BadRequest(new { Message = "Failed to update order status." });
-        }
+        //[HttpPost("{orderId}/accept")]
+        //public async Task<IActionResult> AcceptOrder(int orderId)
+        //{
+        //    var result = await iOrderService.UpdateOrderStatus(orderId, "Accepted");
+        //    if (result)
+        //    {
+        //        return Ok(new { Message = "Order accepted successfully." });
+        //    }
+        //    return BadRequest(new { Message = "Failed to accept order." });
+        //}
 
-        [HttpPost("{orderId}/usercancel")]
-        public async Task<IActionResult> UserCancelOrder(int orderId)
-        {
-            var result = await iOrderService.UpdateOrderStatus(orderId, "Canceled");
-            if (result)
-            {
-                return Ok(new { Message = "Order status updated to Canceled." });
-            }
-            return BadRequest(new { Message = "Failed to update order status." });
-        }
+        //[HttpPost("{orderId}/pickup")]
+        //public async Task<IActionResult> PickupOrder(int orderId)
+        //{
+        //    var result = await iOrderService.UpdateOrderStatus(orderId, "Delivering");
+        //    if (result)
+        //    {
+        //        return Ok(new { Message = "Order status updated to Delivering." });
+        //    }
+        //    return BadRequest(new { Message = "Failed to update order status." });
+        //}
+
+        //[HttpPost("{orderId}/delivered")]
+        //public async Task<IActionResult> DeliverOrder(int orderId)
+        //{
+        //    var result = await iOrderService.UpdateOrderStatus(orderId, "Delivered");
+        //    if (result)
+        //    {
+        //        return Ok(new { Message = "Order status updated to Delivered." });
+        //    }
+        //    return BadRequest(new { Message = "Failed to update order status." });
+        //}
+
+        //[HttpPost("{orderId}/usercancel")]
+        //public async Task<IActionResult> UserCancelOrder(int orderId)
+        //{
+        //    var result = await iOrderService.UpdateOrderStatus(orderId, "Canceled");
+        //    if (result)
+        //    {
+        //        return Ok(new { Message = "Order status updated to Canceled." });
+        //    }
+        //    return BadRequest(new { Message = "Failed to update order status." });
+        //}
 
         //[HttpPost("{orderId}/cancel")]
         //public async Task<IActionResult> CancelOrder(int orderId)
@@ -134,7 +145,6 @@ namespace DiamondStoreAPI.Controllers
                 PaymentMethod = newOrderRequest.PaymentMethod,
                 OrderDate = newOrderRequest.OrderDate,
                 OrderStatus = newOrderRequest.PaymentMethod.Equals("Received") ? "Processing" : "Accepted",
-                ShipStatus = "Pending",
             };
             var order = iOrderService.AddOrder(newOrder);
             //add orderdetail
@@ -226,10 +236,10 @@ namespace DiamondStoreAPI.Controllers
             }
         }
 
-        [HttpGet("GetOrderInfoList")]
-        public async Task<ActionResult<IEnumerable<TblOrder>>> GetOrderInforList()
+        [HttpGet("GetOrderInfoListForSaleStaff")]
+        public async Task<ActionResult<IEnumerable<TblOrder>>> GetOrderInfoListForSaleStaff()
         {
-            var orderInfoList = iOrderService.GetOrderInfoList();
+            var orderInfoList = iOrderService.GetOrderInfoListForSaleStaff();
             if (orderInfoList.IsNullOrEmpty())
             {
                 return NotFound();
@@ -237,10 +247,10 @@ namespace DiamondStoreAPI.Controllers
             return Ok(orderInfoList);
         }
 
-        [HttpGet("GetAcceptedOrderInfoList")]
-        public async Task<ActionResult<IEnumerable<TblOrder>>> GetAcceptedOrderInforList()
+        [HttpGet("GetOrderInforListForShipper")]
+        public async Task<ActionResult<IEnumerable<TblOrder>>> GetOrderInforListForShipper()
         {
-            var acceptedOrderInfoList = iOrderService.GetAcceptedOrderInforList();
+            var acceptedOrderInfoList = iOrderService.GetOrderInforListForShipper();
             if (acceptedOrderInfoList.IsNullOrEmpty())
             {
                 return NotFound();

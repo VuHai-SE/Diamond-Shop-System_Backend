@@ -25,5 +25,6 @@ namespace Services.DTOs.Response
         public double FinalPrice { get; set; } = 0;
         public DateTime OrderDate { get; set; }
         public string OrderStatus { get; set; }
+        public string? OrderNote { get; set; }
     }
 }

@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects;
 using Microsoft.Identity.Client;
+using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Linq;
 using PayPal.Api;
 using Repositories;
 using Repositories.Implement;
@@ -24,8 +27,10 @@ namespace Services.Implement
         private readonly IMaterialCategoryRepository _materialCategoryRepository;
         private readonly IPaymentRepository _paymentRepository;
         private readonly IAccountRepository _accountRepository;
+        private readonly ISaleStaffRepository _saleStaffRepository;
+        private readonly IShipperRepository _shipperRepository;
 
-        public OrderService(IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository, ICustomerRepository customerRepository, IProductRepository productRepository, IProductMaterialRepository productMaterialRepository, IMaterialCategoryRepository materialCategoryRepository, IPaymentRepository paymentRepository, IAccountRepository accountRepository)
+        public OrderService(IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository, ICustomerRepository customerRepository, IProductRepository productRepository, IProductMaterialRepository productMaterialRepository, IMaterialCategoryRepository materialCategoryRepository, IPaymentRepository paymentRepository, IAccountRepository accountRepository, ISaleStaffRepository saleStaffRepository, IShipperRepository shipperRepository)
         {
             _orderDetailRepository = orderDetailRepository;
             _customerRepository = customerRepository;
@@ -35,17 +40,85 @@ namespace Services.Implement
             _materialCategoryRepository = materialCategoryRepository;
             _paymentRepository = paymentRepository;
             _accountRepository = accountRepository;
+            _saleStaffRepository = saleStaffRepository;
+            _shipperRepository = shipperRepository;
         }
 
-        public async Task<bool> UpdateOrderStatus(int orderId, string status)
+        public async Task<bool> UpdateOrderStatus(OrderStatusRequest request)
         {
-            var order = await _orderRepository.GetOrderById(orderId);
+            var order = await _orderRepository.GetOrderById((int)request.OrderID);
             if (order == null)
             {
                 return false;
             }
-            order.OrderStatus = status;
+            var username = request.Username;
+            var btValue = request.ButtonValue;
+            //neu la sale staff thi add sale staff id vao truong staff id
+            //neu la shipper thi add shipper id vao truong shipper id
+            //dong thoi add shipping date va received date
+            if (request.Role.Equals("SaleStaff"))
+            {
+                if (string.IsNullOrEmpty(order.StaffId))
+                {
+                    var SaleStaffID = _saleStaffRepository.GetSaleStaffByUsername(username).StaffId;
+                    order.StaffId = SaleStaffID;
+                }
+                order.OrderStatus = HandleOrderStatus(btValue);
+                if (request.ButtonValue.Equals("Cancel"))
+                {
+                    //OrderNote
+                    order.ShipStatus = request.Username + "-" + request.CancelReason;
+                }
+            }
+            else if (request.Role.Equals("Shipper"))
+            {
+                if (string.IsNullOrEmpty(order.ShipperId))
+                {
+                    var ShipperID = _shipperRepository.GetShipperByUsername(username).ShipperId;
+                    order.ShipperId = ShipperID;
+                }
+                order.OrderStatus = HandleOrderStatus(btValue);
+                if (btValue.Equals("Pick up"))
+                {
+                    order.ShippingDate = request.ShippingDate;
+                }
+                else if (btValue.Equals("Done"))
+                {
+                    order.ReceiveDate = request.ReceivedDate;
+                    order.ShipStatus = _accountRepository.GetAccountSaleStaff(order.StaffId).Username
+                        + "," + _accountRepository.GetAccountShipper(order.ShipperId).Username + "-Done";
+                }   
+                else if (request.ButtonValue.Equals("Cancel"))
+                {
+                    //OrderNote
+                    order.ShipStatus = request.Username + "-" + request.CancelReason;
+                }
+            }
             return await _orderRepository.UpdateOrder(order);
+        }
+
+        private string HandleOrderStatus(string btValue)
+        {
+            if (btValue.Equals("Confirm"))
+            {
+                return "Accepted";
+            }
+            else if (btValue.Equals("Ready"))
+            {
+                return "Pending Delivery";
+            }
+            else if (btValue.Equals("Pick up"))
+            {
+                return "Deliverying";
+            }
+            else if (btValue.Equals("Done"))
+            {
+                return "Deliveried";
+            }
+            else
+            {
+                return "Cancelled";
+            }
         }
 
         public TblOrder AddOrder(TblOrder order)
@@ -86,7 +159,7 @@ namespace Services.Implement
             if (order != null)
             {
                 var customer = _customerRepository.GetCustomerByID((int)order.CustomerId);
-                
+
                 orderInfo.OrderID = order.OrderId;
                 orderInfo.CustomerID = customer.CustomerId;
                 orderInfo.CustomerName = customer.FirstName + " " + customer.LastName;
@@ -107,6 +180,7 @@ namespace Services.Implement
                 orderInfo.DiscountRate = (double)customer.DiscountRate;
                 orderInfo.OrderDate = (DateTime)order.OrderDate;
                 orderInfo.OrderStatus = (string)order.OrderStatus;
+                orderInfo.OrderNote = order.ShipStatus;
                 var OrderDetail = _orderDetailRepository.GetOrderDetailsByOrderID(order.OrderId);
                 foreach (var orderDetail in OrderDetail)
                 {
@@ -130,7 +204,7 @@ namespace Services.Implement
             return orderInfo;
         }
 
-        public List<OrderInfo> GetOrderInfoList()
+        public List<OrderInfo> GetOrderInfoListForSaleStaff()
         {
             var orderInforList = new List<OrderInfo>();
             var orders = _orderRepository.GetOrders();
@@ -145,7 +219,7 @@ namespace Services.Implement
             return orderInforList;
         }
 
-        public List<OrderInfo> GetAcceptedOrderInforList()
+        public List<OrderInfo> GetOrderInforListForShipper()
         {
             var orderInforList = new List<OrderInfo>();
             var orders = _orderRepository.GetOrders();
@@ -153,7 +227,10 @@ namespace Services.Implement
             {
                 foreach (var order in orders)
                 {
-                    if (order.OrderStatus.Equals("Accepted"))
+                    if (order.OrderStatus.Equals("Pending Delivery") ||
+                        order.OrderStatus.Equals("Delivering") ||
+                        order.OrderStatus.Equals("Deliveried") ||
+                        (order.OrderStatus.Equals("Cancelled") && !order.ShipperId.IsNullOrEmpty()))
                     {
                         var orderInfo = GetOrderInfo(order.OrderId);
                         orderInforList.Add(orderInfo);
