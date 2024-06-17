@@ -22,10 +22,11 @@ namespace DAOs
             return await _context.TblAccounts.AsNoTracking().FirstOrDefaultAsync(a => a.Username.Equals(username));
         }
 
-        public async Task AddAccountAsync(TblAccount account)
+        public TblAccount AddAccount(TblAccount account)
         {
             _context.TblAccounts.Add(account);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
+            return account;
         }
 
         public async Task AddAccountByManagerAsync(TblAccount account)

@@ -16,6 +16,7 @@ using System.Text;
 using System.Configuration;
 using Services.DTOs.Response;
 
+
 namespace DiamondStoreAPI.Controllers
 {
     [Route("api/[controller]")]
@@ -46,7 +47,7 @@ namespace DiamondStoreAPI.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] Services.DTOs.Request.RegisterRequest request)
         {
-            await _accountService.RegisterAsync(request.Username, request.Password);
+            await _accountService.RegisterAsync(request);
             return Ok();
         }
     }
