@@ -1,6 +1,7 @@
 ﻿using BusinessObjects;
 using Repositories;
 using Repositories.Implement;
+using Services.DTOs.Request;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,10 +13,12 @@ namespace Services.Implement
     public class AccountService : IAccountService
     {
         private readonly IAccountRepository _accountRepository;
+        private readonly ICustomerRepository _customerRepository;
 
-        public AccountService()
+        public AccountService(IAccountRepository accountRepository, ICustomerRepository customerRepository)
         {
-            _accountRepository = new AccountRepository();
+           _accountRepository = accountRepository;
+            _customerRepository = customerRepository;
         }
 
         public async Task<TblAccount> AuthenticateAsync(string username, string password)
@@ -38,18 +41,31 @@ namespace Services.Implement
         public TblAccount GetAccountShipper(string shipperID)
             => _accountRepository.GetAccountShipper(shipperID);
 
-        public async Task RegisterAsync(string username, string password)
+        public async Task RegisterAsync(RegisterRequest register)
         {
-            
-
+           
             var account = new TblAccount
             {
-                Username = username,
-                Password = password,
+                Username = register.Username,
+                Password = register.Password,
                 Role = "Customer" // Mặc định role là Customer
             };
-
-            await _accountRepository.AddAccountAsync(account);
+            var newAccount = _accountRepository.AddAccount(account);
+            var customer = new TblCustomer()
+            {
+                AccountId = newAccount.AccountId,
+                FirstName = register.FirstName,
+                LastName = register.LastName,
+                Gender = (register.Gender.Equals("Male")) ? true : false,
+                Birthday = register.Birthday,
+                Email = register.Email,
+                PhoneNumber = register.PhoneNumber,
+                Address = register.Address,
+                Ranking = "Bronze",
+                DiscountRate = 0.02,
+                Status = true
+            };
+            _customerRepository.AddCustomer(customer);
         }
     }
 }

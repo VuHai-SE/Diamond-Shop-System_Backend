@@ -28,5 +28,8 @@ namespace Repositories.Implement
 
         public List<TblCustomer> GetCustomers()
             => customerDAO.GetCustomers();
+
+        public TblCustomer AddCustomer(TblCustomer customer)
+            => customerDAO.AddCustomer(customer);
     }
 }

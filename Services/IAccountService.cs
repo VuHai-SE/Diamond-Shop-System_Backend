@@ -1,4 +1,5 @@
 ﻿using BusinessObjects;
+using Services.DTOs.Request;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace Services
     public interface IAccountService
     {
         Task<TblAccount> AuthenticateAsync(string username, string password);
-        Task RegisterAsync(string username, string password);
+        Task RegisterAsync(RegisterRequest register);
         Task<TblAccount> GetAccountByUsernameAsync(string username);
         public TblAccount GetAccountSaleStaff(string saleStaffID);
         public TblAccount GetAccountShipper(string shipperID);
