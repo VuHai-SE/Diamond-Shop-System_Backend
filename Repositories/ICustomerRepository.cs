@@ -12,7 +12,7 @@ namespace Repositories
     {
         public List<TblCustomer> GetCustomers();
         public TblCustomer GetCustomerByID(int customerID);
-
         public TblCustomer GetCustomerByAccount(string username);
+        public TblCustomer AddCustomer(TblCustomer customer);
     }
 }

@@ -14,6 +14,5 @@ namespace Services.DTOs.Request
         public string? Role { get; set; }
         public DateTime? ShippingDate { get; set; }
         public DateTime? ReceivedDate { get; set; }
-        public string? CancelReason { get; set; }
     }
 }

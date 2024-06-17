@@ -64,10 +64,10 @@ namespace Services.Implement
                     order.StaffId = SaleStaffID;
                 }
                 order.OrderStatus = HandleOrderStatus(btValue);
-                if (request.ButtonValue.Equals("Cancel"))
+                if (request.ButtonValue.Equals("CANCEL"))
                 {
                     //OrderNote
-                    order.ShipStatus = request.Username + "-" + request.CancelReason;
+                    order.ShipStatus = request.Username + "-" + "-Cancelled";
                 }
             }
             else if (request.Role.Equals("Shipper"))
@@ -78,20 +78,20 @@ namespace Services.Implement
                     order.ShipperId = ShipperID;
                 }
                 order.OrderStatus = HandleOrderStatus(btValue);
-                if (btValue.Equals("Pick up"))
+                if (btValue.Equals("PICK UP"))
                 {
                     order.ShippingDate = request.ShippingDate;
                 }
-                else if (btValue.Equals("Done"))
+                else if (btValue.Equals("DONE"))
                 {
                     order.ReceiveDate = request.ReceivedDate;
                     order.ShipStatus = _accountRepository.GetAccountSaleStaff(order.StaffId).Username
                         + "," + _accountRepository.GetAccountShipper(order.ShipperId).Username + "-Done";
                 }   
-                else if (request.ButtonValue.Equals("Cancel"))
+                else if (request.ButtonValue.Equals("CANCEL"))
                 {
                     //OrderNote
-                    order.ShipStatus = request.Username + "-" + request.CancelReason;
+                    order.ShipStatus = request.Username + "-Cancelled";
                 }
             }
             return await _orderRepository.UpdateOrder(order);
@@ -99,19 +99,19 @@ namespace Services.Implement
 
         private string HandleOrderStatus(string btValue)
         {
-            if (btValue.Equals("Confirm"))
+            if (btValue.Equals("CONFIRM"))
             {
                 return "Accepted";
             }
-            else if (btValue.Equals("Ready"))
+            else if (btValue.Equals("READY"))
             {
                 return "Pending Delivery";
             }
-            else if (btValue.Equals("Pick up"))
+            else if (btValue.Equals("PICK UP"))
             {
                 return "Deliverying";
             }
-            else if (btValue.Equals("Done"))
+            else if (btValue.Equals("DONE"))
             {
                 return "Deliveried";
             }
