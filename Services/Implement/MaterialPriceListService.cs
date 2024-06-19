@@ -12,11 +12,11 @@ namespace Services.Implement
     {
         private readonly IMaterialPriceListRepository materialPriceListRepository;
 
-        public MaterialPriceListService()
+        public MaterialPriceListService(IMaterialPriceListRepository _materialPriceListRepository)
         {
             if (materialPriceListRepository == null)
             {
-                //materialPriceListRepository = new MaterialPriceListRepository();
+                materialPriceListRepository = _materialPriceListRepository;
             }
         }
 

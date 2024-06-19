@@ -26,13 +26,6 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 });
 
 
-
-
-
-
-services.AddScoped<IGemPriceListService, GemPriceListService>();
-
-
 // Add dependencies
 
 builder.Services.AddScoped<AccountDAO>();
@@ -82,6 +75,10 @@ services.AddScoped<IShipperService, ShipperService>();
 services.AddScoped<GemDAO>();
 services.AddScoped<IGemRepository, GemRepository>();
 services.AddScoped<IGemService, GemService>();
+
+services.AddScoped<MaterialPriceListDAO>();
+services.AddScoped<IMaterialPriceListRepository, MaterialPriceListRepository>();
+services.AddScoped<IMaterialPriceListService, MaterialPriceListService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

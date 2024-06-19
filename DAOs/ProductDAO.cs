@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Update.Internal;
 
 namespace DAOs
 {
@@ -81,5 +82,30 @@ namespace DAOs
         public List<TblProduct> GetProductsByName(string name)
             => _context.TblProducts.Where(p => p.ProductName.ToLower().Contains(name.ToLower())).ToList();
 
+        public async Task<bool> UpdateProduct(string productID, TblProduct product)
+        {
+            var oProduct = await GetProductByIdAsync(productID);
+            if (oProduct == null)
+            {
+                return false;
+            }
+            
+            oProduct.ProductName = product.ProductName;
+            oProduct.ProductCode = product.ProductCode;
+            oProduct.Description = product.Description;
+            oProduct.CategoryId = product.CategoryId;
+            oProduct.MaterialCost = product.MaterialCost;
+            oProduct.GemCost = product.GemCost;
+            oProduct.ProductionCost = product.ProductionCost;
+            oProduct.PriceRate = product.PriceRate;
+            oProduct.ProductSize = product.ProductSize;
+            oProduct.Image  = product.Image;
+            oProduct.Status = product.Status;
+            oProduct.UnitSizePrice = product.UnitSizePrice;
+            oProduct.Gender = product.Gender;
+            _context.TblProducts.Update(oProduct);
+            _context.SaveChanges();
+            return true;
+        }
     }
 }

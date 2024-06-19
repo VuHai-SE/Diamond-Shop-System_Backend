@@ -34,7 +34,21 @@ namespace DAOs
 
         public bool UpdateMaterialPriceList(int id,  TblMaterialPriceList materialPriceList)
         {
-            return false;
+            var materialPrice = GetMaterialPriceList(id);
+            if (materialPrice == null)
+            {
+                return false;
+            }
+            materialPrice.UnitPrice = materialPriceList.UnitPrice;
+            materialPrice.EffDate=  materialPriceList.EffDate;
+            dbContext.TblMaterialPriceLists.Update(materialPrice);
+            dbContext.SaveChanges();
+            return true;
+        }
+
+        public TblMaterialPriceList GetMaterialPriceByMaterialID(string materialID)
+        {
+            return dbContext.TblMaterialPriceLists.FirstOrDefault(mp => mp.MaterialId.Equals(materialID));
         }
 
         public bool DeleteMaterialPriceList(int id)

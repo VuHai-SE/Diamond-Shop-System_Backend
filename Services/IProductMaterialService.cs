@@ -11,5 +11,6 @@ namespace Services
     {
         public List<TblProductMaterial> GetProductMaterials();
         public TblProductMaterial GetProductMaterialProductID(string productID);
+        public List<TblProductMaterial> GetProductMaterialByMaterialID(string materialID);
     }
 }

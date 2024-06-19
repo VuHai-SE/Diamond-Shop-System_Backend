@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BusinessObjects;
 using Services;
 using Services.Implement;
+using Services.DTOs.Request;
 
 namespace DiamondStoreAPI.Controllers
 {
@@ -16,10 +17,14 @@ namespace DiamondStoreAPI.Controllers
     public class MaterialPriceListsController : ControllerBase
     {
         private readonly IMaterialPriceListService iMaterialPriceListService;
+        private readonly IProductService iProductService;
+        private readonly IProductMaterialService iProductMaterialService;
 
-        public MaterialPriceListsController(DiamondStoreContext context)
+        public MaterialPriceListsController(IMaterialPriceListService materialPriceListService, IProductService productService, IProductMaterialService productMaterialService)
         {
-            iMaterialPriceListService = new MaterialPriceListService();
+            iMaterialPriceListService = materialPriceListService;
+            iProductService = productService;
+            iProductMaterialService = productMaterialService;
         }
 
         // GET: api/MaterialPriceLists
@@ -53,18 +58,24 @@ namespace DiamondStoreAPI.Controllers
 
         // PUT: api/MaterialPriceLists/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutTblMaterialPriceList(int id, TblMaterialPriceList tblMaterialPriceList)
+        [HttpPut("UpdateUnitPrice")]
+        public async Task<IActionResult> UpdateMaterialPrice(int id, [FromBody] UpdateMeterialRequest request)
         {
-            if (id != tblMaterialPriceList.Id)
+            var materialPrice = iMaterialPriceListService.GetMaterialPriceList(id);
+            if (materialPrice == null)
             {
-                return BadRequest();
+                return NotFound();
             }
-
-            var isUpdate = iMaterialPriceListService.UpdateMaterialPriceList(id, tblMaterialPriceList);
-
-
-            return NoContent();
+            
+            materialPrice.UnitPrice = request.NewPrice;
+            materialPrice.EffDate = request.EffectDate;
+            var isUpdate = iMaterialPriceListService.UpdateMaterialPriceList(id, materialPrice);
+            var productMaterialList = iProductMaterialService.GetProductMaterialByMaterialID(materialPrice.MaterialId);
+            foreach ( var pm in productMaterialList )
+            {
+                iProductService.UpdateMaterialPriceAndUnitPriceSize(pm.ProductId, materialPrice);
+            }
+            return Ok();
         }
 
         // POST: api/MaterialPriceLists
@@ -82,17 +93,17 @@ namespace DiamondStoreAPI.Controllers
         }
 
         // DELETE: api/MaterialPriceLists/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTblMaterialPriceList(int id)
-        {
-            if (iMaterialPriceListService.GetMaterialPriceLists() == null)
-            {
-                return NotFound();
-            }
-            var isDelete = iMaterialPriceListService.DeleteMaterialPriceList(id);
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> DeleteTblMaterialPriceList(int id)
+        //{
+        //    if (iMaterialPriceListService.GetMaterialPriceLists() == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    var isDelete = iMaterialPriceListService.DeleteMaterialPriceList(id);
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
 
         //private bool TblMaterialPriceListExists(int id)
         //{

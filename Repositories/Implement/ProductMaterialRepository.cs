@@ -17,6 +17,9 @@ namespace Repositories.Implement
             _productMaterialDao = productMaterialDao;
         }
 
+        public List<TblProductMaterial> GetProductMaterialByMaterialID(string materialID)
+            => _productMaterialDao.GetProductMaterialByMaterialID(materialID);
+
         public TblProductMaterial GetProductMaterialProductID(string productID)
             => _productMaterialDao.GetProductMaterialProductID(productID);
 
