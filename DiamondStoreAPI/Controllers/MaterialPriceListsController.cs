@@ -9,6 +9,8 @@ using BusinessObjects;
 using Services;
 using Services.Implement;
 using Services.DTOs.Request;
+using Microsoft.IdentityModel.Tokens;
+using Services.DTOs.Response;
 
 namespace DiamondStoreAPI.Controllers
 {
@@ -29,39 +31,40 @@ namespace DiamondStoreAPI.Controllers
 
         // GET: api/MaterialPriceLists
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TblMaterialPriceList>>> GetTblMaterialPriceLists()
+        public async Task<ActionResult<IEnumerable<MaterialResponse>>> GetMaterialList()
         {
-            if (iMaterialPriceListService.GetMaterialPriceLists() == null)
+            var materialList = iMaterialPriceListService.GetMaterialList();
+            if (materialList.IsNullOrEmpty())
             {
                 return NotFound();
             }
-            return iMaterialPriceListService.GetMaterialPriceLists().ToList();
+            return materialList;
         }
 
         // GET: api/MaterialPriceLists/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TblMaterialPriceList>> GetTblMaterialPriceList(int id)
+        public async Task<ActionResult<MaterialResponse>> GetMaterial(string id)
         {
-            if (iMaterialPriceListService.GetMaterialPriceLists() == null)
+            if (iMaterialPriceListService.GetMaterialList().IsNullOrEmpty())
             {
                 return NotFound();
             }
-            var tblMaterialPriceList = iMaterialPriceListService.GetMaterialPriceList(id);
+            var material = iMaterialPriceListService.GetMaterial(id);
 
-            if (tblMaterialPriceList == null)
+            if (material == null)
             {
                 return NotFound();
             }
 
-            return tblMaterialPriceList;
+            return material;
         }
 
         // PUT: api/MaterialPriceLists/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("UpdateUnitPrice")]
-        public async Task<IActionResult> UpdateMaterialPrice(int id, [FromBody] UpdateMeterialRequest request)
+        public async Task<IActionResult> UpdateMaterialPrice([FromBody] UpdateMeterialRequest request)
         {
-            var materialPrice = iMaterialPriceListService.GetMaterialPriceList(id);
+            var materialPrice = iMaterialPriceListService.GetMaterialPriceByMaterialID(request.MaterialID);
             if (materialPrice == null)
             {
                 return NotFound();
@@ -69,11 +72,11 @@ namespace DiamondStoreAPI.Controllers
             
             materialPrice.UnitPrice = request.NewPrice;
             materialPrice.EffDate = request.EffectDate;
-            var isUpdate = iMaterialPriceListService.UpdateMaterialPriceList(id, materialPrice);
+            var isUpdate = iMaterialPriceListService.UpdateMaterialPriceList(materialPrice.Id, materialPrice);
             var productMaterialList = iProductMaterialService.GetProductMaterialByMaterialID(materialPrice.MaterialId);
             foreach ( var pm in productMaterialList )
             {
-                iProductService.UpdateMaterialPriceAndUnitPriceSize(pm.ProductId, materialPrice);
+                await iProductService.UpdateMaterialPriceAndUnitPriceSize(pm.ProductId, materialPrice);
             }
             return Ok();
         }
@@ -83,7 +86,7 @@ namespace DiamondStoreAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<TblMaterialPriceList>> PostTblMaterialPriceList(TblMaterialPriceList tblMaterialPriceList)
         {
-            if (iMaterialPriceListService.GetMaterialPriceLists() == null)
+            if (iMaterialPriceListService.GetMaterialList() == null)
             {
                 return NotFound();
             }
