@@ -39,5 +39,5 @@ public partial class TblProduct
 
     public virtual TblProductGem? TblProductGem { get; set; }
 
-    public virtual ICollection<TblProductMaterial> TblProductMaterials { get; set; } = new List<TblProductMaterial>();
+    public virtual TblProductMaterial? TblProductMaterial { get; set; }
 }

@@ -80,6 +80,10 @@ services.AddScoped<MaterialPriceListDAO>();
 services.AddScoped<IMaterialPriceListRepository, MaterialPriceListRepository>();
 services.AddScoped<IMaterialPriceListService, MaterialPriceListService>();
 
+services.AddScoped<GemPriceListDAO>();
+services.AddScoped<IGemPriceListRepository, GemPriceListRepository>();
+services.AddScoped<IGemPriceListService, GemPriceListService>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
