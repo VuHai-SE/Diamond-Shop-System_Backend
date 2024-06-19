@@ -16,6 +16,9 @@ namespace Services.Implement
         {
             _productMaterialRepository = productMaterialRepository;
         }
+
+        public List<TblProductMaterial> GetProductMaterialByMaterialID(string materialID)
+            => _productMaterialRepository.GetProductMaterialByMaterialID(materialID);
         public TblProductMaterial GetProductMaterialProductID(string productID)
             => _productMaterialRepository.GetProductMaterialProductID(productID);
 

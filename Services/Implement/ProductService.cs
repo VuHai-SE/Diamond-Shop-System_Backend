@@ -20,13 +20,15 @@ namespace Services.Implement
         private readonly IProductMaterialRepository productMaterialRepository;
         private readonly IMaterialCategoryRepository materialCategoryRepository;
         private readonly IGemRepository gemRepository;
-        public ProductService(IProductRepository _productRepository, IProductCategoryRepository _productCategoryRepository, IProductMaterialRepository _productMaterialRepository, IMaterialCategoryRepository _materialCategoryRepository, IGemRepository _gemRepository)
+        private readonly IMaterialPriceListRepository materialPriceListRepository;
+        public ProductService(IProductRepository _productRepository, IProductCategoryRepository _productCategoryRepository, IProductMaterialRepository _productMaterialRepository, IMaterialCategoryRepository _materialCategoryRepository, IGemRepository _gemRepository, IMaterialPriceListRepository _materialPriceLisRepository)
         {
             productRepository = _productRepository;
             productCategoryRepository = _productCategoryRepository;
             productMaterialRepository = _productMaterialRepository;
             materialCategoryRepository = _materialCategoryRepository;
             gemRepository = _gemRepository;
+            materialPriceListRepository = _materialPriceLisRepository;
         }
 
         public async Task<double> CalculateProductPriceAsync(string productId)
@@ -162,5 +164,19 @@ namespace Services.Implement
 
         public List<TblProduct> GetAllProducts()
             => productRepository.GetAllProducts();
+
+        public async Task<bool> UpdateMaterialPriceAndUnitPriceSize(string productID, TblMaterialPriceList materialPriceList)
+        {
+            var product = await productRepository.GetProductByIdAsync(productID);
+            if (product == null)
+            {
+                return false;
+            }
+            var productMaterial = productMaterialRepository.GetProductMaterialProductID(productID);
+            var materialCost = materialPriceList.UnitPrice * productMaterial.Weight;
+            product.MaterialCost = materialCost;
+            product.UnitSizePrice = materialCost / product.ProductSize;
+            return await productRepository.UpdateProduct(productID, product);
+        }
     }
 }

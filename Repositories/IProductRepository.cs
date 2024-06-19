@@ -21,5 +21,6 @@ namespace Repositories
         public TblProduct GetProduct(string id);
         public List<TblProduct> filterProductsByCategoryID(string categoryID);
         public List<TblProduct> GetProductsByName(string name);
+        public Task<bool> UpdateProduct(string productID, TblProduct product);
     }
 }

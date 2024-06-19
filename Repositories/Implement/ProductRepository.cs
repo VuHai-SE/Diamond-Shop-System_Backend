@@ -77,5 +77,10 @@ namespace Repositories.Implement
 
         public List<TblProduct> GetProductsByName(string name)
             => productDAO.GetProductsByName(name);
+
+        public Task<bool> UpdateProduct(string productID, TblProduct product)
+        {
+            return productDAO.UpdateProduct(productID, product);
+        }
     }
 }

@@ -10,14 +10,11 @@ namespace Repositories.Implement
 {
     public class MaterialPriceListRepository : IMaterialPriceListRepository
     {
-        private readonly MaterialPriceListDAO materialPriceListDAO = null;
+        private readonly MaterialPriceListDAO materialPriceListDAO;
 
-        public MaterialPriceListRepository()
+        public MaterialPriceListRepository(MaterialPriceListDAO _materialPriceListDAO)
         {
-            if (materialPriceListDAO == null)
-            {
-                materialPriceListDAO = new MaterialPriceListDAO();
-            }
+            materialPriceListDAO = _materialPriceListDAO;
         }
 
         public TblMaterialPriceList AddMaterialPriceList(TblMaterialPriceList materialPriceList)
@@ -25,6 +22,9 @@ namespace Repositories.Implement
 
         public bool DeleteMaterialPriceList(int id)
             => materialPriceListDAO.DeleteMaterialPriceList(id);
+                
+        public TblMaterialPriceList GetMaterialPriceByMaterialID(string materialID)
+            => materialPriceListDAO.GetMaterialPriceByMaterialID(materialID);
 
         public TblMaterialPriceList GetMaterialPriceList(int id)
             => materialPriceListDAO.GetMaterialPriceList(id);
