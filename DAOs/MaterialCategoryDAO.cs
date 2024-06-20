@@ -24,14 +24,8 @@ namespace DAOs
         public List<TblMaterialCategory> GetMaterialCategories()
             => dbContext.TblMaterialCategories.ToList();
 
-        //public TblMaterialCategory GetMaterialCategory(string id)
-        //    => dbContext.TblMaterialCategories.FirstOrDefault(m => m.MaterialId.Equals(id));
-
-        public async Task<TblMaterialCategory> GetMaterialCategoryAsync(string id)
-        {
-            return await dbContext.TblMaterialCategories
-                                  .SingleOrDefaultAsync(m => m.MaterialId.Equals(id));
-        }
+        public TblMaterialCategory GetMaterialCategory(string id)
+            => dbContext.TblMaterialCategories.FirstOrDefault(m => m.MaterialId.Equals(id));
 
         public TblMaterialCategory AddMaterialCategory(TblMaterialCategory category)
         {
