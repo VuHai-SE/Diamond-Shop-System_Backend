@@ -78,7 +78,7 @@ namespace Services.Implement
                     order.ShipperId = ShipperID;
                 }
                 order.OrderStatus = HandleOrderStatus(btValue);
-                if (btValue.Equals("PICK UP"))
+                if (btValue.Equals("PICKUP"))
                 {
                     order.ShippingDate = request.ShippingDate;
                 }
