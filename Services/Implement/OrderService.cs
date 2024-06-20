@@ -51,8 +51,8 @@ namespace Services.Implement
             {
                 return false;
             }
-            var username = request.Username;
-            var btValue = request.ButtonValue;
+            var username = request.Username.Trim();
+            var btValue = request.ButtonValue.Trim();
             //neu la sale staff thi add sale staff id vao truong staff id
             //neu la shipper thi add shipper id vao truong shipper id
             //dong thoi add shipping date va received date
@@ -107,7 +107,7 @@ namespace Services.Implement
             {
                 return "Pending Delivery";
             }
-            else if (btValue.Equals("PICK UP"))
+            else if (btValue.Equals("PICKUP"))
             {
                 return "Deliverying";
             }
