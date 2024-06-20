@@ -10,14 +10,11 @@ namespace Repositories.Implement
 {
     public class GemPriceListRepository : IGemPriceListRepository
     {
-        private readonly GemPriceListDAO gemPriceListDAO = null;
+        private readonly GemPriceListDAO gemPriceListDAO;
 
-        public GemPriceListRepository()
+        public GemPriceListRepository(GemPriceListDAO _gemPriceListDAO)
         {
-            if (gemPriceListDAO == null)
-            {
-                gemPriceListDAO = new GemPriceListDAO();
-            }
+            gemPriceListDAO = _gemPriceListDAO;
         }
 
         public TblGemPriceList AddGemPriceList(TblGemPriceList gemPriceList)
@@ -25,6 +22,10 @@ namespace Repositories.Implement
 
         public bool DeleteGemPriceList(int id)
             => gemPriceListDAO.DeleteGemPriceList(id);
+
+        public List<TblGemPriceList> GetListByFourCAndOrigin(string origin, double? minCaratWeight, double? maxCaratWeght,
+     string color, string cut, string clarity)
+            => gemPriceListDAO.GetListByFourCAndOrigin(origin, minCaratWeight, maxCaratWeght, color, cut, clarity);
 
         public TblGemPriceList GetGemPriceList(int id)
             => gemPriceListDAO.GetGemPriceList(id);

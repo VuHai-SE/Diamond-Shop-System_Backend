@@ -8,6 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using BusinessObjects;
 using Services;
 using Services.Implement;
+using Services.DTOs.Request;
+using Microsoft.IdentityModel.Tokens;
+using Services.DTOs.Response;
 
 namespace DiamondStoreAPI.Controllers
 {
@@ -16,55 +19,66 @@ namespace DiamondStoreAPI.Controllers
     public class MaterialPriceListsController : ControllerBase
     {
         private readonly IMaterialPriceListService iMaterialPriceListService;
+        private readonly IProductService iProductService;
+        private readonly IProductMaterialService iProductMaterialService;
 
-        public MaterialPriceListsController(DiamondStoreContext context)
+        public MaterialPriceListsController(IMaterialPriceListService materialPriceListService, IProductService productService, IProductMaterialService productMaterialService)
         {
-            iMaterialPriceListService = new MaterialPriceListService();
+            iMaterialPriceListService = materialPriceListService;
+            iProductService = productService;
+            iProductMaterialService = productMaterialService;
         }
 
         // GET: api/MaterialPriceLists
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TblMaterialPriceList>>> GetTblMaterialPriceLists()
+        public async Task<ActionResult<IEnumerable<MaterialResponse>>> GetMaterialList()
         {
-            if (iMaterialPriceListService.GetMaterialPriceLists() == null)
+            var materialList = iMaterialPriceListService.GetMaterialList();
+            if (materialList.IsNullOrEmpty())
             {
                 return NotFound();
             }
-            return iMaterialPriceListService.GetMaterialPriceLists().ToList();
+            return materialList;
         }
 
         // GET: api/MaterialPriceLists/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TblMaterialPriceList>> GetTblMaterialPriceList(int id)
+        public async Task<ActionResult<MaterialResponse>> GetMaterial(string id)
         {
-            if (iMaterialPriceListService.GetMaterialPriceLists() == null)
+            if (iMaterialPriceListService.GetMaterialList().IsNullOrEmpty())
             {
                 return NotFound();
             }
-            var tblMaterialPriceList = iMaterialPriceListService.GetMaterialPriceList(id);
+            var material = iMaterialPriceListService.GetMaterial(id);
 
-            if (tblMaterialPriceList == null)
+            if (material == null)
             {
                 return NotFound();
             }
 
-            return tblMaterialPriceList;
+            return material;
         }
 
         // PUT: api/MaterialPriceLists/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutTblMaterialPriceList(int id, TblMaterialPriceList tblMaterialPriceList)
+        [HttpPut("UpdateUnitPrice")]
+        public async Task<IActionResult> UpdateMaterialPrice([FromBody] UpdateMeterialRequest request)
         {
-            if (id != tblMaterialPriceList.Id)
+            var materialPrice = iMaterialPriceListService.GetMaterialPriceByMaterialID(request.MaterialID);
+            if (materialPrice == null)
             {
-                return BadRequest();
+                return NotFound();
             }
-
-            var isUpdate = iMaterialPriceListService.UpdateMaterialPriceList(id, tblMaterialPriceList);
-
-
-            return NoContent();
+            
+            materialPrice.UnitPrice = request.NewPrice;
+            materialPrice.EffDate = request.EffectDate;
+            var isUpdate = iMaterialPriceListService.UpdateMaterialPriceList(materialPrice.Id, materialPrice);
+            var productMaterialList = iProductMaterialService.GetProductMaterialByMaterialID(materialPrice.MaterialId);
+            foreach ( var pm in productMaterialList )
+            {
+                await iProductService.UpdateMaterialPriceAndUnitPriceSize(pm.ProductId, materialPrice);
+            }
+            return Ok();
         }
 
         // POST: api/MaterialPriceLists
@@ -72,7 +86,7 @@ namespace DiamondStoreAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<TblMaterialPriceList>> PostTblMaterialPriceList(TblMaterialPriceList tblMaterialPriceList)
         {
-            if (iMaterialPriceListService.GetMaterialPriceLists() == null)
+            if (iMaterialPriceListService.GetMaterialList() == null)
             {
                 return NotFound();
             }
@@ -82,17 +96,17 @@ namespace DiamondStoreAPI.Controllers
         }
 
         // DELETE: api/MaterialPriceLists/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTblMaterialPriceList(int id)
-        {
-            if (iMaterialPriceListService.GetMaterialPriceLists() == null)
-            {
-                return NotFound();
-            }
-            var isDelete = iMaterialPriceListService.DeleteMaterialPriceList(id);
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> DeleteTblMaterialPriceList(int id)
+        //{
+        //    if (iMaterialPriceListService.GetMaterialPriceLists() == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    var isDelete = iMaterialPriceListService.DeleteMaterialPriceList(id);
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
 
         //private bool TblMaterialPriceListExists(int id)
         //{

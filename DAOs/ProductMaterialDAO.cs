@@ -22,5 +22,8 @@ namespace DAOs
 
         public TblProductMaterial GetProductMaterialProductID(string productID)
             => _context.TblProductMaterials.FirstOrDefault(pm => pm.ProductId.Equals(productID));
+
+        public List<TblProductMaterial> GetProductMaterialByMaterialID(string materialID)
+            => _context.TblProductMaterials.Where(pm => pm.MaterialId.Equals(materialID)).ToList();
     }
 }

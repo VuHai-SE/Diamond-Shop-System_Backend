@@ -5,19 +5,52 @@ using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects;
 using Repositories;
+using Services.DTOs.Response;
 
 namespace Services.Implement
 {
     public class MaterialPriceListService : IMaterialPriceListService
     {
         private readonly IMaterialPriceListRepository materialPriceListRepository;
+        private readonly IMaterialCategoryRepository materialCategoryRepository;
 
-        public MaterialPriceListService()
+        public MaterialPriceListService(IMaterialPriceListRepository _materialPriceListRepository, IMaterialCategoryRepository _materialCategoryRepository)
         {
             if (materialPriceListRepository == null)
             {
-                //materialPriceListRepository = new MaterialPriceListRepository();
+                materialPriceListRepository = _materialPriceListRepository;
+                materialCategoryRepository = _materialCategoryRepository;
             }
+        }
+
+        public MaterialResponse GetMaterial(string materialID)
+        {
+            var materialCategory = materialCategoryRepository.GetMaterialCategory(materialID);
+            var materialPrice = materialPriceListRepository.GetMaterialPriceByMaterialID(materialID);
+            if (materialPrice == null || materialPrice == null)
+            {
+                return null;
+            }
+
+            return new MaterialResponse()
+            {
+                materialID = materialCategory.MaterialId,
+                materialName = materialCategory.MaterialName,
+                UnitPrice = materialPrice.UnitPrice,
+                EffectedDate = materialPrice.EffDate
+            };
+        }
+
+        public List<MaterialResponse> GetMaterialList()
+        {
+            var materialCateList = materialCategoryRepository.GetMaterialCategories();
+            var materialList = new List<MaterialResponse>();
+            foreach ( var mc in materialCateList)
+            {
+                var m = GetMaterial(mc.MaterialId);
+                materialList.Add(m);
+            }
+            return materialList;
         }
 
         public TblMaterialPriceList AddMaterialPriceList(TblMaterialPriceList materialPriceList)
@@ -26,8 +59,8 @@ namespace Services.Implement
         public bool DeleteMaterialPriceList(int id)
             => materialPriceListRepository.DeleteMaterialPriceList(id);
 
-        public TblMaterialPriceList GetMaterialPriceList(int id)
-            => materialPriceListRepository.GetMaterialPriceList(id);
+        public TblMaterialPriceList GetMaterialPriceByMaterialID(string materialID)
+            => materialPriceListRepository.GetMaterialPriceByMaterialID(materialID);
 
         public List<TblMaterialPriceList> GetMaterialPriceLists()
             => materialPriceListRepository.GetMaterialPriceLists();

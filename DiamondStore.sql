@@ -124,7 +124,7 @@ CREATE TABLE Tbl_Product (
 
 CREATE TABLE Tbl_ProductMaterial (
 	ID INT IDENTITY(1,1) PRIMARY KEY,
-    ProductID NVARCHAR(8),
+    ProductID NVARCHAR(8) UNIQUE,
     MaterialID NVARCHAR(8),
     Weight FLOAT,
     FOREIGN KEY (ProductID) REFERENCES Tbl_Product(ProductID) ON DELETE CASCADE,

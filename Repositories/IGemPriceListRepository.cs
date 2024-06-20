@@ -19,6 +19,10 @@ namespace Repositories
         public bool UpdateGemPriceList(int id, TblGemPriceList gemPriceList);
 
         public bool DeleteGemPriceList(int id);
-        
+
+        public List<TblGemPriceList> GetListByFourCAndOrigin(string origin, double? minCaratWeight, double? maxCaratWeght,
+     string color, string cut, string clarity);
+
+
     }
 }

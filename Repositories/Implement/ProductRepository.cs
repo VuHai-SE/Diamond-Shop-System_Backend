@@ -44,7 +44,7 @@ namespace Repositories.Implement
                 materialTotalPrice += (pm.Weight ?? 0) * latestMaterialPrice;
             }
             var priceRate = 1 + (double)product.PriceRate / 100;
-            return (gemTotalPrice + materialTotalPrice + (product.ProductionCost ?? 0)) * priceRate;
+            return (gemTotalPrice + (product.GemCost ?? 0) + materialTotalPrice + (product.ProductionCost ?? 0)) * priceRate;
         }
 
         public List<TblProduct> filterProductsByCategoryID(string categoryID)
@@ -77,5 +77,10 @@ namespace Repositories.Implement
 
         public List<TblProduct> GetProductsByName(string name)
             => productDAO.GetProductsByName(name);
+
+        public Task<bool> UpdateProduct(string productID, TblProduct product)
+        {
+            return productDAO.UpdateProduct(productID, product);
+        }
     }
 }
