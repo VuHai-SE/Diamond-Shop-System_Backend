@@ -24,5 +24,6 @@ namespace Services
         public Task<List<ProductWithPriceResponse>> GetProductsByName(string name);
         public List<TblProduct> GetAllProducts();
         Task<bool> UpdateMaterialPriceAndUnitPriceSize(string productID, TblMaterialPriceList materialPriceList);
+        Task<bool> UpdateProductStatus(string productID);
     }
 }

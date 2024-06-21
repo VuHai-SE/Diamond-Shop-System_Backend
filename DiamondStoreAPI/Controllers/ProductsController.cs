@@ -10,6 +10,7 @@ using Services;
 using Services.DTOs.Response;
 using Microsoft.IdentityModel.Tokens;
 using Services.DTOs.Request;
+using Services.Implement;
 
 namespace DiamondStoreAPI.Controllers
 {
@@ -75,6 +76,17 @@ namespace DiamondStoreAPI.Controllers
                 return NotFound();
             }
             return Ok(pruductList);
+        }
+
+        [HttpPut("UpdateStatus/{id}")]
+        public async Task<IActionResult> UpdateProductStatus(string id)
+        {
+            
+            var isUpdate = await _productService.UpdateProductStatus(id);
+
+            if (isUpdate == false) return NotFound("Update failed (Product Not Found)");
+
+            return Ok("Update successfully");
         }
         //[HttpGet("{productId}/price")]
         //public async Task<IActionResult> GetProductPrice(string productId)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects;
@@ -176,6 +177,17 @@ namespace Services.Implement
             var materialCost = materialPriceList.UnitPrice * productMaterial.Weight;
             product.MaterialCost = materialCost;
             product.UnitSizePrice = materialCost / product.ProductSize;
+            return await productRepository.UpdateProduct(productID, product);
+        }
+
+        public async Task<bool> UpdateProductStatus(string productID)
+        {
+            var product = await productRepository.GetProductByIdAsync(productID);
+            if (product == null)
+            {
+                return false;
+            }
+            product.Status = false;
             return await productRepository.UpdateProduct(productID, product);
         }
     }
