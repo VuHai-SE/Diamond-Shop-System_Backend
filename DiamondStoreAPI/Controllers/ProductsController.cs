@@ -78,14 +78,14 @@ namespace DiamondStoreAPI.Controllers
             return Ok(pruductList);
         }
 
-        [HttpPut("UpdateStatus/{id}")]
-        public async Task<IActionResult> UpdateProductStatus(string id)
+        [HttpPut("UpdateStatus")]
+        public async Task<IActionResult> UpdateProductStatus(List<string> productIdList)
         {
-            
-            var isUpdate = await _productService.UpdateProductStatus(id);
-
-            if (isUpdate == false) return NotFound("Update failed (Product Not Found)");
-
+            foreach (var id in productIdList) 
+            {
+                var isUpdate = await _productService.UpdateProductStatus(id);
+                if (isUpdate == false) return NotFound("Product " + id + " not found");
+            }
             return Ok("Update successfully");
         }
         //[HttpGet("{productId}/price")]
