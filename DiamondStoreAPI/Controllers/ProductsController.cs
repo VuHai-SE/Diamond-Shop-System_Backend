@@ -48,11 +48,22 @@ namespace DiamondStoreAPI.Controllers
             }
 
             var createdProduct = await _productService.CreateProductAsync(product);
-            return CreatedAtAction(nameof(), new { id = createdProduct.Id }, createdProduct);
+            return CreatedAtAction(nameof(GetProductById), new { id = createdProduct.ProductId }, createdProduct);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetProductById(string id)
+        {
+            var product = await _productService.GetProductByIdAsync(id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return Ok(product);
         }
 
         // GET: api/Products/5
-        [HttpGet("{productId}")]
+        [HttpGet("Prrice/{productId}")]
         public async Task<IActionResult> GetProductPrice(string productId)
         {
             var response = await _productService.GetProductAndPriceByIdAsync(productId);

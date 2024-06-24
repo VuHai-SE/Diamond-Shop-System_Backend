@@ -11,6 +11,7 @@ namespace Repositories
     public interface IProductRepository
     {
         public List<TblProduct> GetAllProducts();
+
         public TblProduct AddProduct(TblProduct product);
 
         Task<double> CalculateProductPriceAsync(string productId);
