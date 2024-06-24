@@ -190,5 +190,12 @@ namespace Services.Implement
             product.Status = false;
             return await productRepository.UpdateProduct(productID, product);
         }
+
+        public async Task<TblProduct> CreateProductAsync(TblProduct product)
+        {
+            await productRepository.AddAsync(product);
+            await productRepository.SaveChangesAsync();
+            return product;
+        }
     }
 }

@@ -15,6 +15,8 @@ namespace Services
 
         Task<double> CalculateProductPriceAsync(string productId);
 
+        Task<TblProduct> CreateProductAsync(TblProduct product);
+
         Task<List<ProductWithPriceResponse>> GetAllProductsAndPricesAsync();
         Task<List<ProductWithPriceResponse>> FilterProducts(ProductFilterCriteria criteria);
         Task<ProductWithPriceResponse> GetProductAndPriceByIdAsync(string productId);

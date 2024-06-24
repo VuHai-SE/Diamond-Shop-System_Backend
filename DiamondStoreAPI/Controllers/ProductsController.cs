@@ -39,6 +39,18 @@ namespace DiamondStoreAPI.Controllers
             return Ok(productWithPriceList);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CreateProduct([FromBody] TblProduct product)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var createdProduct = await _productService.CreateProductAsync(product);
+            return CreatedAtAction(nameof(), new { id = createdProduct.Id }, createdProduct);
+        }
+
         // GET: api/Products/5
         [HttpGet("{productId}")]
         public async Task<IActionResult> GetProductPrice(string productId)

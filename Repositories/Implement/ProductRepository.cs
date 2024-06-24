@@ -21,6 +21,16 @@ namespace Repositories.Implement
         public TblProduct AddProduct(TblProduct product)
             => productDAO.AddProduct(product);
 
+        public async Task AddAsync(TblProduct product)
+        {
+            await productDAO.AddAsync(product);
+        }
+
+        public async Task SaveChangesAsync()
+        {
+            await productDAO.SaveChangesAsync();
+        }
+
         public async Task<double> CalculateProductPriceAsync(string productId)
         {
             var product = await productDAO.GetProductByIdAsync(productId);
