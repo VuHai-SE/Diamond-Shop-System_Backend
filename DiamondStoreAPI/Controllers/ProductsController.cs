@@ -11,6 +11,7 @@ using Services.DTOs.Response;
 using Microsoft.IdentityModel.Tokens;
 using Services.DTOs.Request;
 using Services.Implement;
+using BusinessObjects.RequestModels;
 
 namespace DiamondStoreAPI.Controllers
 {
@@ -39,16 +40,36 @@ namespace DiamondStoreAPI.Controllers
             return Ok(productWithPriceList);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateProduct([FromBody] TblProduct product)
+        [HttpPost("CreateProduct")]
+        public async Task<IActionResult> CreateProduct([FromBody] CreateProductRequest request)
+        {
+            var result = await _productService.CreateProductAsync(request);
+            if (!result.Success)
+            {
+                if (result.Message.Contains("not found"))
+                {
+                    return NotFound(result.Message);
+                }
+                return BadRequest(result.Message);
+            }
+            return Ok(result.Message);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateProduct(string id, [FromBody] TblProduct product)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var createdProduct = await _productService.CreateProductAsync(product);
-            return CreatedAtAction(nameof(GetProductById), new { id = createdProduct.ProductId }, createdProduct);
+            var updateResult = await _productService.UpdateProductAsync(id, product);
+            if (!updateResult)
+            {
+                return NotFound();
+            }
+
+            return Ok("Product updated successfully.");
         }
 
         [HttpGet("{id}")]
@@ -63,7 +84,7 @@ namespace DiamondStoreAPI.Controllers
         }
 
         // GET: api/Products/5
-        [HttpGet("Prrice/{productId}")]
+        [HttpGet("Price/{productId}")]
         public async Task<IActionResult> GetProductPrice(string productId)
         {
             var response = await _productService.GetProductAndPriceByIdAsync(productId);

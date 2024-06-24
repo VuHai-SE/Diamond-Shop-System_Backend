@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects;
+using BusinessObjects.RequestModels;
+using BusinessObjects.ResponseModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace Repositories
@@ -13,6 +15,7 @@ namespace Repositories
         public List<TblProduct> GetAllProducts();
 
         public TblProduct AddProduct(TblProduct product);
+        Task AddAsync(TblProduct product);
 
         Task<double> CalculateProductPriceAsync(string productId);
 
@@ -24,7 +27,10 @@ namespace Repositories
         public List<TblProduct> GetProductsByName(string name);
         public Task<bool> UpdateProduct(string productID, TblProduct product);
 
-        Task AddAsync(TblProduct product);
+        Task<GenericResponse> CreateProductAsync(CreateProductRequest request);
+
+        Task UpdateAsync(string id, TblProduct product);
+
         Task SaveChangesAsync();
     }
 }
