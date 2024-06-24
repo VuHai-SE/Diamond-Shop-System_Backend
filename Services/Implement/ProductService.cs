@@ -6,6 +6,9 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects;
+using BusinessObjects.RequestModels;
+using BusinessObjects.ResponseModels;
+using DAOs;
 using Microsoft.IdentityModel.Tokens;
 using Repositories;
 using Repositories.Implement;
@@ -196,11 +199,22 @@ namespace Services.Implement
             return await productRepository.UpdateProduct(productID, product);
         }
 
-        public async Task<TblProduct> CreateProductAsync(TblProduct product)
+        public async Task<GenericResponse> CreateProductAsync(CreateProductRequest request)
         {
-            await productRepository.AddAsync(product);
-            await productRepository.SaveChangesAsync();
-            return product;
+            return await productRepository.CreateProductAsync(request);
+        }
+
+        public async Task<bool> UpdateProductAsync(string id, TblProduct product)
+        {
+            var existingProduct = await productRepository.GetProductByIdAsync(id);
+            if (existingProduct == null)
+            {
+                return false;
+            }
+
+            await productRepository.UpdateAsync(id, product);
+
+            return true;
         }
     }
 }
