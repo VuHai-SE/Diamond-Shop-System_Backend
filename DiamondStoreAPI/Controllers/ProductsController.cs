@@ -76,12 +76,6 @@ namespace DiamondStoreAPI.Controllers
             }
             return Ok(pruductList);
         }
-        //[HttpGet("{productId}/price")]
-        //public async Task<IActionResult> GetProductPrice(string productId)
-        //{
-        //    var price = await _productService.CalculateProductPriceAsync(productId);
-        //    return Ok(price);
-        //}
     }
     //[Route("api/[controller]")]
     //[ApiController]
