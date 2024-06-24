@@ -51,8 +51,8 @@ namespace Services.Implement
             {
                 return false;
             }
-            var username = request.Username;
-            var btValue = request.ButtonValue;
+            var username = request.Username.Trim();
+            var btValue = request.ButtonValue.Trim();
             //neu la sale staff thi add sale staff id vao truong staff id
             //neu la shipper thi add shipper id vao truong shipper id
             //dong thoi add shipping date va received date
@@ -78,7 +78,7 @@ namespace Services.Implement
                     order.ShipperId = ShipperID;
                 }
                 order.OrderStatus = HandleOrderStatus(btValue);
-                if (btValue.Equals("PICK UP"))
+                if (btValue.Equals("PICKUP"))
                 {
                     order.ShippingDate = request.ShippingDate;
                 }
@@ -107,7 +107,7 @@ namespace Services.Implement
             {
                 return "Pending Delivery";
             }
-            else if (btValue.Equals("PICK UP"))
+            else if (btValue.Equals("PICKUP"))
             {
                 return "Deliverying";
             }
@@ -166,7 +166,7 @@ namespace Services.Implement
                 orderInfo.CustomerPhone = customer.PhoneNumber;
                 orderInfo.Address = customer.Address;
                 orderInfo.Payment = order.PaymentMethod;
-                orderInfo.Deposits = (double)_paymentRepository.GetPaymentByCustomerAndOrder(orderID, customer.CustomerId).Deposits;
+                orderInfo.Deposits = _paymentRepository.GetPaymentByCustomerAndOrder(orderID, customer.CustomerId).Deposits;
                 if (order.StaffId != null)
                 {
                     var accSaleStaff = _accountRepository.GetAccountSaleStaff(order.StaffId);
@@ -177,9 +177,11 @@ namespace Services.Implement
                     var accShipper = _accountRepository.GetAccountShipper(order.ShipperId);
                     orderInfo.Shipper = accShipper.Username;
                 }
-                orderInfo.DiscountRate = (double)customer.DiscountRate;
-                orderInfo.OrderDate = (DateTime)order.OrderDate;
-                orderInfo.OrderStatus = (string)order.OrderStatus;
+                orderInfo.DiscountRate = customer.DiscountRate;
+                orderInfo.OrderDate = order.OrderDate;
+                orderInfo.OrderStatus = order.OrderStatus;
+                orderInfo.ShippingDate = order.ShippingDate;
+                orderInfo.ReceiveDate = order.ReceiveDate;
                 orderInfo.OrderNote = order.ShipStatus;
                 var OrderDetail = _orderDetailRepository.GetOrderDetailsByOrderID(order.OrderId);
                 foreach (var orderDetail in OrderDetail)
@@ -228,7 +230,7 @@ namespace Services.Implement
                 foreach (var order in orders)
                 {
                     if (order.OrderStatus.Equals("Pending Delivery") ||
-                        order.OrderStatus.Equals("Delivering") ||
+                        order.OrderStatus.Equals("Deliverying") ||
                         order.OrderStatus.Equals("Deliveried") ||
                         (order.OrderStatus.Equals("Cancelled") && !order.ShipperId.IsNullOrEmpty()))
                     {
