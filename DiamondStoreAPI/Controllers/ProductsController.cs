@@ -77,6 +77,17 @@ namespace DiamondStoreAPI.Controllers
             }
             return Ok(pruductList);
         }
+
+        [HttpPut("UpdateStatus")]
+        public async Task<IActionResult> UpdateProductStatus(List<string> productIdList)
+        {
+            foreach (var id in productIdList)
+            {
+                var isUpdate = await _productService.UpdateProductStatus(id);
+                if (isUpdate == false) return NotFound("Product " + id + " not found");
+            }
+            return Ok("Update successfully");
+        }
     }
     //[Route("api/[controller]")]
     //[ApiController]
