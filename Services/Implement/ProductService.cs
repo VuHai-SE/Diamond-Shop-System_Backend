@@ -166,6 +166,11 @@ namespace Services.Implement
         public List<TblProduct> GetAllProducts()
             => productRepository.GetAllProducts();
 
+        public async Task<TblProduct> GetProductByIdAsync(string id)
+        {
+            return await productRepository.GetProductByIdAsync(id);
+        }
+
         public async Task<bool> UpdateMaterialPriceAndUnitPriceSize(string productID, TblMaterialPriceList materialPriceList)
         {
             var product = await productRepository.GetProductByIdAsync(productID);
@@ -189,6 +194,13 @@ namespace Services.Implement
             }
             product.Status = false;
             return await productRepository.UpdateProduct(productID, product);
+        }
+
+        public async Task<TblProduct> CreateProductAsync(TblProduct product)
+        {
+            await productRepository.AddAsync(product);
+            await productRepository.SaveChangesAsync();
+            return product;
         }
     }
 }

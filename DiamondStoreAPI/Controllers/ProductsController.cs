@@ -39,8 +39,31 @@ namespace DiamondStoreAPI.Controllers
             return Ok(productWithPriceList);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CreateProduct([FromBody] TblProduct product)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var createdProduct = await _productService.CreateProductAsync(product);
+            return CreatedAtAction(nameof(GetProductById), new { id = createdProduct.ProductId }, createdProduct);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetProductById(string id)
+        {
+            var product = await _productService.GetProductByIdAsync(id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return Ok(product);
+        }
+
         // GET: api/Products/5
-        [HttpGet("{productId}")]
+        [HttpGet("Prrice/{productId}")]
         public async Task<IActionResult> GetProductPrice(string productId)
         {
             var response = await _productService.GetProductAndPriceByIdAsync(productId);
@@ -81,19 +104,13 @@ namespace DiamondStoreAPI.Controllers
         [HttpPut("UpdateStatus")]
         public async Task<IActionResult> UpdateProductStatus(List<string> productIdList)
         {
-            foreach (var id in productIdList) 
+            foreach (var id in productIdList)
             {
                 var isUpdate = await _productService.UpdateProductStatus(id);
                 if (isUpdate == false) return NotFound("Product " + id + " not found");
             }
             return Ok("Update successfully");
         }
-        //[HttpGet("{productId}/price")]
-        //public async Task<IActionResult> GetProductPrice(string productId)
-        //{
-        //    var price = await _productService.CalculateProductPriceAsync(productId);
-        //    return Ok(price);
-        //}
     }
     //[Route("api/[controller]")]
     //[ApiController]

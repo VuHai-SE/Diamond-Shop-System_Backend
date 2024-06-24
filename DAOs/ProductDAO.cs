@@ -25,6 +25,11 @@ namespace DAOs
             return product;
         }
 
+        public async Task AddAsync(TblProduct product)
+        {
+            await _context.TblProducts.AddAsync(product);
+        }
+
         public async Task<TblProduct> GetProductByIdAsync(string productId)
         {
             return await _context.TblProducts.AsNoTracking().FirstOrDefaultAsync(p => p.ProductId == productId);
@@ -106,6 +111,11 @@ namespace DAOs
             _context.TblProducts.Update(oProduct);
             _context.SaveChanges();
             return true;
+        }
+
+        public async Task SaveChangesAsync()
+        {
+            await _context.SaveChangesAsync();
         }
     }
 }

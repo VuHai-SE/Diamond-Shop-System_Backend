@@ -121,6 +121,13 @@ namespace Services.Implement
             }
         }
 
+        public async Task<TblProduct> CreateProductAsync(TblProduct product)
+        {
+            await _productRepository.AddAsync(product);
+            await _productRepository.SaveChangesAsync();
+            return product;
+        }
+
         public TblOrder AddOrder(TblOrder order)
             => _orderRepository.AddOrder(order);
 
