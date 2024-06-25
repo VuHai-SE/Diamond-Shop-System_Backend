@@ -38,6 +38,11 @@ namespace Repositories.Implement
             return await productDAO.UpdateProductAsync(productId, request);
         }
 
+        public async Task<GenericResponse> DeleteProductAsync(string productId)
+        {
+            return await productDAO.DeleteProductAsync(productId);
+        }
+
         public async Task SaveChangesAsync()
         {
             await productDAO.SaveChangesAsync();

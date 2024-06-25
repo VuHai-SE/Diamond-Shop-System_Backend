@@ -70,6 +70,21 @@ namespace DiamondStoreAPI.Controllers
             return Ok(result.Message);
         }
 
+        [HttpDelete("DeleteProduct{id}")]
+        public async Task<IActionResult> DeleteProduct(string id)
+        {
+            var result = await _productService.DeleteProductAsync(id);
+            if (!result.Success)
+            {
+                if (result.Message.Contains("not found"))
+                {
+                    return NotFound(result.Message);
+                }
+                return BadRequest(result.Message);
+            }
+            return Ok(result.Message);
+        }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateProduct(string id, [FromBody] TblProduct product)
         {
