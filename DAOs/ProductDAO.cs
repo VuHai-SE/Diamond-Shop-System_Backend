@@ -276,6 +276,32 @@ namespace DAOs
             };
         }
 
+        //Delete product
+        public async Task<GenericResponse> DeleteProductAsync(string productId)
+        {
+            // Bước 1: Kiểm tra sự tồn tại của ProductId
+            var existingProduct = await GetProductByIdAsync(productId);
+            if (existingProduct == null)
+            {
+                return new GenericResponse
+                {
+                    Success = false,
+                    Message = "ProductID not found."
+                };
+            }
+
+            // Bước 2: Cập nhật status của product thành 0
+            existingProduct.Status = false;
+            _context.TblProducts.Update(existingProduct);
+            await _context.SaveChangesAsync();
+
+            return new GenericResponse
+            {
+                Success = true,
+                Message = "Product deleted successfully."
+            };
+        }
+
         public async Task UpdateAsync(string id, TblProduct product)
         {
             var existingProduct = await GetProductByIdAsync(id);
