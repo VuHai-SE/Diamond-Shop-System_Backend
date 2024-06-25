@@ -55,6 +55,21 @@ namespace DiamondStoreAPI.Controllers
             return Ok(result.Message);
         }
 
+        [HttpPut("UpdateProduct{id}")]
+        public async Task<IActionResult> UpdateProduct(string id, [FromBody] CreateProductRequest request)
+        {
+            var result = await _productService.UpdateProductAsync(id, request);
+            if (!result.Success)
+            {
+                if (result.Message.Contains("not found"))
+                {
+                    return NotFound(result.Message);
+                }
+                return BadRequest(result.Message);
+            }
+            return Ok(result.Message);
+        }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateProduct(string id, [FromBody] TblProduct product)
         {
