@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects;
+using Microsoft.EntityFrameworkCore;
 
 namespace DAOs
 {
@@ -36,5 +37,11 @@ namespace DAOs
             dbContext.SaveChanges();
             return customer;
         }
+
+        public bool IsEmailExisted(string email)
+            => dbContext.TblCustomers.Any(c => c.Email.Equals(email));
+
+        public bool isPhoneExisted(string phone)
+            => dbContext.TblCustomers.Any(c => c.PhoneNumber.Equals(phone));
     }
 }

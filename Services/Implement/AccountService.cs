@@ -1,4 +1,5 @@
 ﻿using BusinessObjects;
+using Microsoft.Extensions.Options;
 using Repositories;
 using Repositories.Implement;
 using Services.DTOs.Request;
@@ -41,6 +42,9 @@ namespace Services.Implement
         public TblAccount GetAccountShipper(string shipperID)
             => _accountRepository.GetAccountShipper(shipperID);
 
+        public bool IsUsernameExisted(string username)
+            => _accountRepository.IsUsernameExisted(username);
+
         public async Task RegisterAsync(RegisterRequest register)
         {
            
@@ -61,11 +65,11 @@ namespace Services.Implement
                 Email = register.Email,
                 PhoneNumber = register.PhoneNumber,
                 Address = register.Address,
-                Ranking = "Bronze",
-                DiscountRate = 0.02,
+                DiscountRate = 0,
                 Status = true
             };
             _customerRepository.AddCustomer(customer);
         }
+
     }
 }

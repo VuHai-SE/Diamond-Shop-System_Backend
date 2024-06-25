@@ -15,5 +15,6 @@ namespace Services
         Task<TblAccount> GetAccountByUsernameAsync(string username);
         public TblAccount GetAccountSaleStaff(string saleStaffID);
         public TblAccount GetAccountShipper(string shipperID);
+        public bool IsUsernameExisted(string username);
     }
 }

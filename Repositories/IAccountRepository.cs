@@ -17,5 +17,6 @@ namespace Repositories
         Task AddAccountByManagerAsync(TblAccount account);
         public TblAccount GetAccountSaleStaff(string saleStaffID);
         public TblAccount GetAccountShipper(string shipperID);
+        public bool IsUsernameExisted(string username);
     }
 }
