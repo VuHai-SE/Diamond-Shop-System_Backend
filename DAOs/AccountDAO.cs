@@ -47,5 +47,7 @@ namespace DAOs
             return _context.TblAccounts.FirstOrDefault(a => a.AccountId.Equals(shipper.AccountId));
         }
 
+        public bool IsUsernameExisted(string username)
+            => _context.TblAccounts.Any(a => a.Username.Equals(username));
     }
 }

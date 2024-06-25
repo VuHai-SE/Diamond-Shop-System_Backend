@@ -37,5 +37,8 @@ namespace Repositories.Implement
 
         public TblAccount GetAccountShipper(string shipperID)
             => _accountDAO.GetAccountShipper(shipperID);
+
+        public bool IsUsernameExisted(string username)
+            => _accountDAO.IsUsernameExisted(username);
     }
 }

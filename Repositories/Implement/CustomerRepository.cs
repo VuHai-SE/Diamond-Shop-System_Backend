@@ -31,5 +31,11 @@ namespace Repositories.Implement
 
         public TblCustomer AddCustomer(TblCustomer customer)
             => customerDAO.AddCustomer(customer);
+
+        public bool IsEmailExisted(string email)
+            => customerDAO.IsEmailExisted(email);
+
+        public bool isPhoneExisted(string phone)
+            => customerDAO.isPhoneExisted(phone);
     }
 }

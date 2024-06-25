@@ -202,7 +202,7 @@ namespace DiamondStoreAPI.Controllers
                 OrderId = order.OrderId,
                 CustomerId = customer.CustomerId,
                 PaymentMethod = order.PaymentMethod,
-                Deposits = newOrderRequest.Deposits,
+                Deposits = newOrderRequest.Deposits      ,
             };
             newPayMent.PayDetail = newPayMent.PaymentMethod + "-Deposits: " + newPayMent.Deposits;
             var payment = iPaymentService.AddPayment(newPayMent);
