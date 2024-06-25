@@ -59,13 +59,14 @@ namespace Services.Implement
             {
                 AccountId = newAccount.AccountId,
                 FirstName = register.FirstName,
-                LastName = register.LastName,
+                LastName = register.LastName,s
                 Gender = (register.Gender.Equals("Male")) ? true : false,
                 Birthday = register.Birthday,
                 Email = register.Email,
                 PhoneNumber = register.PhoneNumber,
                 Address = register.Address,
-                DiscountRate = 0,
+                DiscountRate = 0.02,
+                Ranking = "Bronze",
                 Status = true
             };
             _customerRepository.AddCustomer(customer);
