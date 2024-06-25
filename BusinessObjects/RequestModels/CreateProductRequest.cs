@@ -12,14 +12,12 @@ namespace BusinessObjects.RequestModels
         public string ProductCode { get; set; }
         public string Description { get; set; }
         public string CategoryID { get; set; }
-        public decimal MaterialCost { get; set; }
         public decimal GemCost { get; set; }
         public decimal ProductionCost { get; set; }
         public decimal PriceRate { get; set; }
         public int ProductSize { get; set; }
         public string Image { get; set; }
-        public string Status { get; set; }
-        public decimal UnitSizePrice { get; set; }
+        public int Status { get; set; }
         public int Gender { get; set; }  // Nhận giá trị -1, 0 hoặc 1
         public string GemId { get; set; }
         public string MaterialId { get; set; }
