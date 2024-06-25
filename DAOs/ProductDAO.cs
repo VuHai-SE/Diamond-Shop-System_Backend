@@ -27,11 +27,6 @@ namespace DAOs
             return product;
         }
 
-        //public async Task AddAsync(TblProduct product)
-        //{
-        //    await _context.TblProducts.AddAsync(product);
-        //}
-
         public async Task<GenericResponse> CreateProductAsync(CreateProductRequest request)
         {
             // Bước 1: Kiểm tra các trường có trống không
