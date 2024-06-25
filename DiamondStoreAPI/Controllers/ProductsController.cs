@@ -11,6 +11,7 @@ using Services.DTOs.Response;
 using Microsoft.IdentityModel.Tokens;
 using Services.DTOs.Request;
 using Services.Implement;
+using BusinessObjects.RequestModels;
 
 namespace DiamondStoreAPI.Controllers
 {
@@ -39,8 +40,51 @@ namespace DiamondStoreAPI.Controllers
             return Ok(productWithPriceList);
         }
 
+        [HttpPost("CreateProduct")]
+        public async Task<IActionResult> CreateProduct([FromBody] CreateProductRequest request)
+        {
+            var result = await _productService.CreateProductAsync(request);
+            if (!result.Success)
+            {
+                if (result.Message.Contains("not found"))
+                {
+                    return NotFound(result.Message);
+                }
+                return BadRequest(result.Message);
+            }
+            return Ok(result.Message);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateProduct(string id, [FromBody] TblProduct product)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var updateResult = await _productService.UpdateProductAsync(id, product);
+            if (!updateResult)
+            {
+                return NotFound();
+            }
+
+            return Ok("Product updated successfully.");
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetProductById(string id)
+        {
+            var product = await _productService.GetProductByIdAsync(id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return Ok(product);
+        }
+
         // GET: api/Products/5
-        [HttpGet("{productId}")]
+        [HttpGet("Price/{productId}")]
         public async Task<IActionResult> GetProductPrice(string productId)
         {
             var response = await _productService.GetProductAndPriceByIdAsync(productId);
@@ -81,19 +125,13 @@ namespace DiamondStoreAPI.Controllers
         [HttpPut("UpdateStatus")]
         public async Task<IActionResult> UpdateProductStatus(List<string> productIdList)
         {
-            foreach (var id in productIdList) 
+            foreach (var id in productIdList)
             {
                 var isUpdate = await _productService.UpdateProductStatus(id);
                 if (isUpdate == false) return NotFound("Product " + id + " not found");
             }
             return Ok("Update successfully");
         }
-        //[HttpGet("{productId}/price")]
-        //public async Task<IActionResult> GetProductPrice(string productId)
-        //{
-        //    var price = await _productService.CalculateProductPriceAsync(productId);
-        //    return Ok(price);
-        //}
     }
     //[Route("api/[controller]")]
     //[ApiController]

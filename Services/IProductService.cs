@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects;
+using BusinessObjects.RequestModels;
+using BusinessObjects.ResponseModels;
 using Services.DTOs.Request;
 using Services.DTOs.Response;
 
@@ -15,11 +17,18 @@ namespace Services
 
         Task<double> CalculateProductPriceAsync(string productId);
 
+        Task<GenericResponse> CreateProductAsync(CreateProductRequest request);
+
+        Task<bool> UpdateProductAsync(string id, TblProduct product);
+
         Task<List<ProductWithPriceResponse>> GetAllProductsAndPricesAsync();
         Task<List<ProductWithPriceResponse>> FilterProducts(ProductFilterCriteria criteria);
         Task<ProductWithPriceResponse> GetProductAndPriceByIdAsync(string productId);
 
         public TblProduct GetProduct(string id);
+
+        Task<TblProduct> GetProductByIdAsync(string id);
+
         public Task<List<ProductWithPriceResponse>> filterProductsByCategoryID(string categoryID);
         public Task<List<ProductWithPriceResponse>> GetProductsByName(string name);
         public List<TblProduct> GetAllProducts();

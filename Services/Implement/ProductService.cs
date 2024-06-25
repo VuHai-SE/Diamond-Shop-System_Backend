@@ -6,6 +6,9 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects;
+using BusinessObjects.RequestModels;
+using BusinessObjects.ResponseModels;
+using DAOs;
 using Microsoft.IdentityModel.Tokens;
 using Repositories;
 using Repositories.Implement;
@@ -166,6 +169,11 @@ namespace Services.Implement
         public List<TblProduct> GetAllProducts()
             => productRepository.GetAllProducts();
 
+        public async Task<TblProduct> GetProductByIdAsync(string id)
+        {
+            return await productRepository.GetProductByIdAsync(id);
+        }
+
         public async Task<bool> UpdateMaterialPriceAndUnitPriceSize(string productID, TblMaterialPriceList materialPriceList)
         {
             var product = await productRepository.GetProductByIdAsync(productID);
@@ -189,6 +197,24 @@ namespace Services.Implement
             }
             product.Status = false;
             return await productRepository.UpdateProduct(productID, product);
+        }
+
+        public async Task<GenericResponse> CreateProductAsync(CreateProductRequest request)
+        {
+            return await productRepository.CreateProductAsync(request);
+        }
+
+        public async Task<bool> UpdateProductAsync(string id, TblProduct product)
+        {
+            var existingProduct = await productRepository.GetProductByIdAsync(id);
+            if (existingProduct == null)
+            {
+                return false;
+            }
+
+            await productRepository.UpdateAsync(id, product);
+
+            return true;
         }
     }
 }

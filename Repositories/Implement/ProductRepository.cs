@@ -6,6 +6,8 @@ using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects;
+using BusinessObjects.RequestModels;
+using BusinessObjects.ResponseModels;
 using DAOs;
 
 namespace Repositories.Implement
@@ -20,6 +22,21 @@ namespace Repositories.Implement
         }
         public TblProduct AddProduct(TblProduct product)
             => productDAO.AddProduct(product);
+
+        public async Task AddAsync(TblProduct product)
+        {
+            await productDAO.AddAsync(product);
+        }
+
+        public async Task<GenericResponse> CreateProductAsync(CreateProductRequest request)
+        {
+            return await productDAO.CreateProductAsync(request);
+        }
+
+        public async Task SaveChangesAsync()
+        {
+            await productDAO.SaveChangesAsync();
+        }
 
         public async Task<double> CalculateProductPriceAsync(string productId)
         {
@@ -81,6 +98,12 @@ namespace Repositories.Implement
         public Task<bool> UpdateProduct(string productID, TblProduct product)
         {
             return productDAO.UpdateProduct(productID, product);
+        }
+
+        public async Task UpdateAsync(string id, TblProduct product)
+        {
+            await productDAO.UpdateAsync(id, product);
+            await productDAO.SaveChangesAsync(); // Gọi lưu thay đổi tại tầng DAO
         }
     }
 }
