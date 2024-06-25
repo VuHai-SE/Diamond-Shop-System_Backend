@@ -59,7 +59,7 @@ namespace Services.Implement
             {
                 AccountId = newAccount.AccountId,
                 FirstName = register.FirstName,
-                LastName = register.LastName,s
+                LastName = register.LastName,
                 Gender = (register.Gender.Equals("Male")) ? true : false,
                 Birthday = register.Birthday,
                 Email = register.Email,
