@@ -24,11 +24,13 @@ namespace DiamondStoreAPI.Controllers
     public class AccountsController : ControllerBase
     {
         private readonly IAccountService _accountService;
+        private readonly ICustomerService _customerService;
 
         
-        public AccountsController(IAccountService accountService)
+        public AccountsController(IAccountService accountService, ICustomerService customerService)
         {
             _accountService = accountService;
+            _customerService = customerService;
             
         }
 
@@ -49,6 +51,27 @@ namespace DiamondStoreAPI.Controllers
         {
             await _accountService.RegisterAsync(request);
             return Ok();
+        }
+
+        [HttpPost("CheckUsernameExist")]
+        public async Task<IActionResult> CheckUsernameExist(string username)
+        {
+            var isUsernameExist = _accountService.IsUsernameExisted(username);
+            return Ok(isUsernameExist);
+        }
+
+        [HttpPost("CheckEmailExist")]
+        public async Task<IActionResult> CheckEmailExist(string email)
+        {
+            var isEmailExist = _customerService.IsEmailExisted(email);
+            return Ok(isEmailExist);
+        }
+
+        [HttpPost("CheckPhoneExist")]
+        public async Task<IActionResult> CheckPhoneExist(string phone)
+        {
+            var isPhoneExist = _customerService.isPhoneExisted(phone);
+            return Ok(isPhoneExist);
         }
     }
 }

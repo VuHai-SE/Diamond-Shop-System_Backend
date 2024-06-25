@@ -12,5 +12,7 @@ namespace Services
         public List<TblCustomer> GetCustomers();
         public TblCustomer GetCustomerByID(int customerID);
         public TblCustomer GetCustomerByAccount(string username);
+        public bool IsEmailExisted(string email);
+        public bool isPhoneExisted(string phone);
     }
 }

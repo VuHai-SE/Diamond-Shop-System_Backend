@@ -29,5 +29,11 @@ namespace Services.Implement
 
         public List<TblCustomer> GetCustomers()
             => customerRepository.GetCustomers();
+
+        public bool IsEmailExisted(string email)
+            => customerRepository.IsEmailExisted(email);
+
+        public bool isPhoneExisted(string phone)
+            => customerRepository.isPhoneExisted(phone);
     }
 }
