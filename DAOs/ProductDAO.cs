@@ -27,11 +27,7 @@ namespace DAOs
             return product;
         }
 
-        //public async Task AddAsync(TblProduct product)
-        //{
-        //    await _context.TblProducts.AddAsync(product);
-        //}
-
+        //Tạo Product mới
         public async Task<GenericResponse> CreateProductAsync(CreateProductRequest request)
         {
             // Bước 1: Kiểm tra các trường có trống không
@@ -39,14 +35,12 @@ namespace DAOs
                 string.IsNullOrEmpty(request.ProductCode) ||
                 string.IsNullOrEmpty(request.Description) ||
                 string.IsNullOrEmpty(request.CategoryID) ||
-                request.MaterialCost <= 0 ||
                 request.GemCost <= 0 ||
                 request.ProductionCost <= 0 ||
                 request.PriceRate <= 0 ||
                 request.ProductSize <= 0 ||
                 string.IsNullOrEmpty(request.Image) ||
-                string.IsNullOrEmpty(request.Status) ||
-                request.UnitSizePrice <= 0 ||
+                (request.Status != 1 && request.Status != 0) ||
                 (request.Gender != -1 && request.Gender != 0 && request.Gender != 1) ||
                 string.IsNullOrEmpty(request.GemId) ||
                 string.IsNullOrEmpty(request.MaterialId) ||
@@ -110,7 +104,13 @@ namespace DAOs
 
             var newProductId = $"P{nextProductNumber.ToString("D3")}";
 
-            // Bước 4: Tạo mới Product
+            //Bước 4: Update MaterialCost and UnitPriceSize
+            double materialPrice = 0;
+            var materialPriceList = GetMaterialPriceList(request.MaterialId);
+            var latestMaterialPrice = materialPriceList.FirstOrDefault()?.UnitPrice ?? 0;
+            materialPrice += (request.Weight) * latestMaterialPrice;
+
+            // Bước 5: Tạo mới Product
             var product = new TblProduct
             {
                 ProductId = newProductId,
@@ -118,33 +118,33 @@ namespace DAOs
                 ProductCode = request.ProductCode,
                 Description = request.Description,
                 CategoryId = request.CategoryID,
-                MaterialCost = (double)request.MaterialCost,
+                MaterialCost = materialPrice,
                 GemCost = (double)request.GemCost,
                 ProductionCost = (double)request.ProductionCost,
                 PriceRate = (double)request.PriceRate,
                 ProductSize = request.ProductSize,
                 Image = request.Image,
-                Status = request.Status.ToLower() == "true",
-                UnitSizePrice = (double)request.UnitSizePrice,
+                Status = Convert.ToBoolean(request.Status),
+                UnitSizePrice = (double)materialPrice / request.ProductSize,
                 Gender = request.Gender
             };
 
             await _context.TblProducts.AddAsync(product);
             await _context.SaveChangesAsync();
 
-            // Bước 5: Cập nhật Tbl_ProductGem
+            // Bước 6: Cập nhật Tbl_ProductGem
             var productGem = new TblProductGem
             {
-                ProductId = product.ProductId,
+                ProductId = newProductId,
                 GemId = request.GemId
             };
 
             await _context.TblProductGems.AddAsync(productGem);
 
-            // Bước 6: Cập nhật Tbl_ProductMaterial
+            // Bước 7: Cập nhật Tbl_ProductMaterial
             var productMaterial = new TblProductMaterial
             {
-                ProductId = product.ProductId,
+                ProductId = newProductId,
                 MaterialId = request.MaterialId,
                 Weight = request.Weight
             };
