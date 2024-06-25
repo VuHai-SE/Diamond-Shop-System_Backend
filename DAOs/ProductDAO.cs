@@ -27,6 +27,7 @@ namespace DAOs
             return product;
         }
 
+        //Tạo Product mới
         public async Task<GenericResponse> CreateProductAsync(CreateProductRequest request)
         {
             // Bước 1: Kiểm tra các trường có trống không
@@ -34,14 +35,12 @@ namespace DAOs
                 string.IsNullOrEmpty(request.ProductCode) ||
                 string.IsNullOrEmpty(request.Description) ||
                 string.IsNullOrEmpty(request.CategoryID) ||
-                request.MaterialCost <= 0 ||
                 request.GemCost <= 0 ||
                 request.ProductionCost <= 0 ||
                 request.PriceRate <= 0 ||
                 request.ProductSize <= 0 ||
                 string.IsNullOrEmpty(request.Image) ||
                 string.IsNullOrEmpty(request.Status) ||
-                request.UnitSizePrice <= 0 ||
                 (request.Gender != -1 && request.Gender != 0 && request.Gender != 1) ||
                 string.IsNullOrEmpty(request.GemId) ||
                 string.IsNullOrEmpty(request.MaterialId) ||
