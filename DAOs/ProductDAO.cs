@@ -159,6 +159,123 @@ namespace DAOs
             };
         }
 
+        //Update Product
+        public async Task<GenericResponse> UpdateProductAsync(string productId, CreateProductRequest request)
+        {
+            // Bước 1: Kiểm tra sự tồn tại của ProductId, CategoryID, GemId, MaterialId
+            var existingProduct = await GetProductByIdAsync(productId);
+            if (existingProduct == null)
+            {
+                return new GenericResponse
+                {
+                    Success = false,
+                    Message = "ProductID not found."
+                };
+            }
+
+            var categoryExists = await _context.TblProductCategories.AnyAsync(c => c.CategoryId == request.CategoryID);
+            if (!categoryExists)
+            {
+                return new GenericResponse
+                {
+                    Success = false,
+                    Message = "CategoryID not found."
+                };
+            }
+
+            var gemExists = await _context.TblGems.AnyAsync(g => g.GemId == request.GemId);
+            if (!gemExists)
+            {
+                return new GenericResponse
+                {
+                    Success = false,
+                    Message = "GemID not found."
+                };
+            }
+
+            var materialExists = await _context.TblMaterialCategories.AnyAsync(m => m.MaterialId == request.MaterialId);
+            if (!materialExists)
+            {
+                return new GenericResponse
+                {
+                    Success = false,
+                    Message = "MaterialID not found."
+                };
+            }
+
+            // Bước 2: Update MaterialCost and UnitPriceSize
+            double materialPrice = 0;
+            var materialPriceList = GetMaterialPriceList(request.MaterialId);
+            var latestMaterialPrice = materialPriceList.FirstOrDefault()?.UnitPrice ?? 0;
+            materialPrice += (request.Weight) * latestMaterialPrice;
+
+            // Bước 3: Update Product
+            existingProduct.ProductName = request.ProductName;
+            existingProduct.ProductCode = request.ProductCode;
+            existingProduct.Description = request.Description;
+            existingProduct.CategoryId = request.CategoryID;
+            existingProduct.MaterialCost = materialPrice;
+            existingProduct.GemCost = (double)request.GemCost;
+            existingProduct.ProductionCost = (double)request.ProductionCost;
+            existingProduct.PriceRate = (double)request.PriceRate;
+            existingProduct.ProductSize = request.ProductSize;
+            existingProduct.Image = request.Image;
+            existingProduct.Status = Convert.ToBoolean(request.Status);
+            existingProduct.UnitSizePrice = (double)materialPrice / request.ProductSize;
+            existingProduct.Gender = request.Gender;
+
+            _context.TblProducts.Update(existingProduct);
+            await _context.SaveChangesAsync();
+
+            // Bước 4: Cập nhật Tbl_ProductGem
+            var existingProductGem = await _context.TblProductGems
+                .FirstOrDefaultAsync(pg => pg.ProductId == productId);
+
+            if (existingProductGem != null)
+            {
+                existingProductGem.GemId = request.GemId;
+                _context.TblProductGems.Update(existingProductGem);
+            }
+            else
+            {
+                var newProductGem = new TblProductGem
+                {
+                    ProductId = productId,
+                    GemId = request.GemId
+                };
+                await _context.TblProductGems.AddAsync(newProductGem);
+            }
+
+            // Bước 5: Cập nhật Tbl_ProductMaterial
+            var existingProductMaterial = await _context.TblProductMaterials
+                .FirstOrDefaultAsync(pm => pm.ProductId == productId);
+
+            if (existingProductMaterial != null)
+            {
+                existingProductMaterial.MaterialId = request.MaterialId;
+                existingProductMaterial.Weight = request.Weight;
+                _context.TblProductMaterials.Update(existingProductMaterial);
+            }
+            else
+            {
+                var newProductMaterial = new TblProductMaterial
+                {
+                    ProductId = productId,
+                    MaterialId = request.MaterialId,
+                    Weight = request.Weight
+                };
+                await _context.TblProductMaterials.AddAsync(newProductMaterial);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return new GenericResponse
+            {
+                Success = true,
+                Message = "Product updated successfully."
+            };
+        }
+
         public async Task UpdateAsync(string id, TblProduct product)
         {
             var existingProduct = await GetProductByIdAsync(id);

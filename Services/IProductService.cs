@@ -19,6 +19,8 @@ namespace Services
 
         Task<GenericResponse> CreateProductAsync(CreateProductRequest request);
 
+        Task<GenericResponse> UpdateProductAsync(string productId, CreateProductRequest request);
+
         Task<bool> UpdateProductAsync(string id, TblProduct product);
 
         Task<List<ProductWithPriceResponse>> GetAllProductsAndPricesAsync();
