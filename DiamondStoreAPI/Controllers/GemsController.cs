@@ -17,9 +17,9 @@ namespace DiamondStoreAPI.Controllers
     {
         private readonly IGemService iGemService;
 
-        public GemsController()
+        public GemsController(IGemService gemService)
         {
-            iGemService = new GemService();
+            iGemService = gemService;
         }
 
         // GET: api/Gems

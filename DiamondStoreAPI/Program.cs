@@ -11,6 +11,7 @@ using System.Text;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+var services = builder.Services;
 
 // Add services to the container.
 builder.Services.AddDbContext<DiamondStoreContext>(options =>
@@ -24,32 +25,9 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
 });
 
-//builder.Services.AddControllers().AddJsonOptions(options =>
-//{
-//    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
-//});
-
-// Configure JWT authentication
-var key = Encoding.ASCII.GetBytes(builder.Configuration.GetValue<string>("Jwt:Day_la_key_cua_Hai"));
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(options =>
-{
-    options.RequireHttpsMetadata = false;
-    options.SaveToken = true;
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(key),
-        ValidateIssuer = false,
-        ValidateAudience = false
-    };
-});
 
 // Add dependencies
+
 builder.Services.AddScoped<AccountDAO>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IAccountService, AccountService>();
@@ -57,6 +35,54 @@ builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<ProductDAO>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
+
+services.AddScoped<ProductMaterialDAO>();
+services.AddScoped<IProductMaterialRepository, ProductMaterialRepository>();
+services.AddScoped<IProductMaterialService, ProductMaterialService>();
+
+services.AddScoped<MaterialCategoryDAO>();
+services.AddScoped<IMaterialCategoryRepository, MaterialCategoryRepository>();
+services.AddScoped<IMaterialCategoryService, MaterialCategoryService>();
+
+services.AddScoped<ProductCategoryDAO>();
+services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
+services.AddScoped<IProductCategoryService, ProductCategoryService>();
+
+services.AddScoped<OrderDAO>();
+services.AddScoped<IOrderRepository, OrderRepository>();
+services.AddScoped<IOrderService, OrderService>();
+
+services.AddScoped<OrderDetailDAO>();
+services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
+services.AddScoped<IOrderDetailService, OrderDetailService>();
+
+services.AddScoped<CustomerDAO>();
+services.AddScoped<ICustomerRepository, CustomerRepository>();
+services.AddScoped<ICustomerService, CustomerService>();
+
+services.AddScoped<PaymentDAO>();
+services.AddScoped<IPaymentRepository, PaymentRepository>();
+services.AddScoped<IPaymentService, PaymentService>();
+
+services.AddScoped<SaleStaffDAO>();
+services.AddScoped<ISaleStaffRepository, SaleStaffRepository>();
+services.AddScoped<ISaleStaffService, SaleStaffService>();
+
+services.AddScoped<ShipperDAO>();
+services.AddScoped<IShipperRepository, ShipperRepository>();
+services.AddScoped<IShipperService, ShipperService>();
+
+services.AddScoped<GemDAO>();
+services.AddScoped<IGemRepository, GemRepository>();
+services.AddScoped<IGemService, GemService>();
+
+services.AddScoped<MaterialPriceListDAO>();
+services.AddScoped<IMaterialPriceListRepository, MaterialPriceListRepository>();
+services.AddScoped<IMaterialPriceListService, MaterialPriceListService>();
+
+services.AddScoped<GemPriceListDAO>();
+services.AddScoped<IGemPriceListRepository, GemPriceListRepository>();
+services.AddScoped<IGemPriceListService, GemPriceListService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -96,6 +122,18 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+// Add CORS policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReact",
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:3000" , "http://localhost:5173")
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        });
+});
+
 // Build the app
 var app = builder.Build();
 
@@ -110,7 +148,7 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseCors("AllowReact");
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {

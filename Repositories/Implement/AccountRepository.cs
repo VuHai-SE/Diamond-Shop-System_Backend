@@ -22,14 +22,23 @@ namespace Repositories.Implement
             return await _accountDAO.GetAccountByUsernameAsync(username);
         }
 
-        public async Task AddAccountAsync(TblAccount account)
+        public TblAccount AddAccount(TblAccount account)
         {
-            await _accountDAO.AddAccountAsync(account);
+            return _accountDAO.AddAccount(account);
         }
 
         public async Task AddAccountByManagerAsync(TblAccount account)
         {
-            await _accountDAO.AddAccountAsync(account);
+            _accountDAO.AddAccount(account);
         }
+
+        public TblAccount GetAccountSaleStaff(string saleStaffID)
+            => _accountDAO.GetAccountSaleStaff(saleStaffID);
+
+        public TblAccount GetAccountShipper(string shipperID)
+            => _accountDAO.GetAccountShipper(shipperID);
+
+        public bool IsUsernameExisted(string username)
+            => _accountDAO.IsUsernameExisted(username);
     }
 }

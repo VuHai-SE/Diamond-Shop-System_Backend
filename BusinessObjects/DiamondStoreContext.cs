@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace BusinessObjects;
 
@@ -51,19 +52,26 @@ public partial class DiamondStoreContext : DbContext
 
     public virtual DbSet<TblWarranty> TblWarranties { get; set; }
 
+    private string? GetConnectionString()
+    {
+        IConfiguration configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", true, true).Build();
+        return configuration["ConnectionStrings:DbConnection"];
+    }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=localhost;uid=sa;pwd=12345;database=DiamondStore;TrustServerCertificate=True;");
+        => optionsBuilder.UseSqlServer(GetConnectionString());
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<TblAccount>(entity =>
         {
-            entity.HasKey(e => e.AccountId).HasName("PK__Tbl_Acco__349DA586C167EB6E");
+            entity.HasKey(e => e.AccountId).HasName("PK__Tbl_Acco__349DA58686734B9C");
 
             entity.ToTable("Tbl_Account");
 
-            entity.HasIndex(e => e.Username, "UQ__Tbl_Acco__536C85E42AD47E8E").IsUnique();
+            entity.HasIndex(e => e.Username, "UQ__Tbl_Acco__536C85E4F76D9010").IsUnique();
 
             entity.Property(e => e.AccountId).HasColumnName("AccountID");
             entity.Property(e => e.Password).HasMaxLength(100);
@@ -73,21 +81,18 @@ public partial class DiamondStoreContext : DbContext
 
         modelBuilder.Entity<TblCustomer>(entity =>
         {
-            entity.HasKey(e => e.CustomerId).HasName("PK__Tbl_Cust__A4AE64B880B208E0");
+            entity.HasKey(e => e.CustomerId).HasName("PK__Tbl_Cust__A4AE64B89644A058");
 
             entity.ToTable("Tbl_Customer");
 
-            entity.HasIndex(e => e.AccountId, "UQ__Tbl_Cust__349DA5877148F1C2").IsUnique();
+            entity.HasIndex(e => e.AccountId, "UQ__Tbl_Cust__349DA5876EB59931").IsUnique();
 
-            entity.Property(e => e.CustomerId)
-                .HasMaxLength(8)
-                .HasColumnName("CustomerID");
+            entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
             entity.Property(e => e.AccountId).HasColumnName("AccountID");
             entity.Property(e => e.Address).HasMaxLength(200);
             entity.Property(e => e.Birthday).HasColumnType("datetime");
             entity.Property(e => e.Email).HasMaxLength(100);
             entity.Property(e => e.FirstName).HasMaxLength(100);
-            entity.Property(e => e.Gender).HasMaxLength(10);
             entity.Property(e => e.LastName).HasMaxLength(100);
             entity.Property(e => e.PhoneNumber).HasMaxLength(10);
             entity.Property(e => e.Ranking).HasMaxLength(10);
@@ -100,11 +105,11 @@ public partial class DiamondStoreContext : DbContext
 
         modelBuilder.Entity<TblDiamondGradingReport>(entity =>
         {
-            entity.HasKey(e => e.ReportId).HasName("PK__Tbl_Diam__D5BD48E5EC4C17BA");
+            entity.HasKey(e => e.ReportId).HasName("PK__Tbl_Diam__D5BD48E51807F567");
 
             entity.ToTable("Tbl_DiamondGradingReport");
 
-            entity.HasIndex(e => e.GemId, "UQ__Tbl_Diam__F101D5A1BD68F812").IsUnique();
+            entity.HasIndex(e => e.GemId, "UQ__Tbl_Diam__F101D5A181DFCC6B").IsUnique();
 
             entity.Property(e => e.ReportId).HasColumnName("ReportID");
             entity.Property(e => e.GemId)
@@ -116,12 +121,12 @@ public partial class DiamondStoreContext : DbContext
             entity.HasOne(d => d.Gem).WithOne(p => p.TblDiamondGradingReport)
                 .HasForeignKey<TblDiamondGradingReport>(d => d.GemId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK__Tbl_Diamo__GemID__5AEE82B9");
+                .HasConstraintName("FK__Tbl_Diamo__GemID__5DCAEF64");
         });
 
         modelBuilder.Entity<TblGem>(entity =>
         {
-            entity.HasKey(e => e.GemId).HasName("PK__Tbl_Gem__F101D5A0915C321E");
+            entity.HasKey(e => e.GemId).HasName("PK__Tbl_Gem__F101D5A0D17B88D5");
 
             entity.ToTable("Tbl_Gem");
 
@@ -133,7 +138,6 @@ public partial class DiamondStoreContext : DbContext
             entity.Property(e => e.Cut).HasMaxLength(50);
             entity.Property(e => e.Fluorescence).HasMaxLength(50);
             entity.Property(e => e.GemName).HasMaxLength(50);
-            entity.Property(e => e.Origin).HasMaxLength(100);
             entity.Property(e => e.Polish).HasMaxLength(50);
             entity.Property(e => e.Shape).HasMaxLength(50);
             entity.Property(e => e.Symmetry).HasMaxLength(50);
@@ -141,7 +145,7 @@ public partial class DiamondStoreContext : DbContext
 
         modelBuilder.Entity<TblGemPriceList>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Tbl_GemP__3214EC2725FCE3DD");
+            entity.HasKey(e => e.Id).HasName("PK__Tbl_GemP__3214EC27B57CBE99");
 
             entity.ToTable("Tbl_GemPriceList");
 
@@ -150,12 +154,11 @@ public partial class DiamondStoreContext : DbContext
             entity.Property(e => e.Color).HasMaxLength(50);
             entity.Property(e => e.Cut).HasMaxLength(50);
             entity.Property(e => e.EffDate).HasColumnType("datetime");
-            entity.Property(e => e.Origin).HasMaxLength(100);
         });
 
         modelBuilder.Entity<TblMaterialCategory>(entity =>
         {
-            entity.HasKey(e => e.MaterialId).HasName("PK__Tbl_Mate__C5061317C6E07B1D");
+            entity.HasKey(e => e.MaterialId).HasName("PK__Tbl_Mate__C50613178B58D081");
 
             entity.ToTable("Tbl_MaterialCategory");
 
@@ -167,11 +170,11 @@ public partial class DiamondStoreContext : DbContext
 
         modelBuilder.Entity<TblMaterialPriceList>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Tbl_Mate__3214EC27308DE175");
+            entity.HasKey(e => e.Id).HasName("PK__Tbl_Mate__3214EC278670D996");
 
             entity.ToTable("Tbl_MaterialPriceList");
 
-            entity.HasIndex(e => e.MaterialId, "UQ__Tbl_Mate__C5061316A8ACD157").IsUnique();
+            entity.HasIndex(e => e.MaterialId, "UQ__Tbl_Mate__C506131648FDA411").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.EffDate).HasColumnType("datetime");
@@ -196,14 +199,12 @@ public partial class DiamondStoreContext : DbContext
 
         modelBuilder.Entity<TblOrder>(entity =>
         {
-            entity.HasKey(e => e.OrderId).HasName("PK__Tbl_Orde__C3905BAFB4C6799D");
+            entity.HasKey(e => e.OrderId).HasName("PK__Tbl_Orde__C3905BAFC0A397AF");
 
             entity.ToTable("Tbl_Order");
 
             entity.Property(e => e.OrderId).HasColumnName("OrderID");
-            entity.Property(e => e.CustomerId)
-                .HasMaxLength(8)
-                .HasColumnName("CustomerID");
+            entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
             entity.Property(e => e.OrderDate).HasColumnType("datetime");
             entity.Property(e => e.OrderStatus).HasMaxLength(50);
             entity.Property(e => e.PaymentMethod).HasMaxLength(50);
@@ -219,20 +220,20 @@ public partial class DiamondStoreContext : DbContext
 
             entity.HasOne(d => d.Customer).WithMany(p => p.TblOrders)
                 .HasForeignKey(d => d.CustomerId)
-                .HasConstraintName("FK__Tbl_Order__Custo__49C3F6B7");
+                .HasConstraintName("FK__Tbl_Order__Custo__4CA06362");
 
             entity.HasOne(d => d.Shipper).WithMany(p => p.TblOrders)
                 .HasForeignKey(d => d.ShipperId)
-                .HasConstraintName("FK__Tbl_Order__Shipp__4BAC3F29");
+                .HasConstraintName("FK__Tbl_Order__Shipp__4E88ABD4");
 
             entity.HasOne(d => d.Staff).WithMany(p => p.TblOrders)
                 .HasForeignKey(d => d.StaffId)
-                .HasConstraintName("FK__Tbl_Order__Staff__4AB81AF0");
+                .HasConstraintName("FK__Tbl_Order__Staff__4D94879B");
         });
 
         modelBuilder.Entity<TblOrderDetail>(entity =>
         {
-            entity.HasKey(e => e.OrderDetailId).HasName("PK__Tbl_Orde__D3B9D30C2833DED0");
+            entity.HasKey(e => e.OrderDetailId).HasName("PK__Tbl_Orde__D3B9D30C8C5451FF");
 
             entity.ToTable("Tbl_OrderDetail");
 
@@ -245,24 +246,22 @@ public partial class DiamondStoreContext : DbContext
             entity.HasOne(d => d.Order).WithMany(p => p.TblOrderDetails)
                 .HasForeignKey(d => d.OrderId)
                 .OnDelete(DeleteBehavior.SetNull)
-                .HasConstraintName("FK__Tbl_Order__Order__4E88ABD4");
+                .HasConstraintName("FK__Tbl_Order__Order__5165187F");
 
             entity.HasOne(d => d.Product).WithMany(p => p.TblOrderDetails)
                 .HasForeignKey(d => d.ProductId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK__Tbl_Order__Produ__4F7CD00D");
+                .HasConstraintName("FK__Tbl_Order__Produ__52593CB8");
         });
 
         modelBuilder.Entity<TblPayment>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Tbl_Paym__3214EC2746202532");
+            entity.HasKey(e => e.Id).HasName("PK__Tbl_Paym__3214EC27A64262F6");
 
             entity.ToTable("Tbl_Payment");
 
             entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.CustomerId)
-                .HasMaxLength(8)
-                .HasColumnName("CustomerID");
+            entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
             entity.Property(e => e.OrderId).HasColumnName("OrderID");
             entity.Property(e => e.PayDetail).HasMaxLength(255);
             entity.Property(e => e.PaymentMethod).HasMaxLength(50);
@@ -270,17 +269,17 @@ public partial class DiamondStoreContext : DbContext
             entity.HasOne(d => d.Customer).WithMany(p => p.TblPayments)
                 .HasForeignKey(d => d.CustomerId)
                 .OnDelete(DeleteBehavior.SetNull)
-                .HasConstraintName("FK__Tbl_Payme__Custo__534D60F1");
+                .HasConstraintName("FK__Tbl_Payme__Custo__5629CD9C");
 
             entity.HasOne(d => d.Order).WithMany(p => p.TblPayments)
                 .HasForeignKey(d => d.OrderId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK__Tbl_Payme__Order__52593CB8");
+                .HasConstraintName("FK__Tbl_Payme__Order__5535A963");
         });
 
         modelBuilder.Entity<TblProduct>(entity =>
         {
-            entity.HasKey(e => e.ProductId).HasName("PK__Tbl_Prod__B40CC6ED4976E676");
+            entity.HasKey(e => e.ProductId).HasName("PK__Tbl_Prod__B40CC6EDF7BB1755");
 
             entity.ToTable("Tbl_Product");
 
@@ -303,7 +302,7 @@ public partial class DiamondStoreContext : DbContext
 
         modelBuilder.Entity<TblProductCategory>(entity =>
         {
-            entity.HasKey(e => e.CategoryId).HasName("PK__Tbl_Prod__19093A2B447A81EC");
+            entity.HasKey(e => e.CategoryId).HasName("PK__Tbl_Prod__19093A2BC70F1B8D");
 
             entity.ToTable("Tbl_ProductCategory");
 
@@ -315,9 +314,13 @@ public partial class DiamondStoreContext : DbContext
 
         modelBuilder.Entity<TblProductGem>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Tbl_Prod__3214EC279C1B64C3");
+            entity.HasKey(e => e.Id).HasName("PK__Tbl_Prod__3214EC2782D02B60");
 
             entity.ToTable("Tbl_ProductGem");
+
+            entity.HasIndex(e => e.ProductId, "UQ__Tbl_Prod__B40CC6EC3CCA881A").IsUnique();
+
+            entity.HasIndex(e => e.GemId, "UQ__Tbl_Prod__F101D5A1B7070780").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.GemId)
@@ -327,22 +330,24 @@ public partial class DiamondStoreContext : DbContext
                 .HasMaxLength(8)
                 .HasColumnName("ProductID");
 
-            entity.HasOne(d => d.Gem).WithMany(p => p.TblProductGems)
-                .HasForeignKey(d => d.GemId)
+            entity.HasOne(d => d.Gem).WithOne(p => p.TblProductGem)
+                .HasForeignKey<TblProductGem>(d => d.GemId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK__Tbl_Produ__GemID__46E78A0C");
+                .HasConstraintName("FK__Tbl_Produ__GemID__49C3F6B7");
 
-            entity.HasOne(d => d.Product).WithMany(p => p.TblProductGems)
-                .HasForeignKey(d => d.ProductId)
+            entity.HasOne(d => d.Product).WithOne(p => p.TblProductGem)
+                .HasForeignKey<TblProductGem>(d => d.ProductId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK__Tbl_Produ__Produ__45F365D3");
+                .HasConstraintName("FK__Tbl_Produ__Produ__48CFD27E");
         });
 
         modelBuilder.Entity<TblProductMaterial>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Tbl_Prod__3214EC278240DBBF");
+            entity.HasKey(e => e.Id).HasName("PK__Tbl_Prod__3214EC272F3799C0");
 
             entity.ToTable("Tbl_ProductMaterial");
+
+            entity.HasIndex(e => e.ProductId, "UQ__Tbl_Prod__B40CC6ECC582FC63").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.MaterialId)
@@ -355,21 +360,21 @@ public partial class DiamondStoreContext : DbContext
             entity.HasOne(d => d.Material).WithMany(p => p.TblProductMaterials)
                 .HasForeignKey(d => d.MaterialId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK__Tbl_Produ__Mater__4316F928");
+                .HasConstraintName("FK__Tbl_Produ__Mater__440B1D61");
 
-            entity.HasOne(d => d.Product).WithMany(p => p.TblProductMaterials)
-                .HasForeignKey(d => d.ProductId)
+            entity.HasOne(d => d.Product).WithOne(p => p.TblProductMaterial)
+                .HasForeignKey<TblProductMaterial>(d => d.ProductId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK__Tbl_Produ__Produ__4222D4EF");
+                .HasConstraintName("FK__Tbl_Produ__Produ__4316F928");
         });
 
         modelBuilder.Entity<TblSaleStaff>(entity =>
         {
-            entity.HasKey(e => e.StaffId).HasName("PK__Tbl_Sale__96D4AAF7C0C70A0C");
+            entity.HasKey(e => e.StaffId).HasName("PK__Tbl_Sale__96D4AAF7C0CC2745");
 
             entity.ToTable("Tbl_SaleStaff");
 
-            entity.HasIndex(e => e.AccountId, "UQ__Tbl_Sale__349DA587E647FA38").IsUnique();
+            entity.HasIndex(e => e.AccountId, "UQ__Tbl_Sale__349DA5877611C376").IsUnique();
 
             entity.Property(e => e.StaffId)
                 .HasMaxLength(8)
@@ -386,11 +391,11 @@ public partial class DiamondStoreContext : DbContext
 
         modelBuilder.Entity<TblShipper>(entity =>
         {
-            entity.HasKey(e => e.ShipperId).HasName("PK__Tbl_Ship__1F8AFFB9DB6A06B2");
+            entity.HasKey(e => e.ShipperId).HasName("PK__Tbl_Ship__1F8AFFB99C2A3EFC");
 
             entity.ToTable("Tbl_Shipper");
 
-            entity.HasIndex(e => e.AccountId, "UQ__Tbl_Ship__349DA587A4AFB472").IsUnique();
+            entity.HasIndex(e => e.AccountId, "UQ__Tbl_Ship__349DA58758C248FD").IsUnique();
 
             entity.Property(e => e.ShipperId)
                 .HasMaxLength(8)
@@ -407,15 +412,13 @@ public partial class DiamondStoreContext : DbContext
 
         modelBuilder.Entity<TblWarranty>(entity =>
         {
-            entity.HasKey(e => e.WarrantyId).HasName("PK__Tbl_Warr__2ED318F328E9703A");
+            entity.HasKey(e => e.WarrantyId).HasName("PK__Tbl_Warr__2ED318F3FF891667");
 
             entity.ToTable("Tbl_Warranty");
 
-            entity.HasIndex(e => e.OrderDetailId, "UQ__Tbl_Warr__D3B9D30DB6C5A187").IsUnique();
+            entity.HasIndex(e => e.OrderDetailId, "UQ__Tbl_Warr__D3B9D30D8EF9673D").IsUnique();
 
-            entity.Property(e => e.WarrantyId)
-                .HasMaxLength(8)
-                .HasColumnName("WarrantyID");
+            entity.Property(e => e.WarrantyId).HasColumnName("WarrantyID");
             entity.Property(e => e.OrderDetailId).HasColumnName("OrderDetailID");
             entity.Property(e => e.WarrantyEndDate).HasColumnType("datetime");
             entity.Property(e => e.WarrantyStartDate).HasColumnType("datetime");
@@ -423,7 +426,7 @@ public partial class DiamondStoreContext : DbContext
             entity.HasOne(d => d.OrderDetail).WithOne(p => p.TblWarranty)
                 .HasForeignKey<TblWarranty>(d => d.OrderDetailId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK__Tbl_Warra__Order__571DF1D5");
+                .HasConstraintName("FK__Tbl_Warra__Order__59FA5E80");
         });
 
         OnModelCreatingPartial(modelBuilder);

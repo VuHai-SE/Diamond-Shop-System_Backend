@@ -9,14 +9,11 @@ namespace DAOs
 {
     public class GemDAO
     {
-        private readonly DiamondStoreContext dbContext = null;
+        private readonly DiamondStoreContext dbContext;
 
-        public GemDAO()
+        public GemDAO(DiamondStoreContext _dbContext)
         {
-            if (dbContext == null)
-            {
-                dbContext = new DiamondStoreContext();
-            }
+            dbContext = _dbContext;
         }
 
         public List<TblGem> GetGems() => dbContext.TblGems.ToList();
@@ -39,6 +36,12 @@ namespace DAOs
         public bool DeleteGem(string id)
         {
             return false;
+        }
+
+        public TblGem GetGemByProduct(string productId)
+        {
+            var productGem = dbContext.TblProductGems.FirstOrDefault(pg => pg.ProductId.Equals(productId));
+            return dbContext.TblGems.FirstOrDefault(g => g.GemId.Equals(productGem.GemId));
         }
     }
 }

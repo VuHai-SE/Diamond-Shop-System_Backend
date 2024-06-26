@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects;
+using BusinessObjects.RequestModels;
+using BusinessObjects.ResponseModels;
 using DAOs;
 
 namespace Repositories.Implement
@@ -13,15 +16,37 @@ namespace Repositories.Implement
     {
         private readonly ProductDAO productDAO;
 
-        public ProductRepository()
+        public ProductRepository(ProductDAO _productDAO)
         {
-            if (productDAO == null)
-            {
-                productDAO = new ProductDAO();
-            }
+           productDAO = _productDAO;
         }
         public TblProduct AddProduct(TblProduct product)
             => productDAO.AddProduct(product);
+
+        public async Task AddAsync(TblProduct product)
+        {
+            await productDAO.AddAsync(product);
+        }
+
+        public async Task<GenericResponse> CreateProductAsync(CreateProductRequest request)
+        {
+            return await productDAO.CreateProductAsync(request);
+        }
+
+        public async Task<GenericResponse> UpdateProductAsync(string productId, CreateProductRequest request)
+        {
+            return await productDAO.UpdateProductAsync(productId, request);
+        }
+
+        public async Task<GenericResponse> DeleteProductAsync(string productId)
+        {
+            return await productDAO.DeleteProductAsync(productId);
+        }
+
+        public async Task SaveChangesAsync()
+        {
+            await productDAO.SaveChangesAsync();
+        }
 
         public async Task<double> CalculateProductPriceAsync(string productId)
         {
@@ -45,27 +70,50 @@ namespace Repositories.Implement
                 var latestMaterialPrice = materialPriceList.FirstOrDefault()?.UnitPrice ?? 0;
                 materialTotalPrice += (pm.Weight ?? 0) * latestMaterialPrice;
             }
-
-            return gemTotalPrice + materialTotalPrice + (product.ProductionCost ?? 0);
+            var priceRate = 1 + (double)product.PriceRate / 100;
+            return (gemTotalPrice + (product.GemCost ?? 0) + materialTotalPrice + (product.ProductionCost ?? 0)) * priceRate;
         }
 
-        public async Task<List<(TblProduct product, double price)>> GetAllProductsAndPricesAsync()
-        {
-            var products = productDAO.GetAllProducts();
-            var productPrices = new List<(TblProduct product, double price)>();
+        public List<TblProduct> filterProductsByCategoryID(string categoryID)
+            => productDAO.filterProductsByCategoryID(categoryID);
 
-            foreach (var product in products)
-            {
-                var price = await CalculateProductPriceAsync(product.ProductId);
-                productPrices.Add((product, price));
-            }
+        public List<TblProduct> GetAllProducts()
+            => productDAO.GetAllProducts();
 
-            return productPrices;
-        }
+        //public async Task<List<(TblProduct product, double price)>> GetAllProductsAndPricesAsync()
+        //{
+        //    var products = productDAO.GetAllProducts();
+        //    var productPrices = new List<(TblProduct product, double price)>();
+
+        //    foreach (var product in products)
+        //    {
+        //        var price = await CalculateProductPriceAsync(product.ProductId);
+        //        productPrices.Add((product, price));
+        //    }
+
+        //    return productPrices;
+        //}
+
+        public TblProduct GetProduct(string id)
+            =>productDAO.GetProduct(id);
 
         public async Task<TblProduct> GetProductByIdAsync(string productId)
         {
             return await productDAO.GetProductByIdAsync(productId);
+        }
+
+        public List<TblProduct> GetProductsByName(string name)
+            => productDAO.GetProductsByName(name);
+
+        public Task<bool> UpdateProduct(string productID, TblProduct product)
+        {
+            return productDAO.UpdateProduct(productID, product);
+        }
+
+        public async Task UpdateAsync(string id, TblProduct product)
+        {
+            await productDAO.UpdateAsync(id, product);
+            await productDAO.SaveChangesAsync(); // Gọi lưu thay đổi tại tầng DAO
         }
     }
 }

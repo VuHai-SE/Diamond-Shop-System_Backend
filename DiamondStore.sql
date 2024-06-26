@@ -29,7 +29,7 @@ CREATE TABLE Tbl_MaterialPriceList (
 
 CREATE TABLE Tbl_GemPriceList (
     ID INT IDENTITY(1,1) PRIMARY KEY,
-    Origin NVARCHAR(100),
+    Origin BIT,
     CaratWeight FLOAT,
     Color NVARCHAR(50),
     Cut NVARCHAR(50),
@@ -45,7 +45,7 @@ CREATE TABLE Tbl_Gem (
     Polish NVARCHAR(50),
     Symmetry NVARCHAR(50),
     Fluorescence NVARCHAR(50),
-    Origin NVARCHAR(100),
+    Origin BIT,
     CaratWeight FLOAT,
     Color NVARCHAR(50),
     Cut NVARCHAR(50),
@@ -82,17 +82,17 @@ CREATE TABLE Tbl_Shipper (
 );
 
 CREATE TABLE Tbl_Customer (
-    CustomerID NVARCHAR(8) PRIMARY KEY,
+    CustomerID INT IDENTITY(1,1) PRIMARY KEY,
     AccountID INT UNIQUE,
     FirstName NVARCHAR(100),
     LastName NVARCHAR(100),
-    Gender NVARCHAR(10),
+    Gender BIT,
     Birthday DATETIME,
     Email NVARCHAR(100),
     PhoneNumber NVARCHAR(10),
     Address NVARCHAR(200),
     Ranking NVARCHAR(10),
-	DiscountRate FLOAT,
+    DiscountRate FLOAT,
     Status BIT,
     FOREIGN KEY (AccountID) REFERENCES Tbl_Account(AccountID) ON DELETE SET NULL
 );
@@ -111,18 +111,20 @@ CREATE TABLE Tbl_Product (
     Description NVARCHAR(255),
     CategoryID NVARCHAR(8),
     MaterialCost FLOAT,
-	GemCost FLOAT,
+    GemCost FLOAT,
     ProductionCost FLOAT,
     PriceRate FLOAT,
     ProductSize INT,
     Image NVARCHAR(255),
     Status BIT,
-    FOREIGN KEY (CategoryID) REFERENCES Tbl_ProductCategory(CategoryID) ON DELETE CASCADE,
+    UnitSizePrice FLOAT,
+	Gender INT, --  -1 Female, 1 Male, 0 Both
+    FOREIGN KEY (CategoryID) REFERENCES Tbl_ProductCategory(CategoryID) ON DELETE CASCADE
 );
 
 CREATE TABLE Tbl_ProductMaterial (
 	ID INT IDENTITY(1,1) PRIMARY KEY,
-    ProductID NVARCHAR(8),
+    ProductID NVARCHAR(8) UNIQUE,
     MaterialID NVARCHAR(8),
     Weight FLOAT,
     FOREIGN KEY (ProductID) REFERENCES Tbl_Product(ProductID) ON DELETE CASCADE,
@@ -132,15 +134,15 @@ CREATE TABLE Tbl_ProductMaterial (
 -- Tbl_ProductGem
 CREATE TABLE Tbl_ProductGem (
 	ID INT IDENTITY(1,1) PRIMARY KEY,
-    ProductID NVARCHAR(8),
-    GemID NVARCHAR(8),
+    ProductID NVARCHAR(8) UNIQUE,
+    GemID NVARCHAR(8) UNIQUE,
     FOREIGN KEY (ProductID) REFERENCES Tbl_Product(ProductID) ON DELETE CASCADE,
     FOREIGN KEY (GemID) REFERENCES Tbl_Gem(GemID) ON DELETE CASCADE
 );
 
 CREATE TABLE Tbl_Order (
     OrderID INT IDENTITY(1,1) PRIMARY KEY,
-    CustomerID NVARCHAR(8),
+    CustomerID INT,--THAY DOI KIEUR DU LIEU
     OrderDate DATETIME,
     PaymentMethod NVARCHAR(50),
     OrderStatus NVARCHAR(50),
@@ -170,7 +172,7 @@ CREATE TABLE Tbl_OrderDetail (
 CREATE TABLE Tbl_Payment (
 	ID INT IDENTITY(1,1) PRIMARY KEY,
     OrderID INT,
-    CustomerID NVARCHAR(8),
+    CustomerID INT,
     PaymentMethod NVARCHAR(50),
     Deposits FLOAT,
     PayDetail NVARCHAR(255),
@@ -179,7 +181,7 @@ CREATE TABLE Tbl_Payment (
 );
 
 CREATE TABLE Tbl_Warranty (
-    WarrantyID NVARCHAR(8) PRIMARY KEY,
+    WarrantyID INT IDENTITY(1,1) PRIMARY KEY,
     OrderDetailID INT UNIQUE,
     WarrantyStartDate DATETIME,
     WarrantyEndDate DATETIME,

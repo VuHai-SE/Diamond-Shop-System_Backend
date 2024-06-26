@@ -7,7 +7,7 @@ public partial class TblGemPriceList
 {
     public int Id { get; set; }
 
-    public string? Origin { get; set; }
+    public bool? Origin { get; set; }
 
     public double? CaratWeight { get; set; }
 

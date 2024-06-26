@@ -29,11 +29,15 @@ public partial class TblProduct
 
     public bool? Status { get; set; }
 
+    public double? UnitSizePrice { get; set; }
+
+    public int? Gender { get; set; }
+
     public virtual TblProductCategory? Category { get; set; }
 
     public virtual ICollection<TblOrderDetail> TblOrderDetails { get; set; } = new List<TblOrderDetail>();
 
-    public virtual ICollection<TblProductGem> TblProductGems { get; set; } = new List<TblProductGem>();
+    public virtual TblProductGem? TblProductGem { get; set; }
 
-    public virtual ICollection<TblProductMaterial> TblProductMaterials { get; set; } = new List<TblProductMaterial>();
+    public virtual TblProductMaterial? TblProductMaterial { get; set; }
 }

@@ -5,7 +5,7 @@ namespace BusinessObjects;
 
 public partial class TblCustomer
 {
-    public string CustomerId { get; set; } = null!;
+    public int CustomerId { get; set; }
 
     public int? AccountId { get; set; }
 
@@ -13,7 +13,7 @@ public partial class TblCustomer
 
     public string? LastName { get; set; }
 
-    public string? Gender { get; set; }
+    public bool? Gender { get; set; }
 
     public DateTime? Birthday { get; set; }
 

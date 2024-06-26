@@ -18,5 +18,6 @@ namespace Repositories
         public bool UpdateMaterialPriceList(int id, TblMaterialPriceList materialPriceList);
 
         public bool DeleteMaterialPriceList(int id);
+        public TblMaterialPriceList GetMaterialPriceByMaterialID(string materialID);
     }
 }

@@ -22,7 +22,7 @@ namespace DAOs
         }
 
         public List<TblProductCategory> GetProductCategories() 
-            => dbContext.TblProductCategories.Include(cat => cat.TblProducts).ToList();
+            => dbContext.TblProductCategories.ToList();
 
         public TblProductCategory AddProductCategories(TblProductCategory productCategory)
         {
@@ -32,7 +32,7 @@ namespace DAOs
         }
 
         public TblProductCategory GetProductCategory(string id)
-            => dbContext.TblProductCategories.Include(cat => cat.TblProducts).FirstOrDefault(m => m.CategoryId.Equals(id));
+            => dbContext.TblProductCategories.FirstOrDefault(m => m.CategoryId.Equals(id));
 
         public bool UpdateProductCategory(string id,  TblProductCategory productCategory)
         {
@@ -43,5 +43,8 @@ namespace DAOs
         {
             return false;
         }
+
+        public TblProductCategory GetCategoryByName(string name)
+            => dbContext.TblProductCategories.FirstOrDefault(pc => pc.CategoryName.Equals(name));
     }
 }

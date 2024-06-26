@@ -5,7 +5,7 @@ namespace BusinessObjects;
 
 public partial class TblWarranty
 {
-    public string WarrantyId { get; set; } = null!;
+    public int WarrantyId { get; set; }
 
     public int? OrderDetailId { get; set; }
 

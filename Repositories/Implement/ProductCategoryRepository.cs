@@ -26,6 +26,9 @@ namespace Repositories.Implement
         public bool DeleteProductCategory(string id)
             => productCategoryDAO.DeleteProductCategory(id);
 
+        public TblProductCategory GetCategoryByName(string name)
+            => productCategoryDAO.GetCategoryByName(name);
+
         public List<TblProductCategory> GetProductCategories()
             => productCategoryDAO.GetProductCategories();
 

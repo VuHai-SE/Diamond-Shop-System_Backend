@@ -1,4 +1,5 @@
 ﻿using BusinessObjects;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +12,11 @@ namespace Repositories
     {
         Task<TblAccount> GetAccountByUsernameAsync(string username);
 
-        Task AddAccountAsync(TblAccount account);
+        public TblAccount AddAccount(TblAccount account);
 
         Task AddAccountByManagerAsync(TblAccount account);
+        public TblAccount GetAccountSaleStaff(string saleStaffID);
+        public TblAccount GetAccountShipper(string shipperID);
+        public bool IsUsernameExisted(string username);
     }
 }
