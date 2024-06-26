@@ -64,12 +64,12 @@ namespace DiamondStoreAPI.Controllers
             }
 
             var token = GenerateJwtToken(account);
-            var loginResponse = new LoginResponse() { Username = account.Username, Role = account.Role };
+            var customerInfo = _customerService.GetCustomerByAccount(request.Username);
 
             return Ok(new
             {
                 Token = token,
-                LoginResponse = loginResponse
+                CustomerInfo = customerInfo
             });
         }
 
