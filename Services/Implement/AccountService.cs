@@ -6,6 +6,7 @@ using Services.DTOs.Request;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,39 +23,40 @@ namespace Services.Implement
             _customerRepository = customerRepository;
         }
 
+        //public async Task<TblAccount> AuthenticateAsync(string username, string password)
+        //{
+        //    var account = await _accountRepository.GetAccountByUsernameAsync(username);
+
+        //    if (account == null)
+        //    {
+        //        return null;
+        //    }
+        //    return account;
+        //}
+
         public async Task<TblAccount> AuthenticateAsync(string username, string password)
         {
             var account = await _accountRepository.GetAccountByUsernameAsync(username);
-
-            if (account == null)
+            if (account == null || !BCrypt.Net.BCrypt.Verify(password, account.Password))
             {
                 return null;
             }
             return account;
         }
 
-        public async Task<TblAccount> GetAccountByUsernameAsync(string username)
-            => await _accountRepository.GetAccountByUsernameAsync(username);
-
-        public TblAccount GetAccountSaleStaff(string saleStaffID)
-            => _accountRepository.GetAccountSaleStaff(saleStaffID);
-
-        public TblAccount GetAccountShipper(string shipperID)
-            => _accountRepository.GetAccountShipper(shipperID);
-
-        public bool IsUsernameExisted(string username)
-            => _accountRepository.IsUsernameExisted(username);
-
         public async Task RegisterAsync(RegisterRequest register)
         {
-           
-            var account = new TblAccount
+            var passwordHash = BCrypt.Net.BCrypt.HashPassword(register.Password);
+
+            var newAccount = new TblAccount
             {
                 Username = register.Username,
-                Password = register.Password,
+                Password = passwordHash,
                 Role = "Customer" // Mặc định role là Customer
             };
-            var newAccount = _accountRepository.AddAccount(account);
+
+            await _accountRepository.AddAccountAsync(newAccount);
+
             var customer = new TblCustomer()
             {
                 AccountId = newAccount.AccountId,
@@ -71,6 +73,20 @@ namespace Services.Implement
             };
             _customerRepository.AddCustomer(customer);
         }
+
+        public async Task<TblAccount> GetAccountByUsernameAsync(string username)
+            => await _accountRepository.GetAccountByUsernameAsync(username);
+
+        public TblAccount GetAccountSaleStaff(string saleStaffID)
+            => _accountRepository.GetAccountSaleStaff(saleStaffID);
+
+        public TblAccount GetAccountShipper(string shipperID)
+            => _accountRepository.GetAccountShipper(shipperID);
+
+        public bool IsUsernameExisted(string username)
+            => _accountRepository.IsUsernameExisted(username);
+
+        
 
     }
 }
