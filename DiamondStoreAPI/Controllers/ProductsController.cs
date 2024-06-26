@@ -55,7 +55,7 @@ namespace DiamondStoreAPI.Controllers
             return Ok(result.Message);
         }
 
-        [HttpPut("UpdateProduct{id}")]
+        [HttpPut("UpdateProduct/{id}")]
         public async Task<IActionResult> UpdateProduct(string id, [FromBody] CreateProductRequest request)
         {
             var result = await _productService.UpdateProductAsync(id, request);
@@ -70,7 +70,7 @@ namespace DiamondStoreAPI.Controllers
             return Ok(result.Message);
         }
 
-        [HttpDelete("DeleteProduct{id}")]
+        [HttpDelete("DeleteProduct/{id}")]
         public async Task<IActionResult> DeleteProduct(string id)
         {
             var result = await _productService.DeleteProductAsync(id);

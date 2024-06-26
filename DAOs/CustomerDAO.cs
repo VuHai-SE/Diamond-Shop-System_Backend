@@ -39,6 +39,7 @@ namespace DAOs
             LoginResponse response = new LoginResponse();
             if (cus != null)
             {
+                response.UserName = username;
                 response.CustomerId = cus.CustomerId;
                 response.LastName = cus.LastName;
                 response.FirstName = cus.FirstName;
