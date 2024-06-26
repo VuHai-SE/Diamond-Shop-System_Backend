@@ -34,7 +34,7 @@ namespace DiamondStoreAPI.Controllers
             _accountService = accountService;
             _customerService = customerService;
             _configuration = configuration;
-            _jwtSecret = _configuration.GetValue<string>("Jwt:Day_la_key_cua_Hai");
+            _jwtSecret = _configuration.GetValue<string>("Jwt:Day_la_key_JWT");
         }
 
         //[HttpPost("login")]
@@ -52,6 +52,11 @@ namespace DiamondStoreAPI.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] Services.DTOs.Request.LoginRequest request)
         {
+            if (request == null)
+            {
+                return BadRequest("Invalid client request");
+            }
+
             var account = await _accountService.AuthenticateAsync(request.Username, request.Password);
             if (account == null)
             {
