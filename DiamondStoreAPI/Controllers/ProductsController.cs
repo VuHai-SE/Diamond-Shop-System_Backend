@@ -102,19 +102,19 @@ namespace DiamondStoreAPI.Controllers
             return Ok("Product updated successfully.");
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetProductById(string id)
-        {
-            var product = await _productService.GetProductByIdAsync(id);
-            if (product == null)
-            {
-                return NotFound();
-            }
-            return Ok(product);
-        }
+        //[HttpGet("{id}")]
+        //public async Task<IActionResult> GetProductById(string id)
+        //{
+        //    var product = await _productService.GetProductByIdAsync(id);
+        //    if (product == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return Ok(product);
+        //}
 
         // GET: api/Products/5
-        [HttpGet("Price/{productId}")]
+        [HttpGet("{productId}")]
         public async Task<IActionResult> GetProductPrice(string productId)
         {
             var response = await _productService.GetProductAndPriceByIdAsync(productId);
