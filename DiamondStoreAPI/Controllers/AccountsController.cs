@@ -15,6 +15,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Configuration;
 using Services.DTOs.Response;
+using BusinessObjects.ResponseModels;
 
 
 namespace DiamondStoreAPI.Controllers
@@ -64,7 +65,7 @@ namespace DiamondStoreAPI.Controllers
             }
 
             var token = GenerateJwtToken(account);
-            var customerInfo = _customerService.GetCustomerByAccount(request.Username);
+            BusinessObjects.ResponseModels.LoginResponse customerInfo = _customerService.GetCustomerByAccountForLogin(request.Username);
 
             return Ok(new
             {
