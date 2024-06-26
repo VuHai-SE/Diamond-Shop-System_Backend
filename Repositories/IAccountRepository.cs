@@ -12,6 +12,8 @@ namespace Repositories
     {
         Task<TblAccount> GetAccountByUsernameAsync(string username);
 
+        Task AddAccountAsync(TblAccount account);
+
         public TblAccount AddAccount(TblAccount account);
 
         Task AddAccountByManagerAsync(TblAccount account);
