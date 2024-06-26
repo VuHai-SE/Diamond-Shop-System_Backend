@@ -15,6 +15,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Configuration;
 using Services.DTOs.Response;
+using BusinessObjects.ResponseModels;
 
 
 namespace DiamondStoreAPI.Controllers
@@ -25,25 +26,52 @@ namespace DiamondStoreAPI.Controllers
     {
         private readonly IAccountService _accountService;
         private readonly ICustomerService _customerService;
+        private readonly string _jwtSecret;
+        private readonly IConfiguration _configuration;
 
-        
-        public AccountsController(IAccountService accountService, ICustomerService customerService)
+
+        public AccountsController(IAccountService accountService, ICustomerService customerService, IConfiguration configuration)
         {
             _accountService = accountService;
             _customerService = customerService;
-            
+            _configuration = configuration;
+            _jwtSecret = _configuration.GetValue<string>("Jwt:Day_la_key_JWT");
         }
+
+        //[HttpPost("login")]
+        //public async Task<IActionResult> Login([FromBody] Services.DTOs.Request.LoginRequest request)
+        //{
+        //    var account = await _accountService.AuthenticateAsync(request.Username, request.Password);
+        //    if (account == null)
+        //    {
+        //        return Unauthorized();
+        //    }
+        //    var loginResponse = new LoginResponse() { Username = account.Username, Role = account.Role };
+        //    return Ok(loginResponse);
+        //}
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] Services.DTOs.Request.LoginRequest request)
         {
+            if (request == null)
+            {
+                return BadRequest("Invalid client request");
+            }
+
             var account = await _accountService.AuthenticateAsync(request.Username, request.Password);
             if (account == null)
             {
                 return Unauthorized();
             }
-            var loginResponse = new LoginResponse() { Username = account.Username, Role = account.Role };
-            return Ok(loginResponse);
+
+            var token = GenerateJwtToken(account);
+            BusinessObjects.ResponseModels.LoginResponse customerInfo = _customerService.GetCustomerByAccountForLogin(request.Username);
+
+            return Ok(new
+            {
+                Token = token,
+                CustomerInfo = customerInfo
+            });
         }
 
         [HttpPost("register")]
@@ -72,6 +100,24 @@ namespace DiamondStoreAPI.Controllers
         {
             var isPhoneExist = _customerService.isPhoneExisted(phone);
             return Ok(isPhoneExist);
+        }
+
+        private string GenerateJwtToken(TblAccount account)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_jwtSecret);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[]
+                {
+                    new Claim(ClaimTypes.Name, account.Username),
+                    new Claim(ClaimTypes.Role, account.Role)
+                }),
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
         }
     }
 }

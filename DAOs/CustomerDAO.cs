@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects;
+using BusinessObjects.ResponseModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace DAOs
@@ -30,7 +31,30 @@ namespace DAOs
             var account = dbContext.TblAccounts.FirstOrDefault(a => a.Username.Equals(username));
             return dbContext.TblCustomers.FirstOrDefault(c => c.AccountId.Equals(account.AccountId));
         }
-            
+
+        public LoginResponse GetCustomerByAccountForLogin (string username)
+        {
+            var account = dbContext.TblAccounts.FirstOrDefault(a => a.Username.Equals(username));
+            var cus = dbContext.TblCustomers.FirstOrDefault(c => c.AccountId.Equals(account.AccountId));
+            LoginResponse response = new LoginResponse();
+            if (cus != null)
+            {
+                response.UserName = username;
+                response.CustomerId = cus.CustomerId;
+                response.LastName = cus.LastName;
+                response.FirstName = cus.FirstName;
+                response.Gender = cus.Gender;
+                response.Birthday = cus.Birthday;
+                response.Email = cus.Email;
+                response.PhoneNumber = cus.PhoneNumber;
+                response.Address = cus.Address;
+                response.Ranking = cus.Ranking;
+                response.DiscountRate = cus.DiscountRate;
+                response.Status = cus.Status;
+            }
+            return response;
+        }
+
         public TblCustomer AddCustomer(TblCustomer customer)
         {
             dbContext.TblCustomers.Add(customer);
