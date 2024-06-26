@@ -185,6 +185,7 @@ CREATE TABLE Tbl_Warranty (
     OrderDetailID INT UNIQUE,
     WarrantyStartDate DATETIME,
     WarrantyEndDate DATETIME,
+	WarrantyPdf VARBINARY(MAX),
     FOREIGN KEY (OrderDetailID) REFERENCES Tbl_OrderDetail(OrderDetailID) ON DELETE CASCADE
 );
 
