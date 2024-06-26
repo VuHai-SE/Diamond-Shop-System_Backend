@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using Services.DTOs.Request;
 using Services.Implement;
 using BusinessObjects.RequestModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DiamondStoreAPI.Controllers
 {
@@ -41,6 +42,8 @@ namespace DiamondStoreAPI.Controllers
         }
 
         [HttpPost("CreateProduct")]
+        //[Authorize(Roles = "Admin,Manager")]
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> CreateProduct([FromBody] CreateProductRequest request)
         {
             var result = await _productService.CreateProductAsync(request);
