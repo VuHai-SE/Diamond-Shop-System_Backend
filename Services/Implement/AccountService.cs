@@ -65,7 +65,8 @@ namespace Services.Implement
                 Email = register.Email,
                 PhoneNumber = register.PhoneNumber,
                 Address = register.Address,
-                DiscountRate = 0,
+                DiscountRate = 0.02,
+                Ranking = "Bronze",
                 Status = true
             };
             _customerRepository.AddCustomer(customer);

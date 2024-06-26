@@ -204,6 +204,16 @@ namespace Services.Implement
             return await productRepository.CreateProductAsync(request);
         }
 
+        public async Task<GenericResponse> UpdateProductAsync(string productId, CreateProductRequest request)
+        {
+            return await productRepository.UpdateProductAsync(productId, request);
+        }
+
+        public async Task<GenericResponse> DeleteProductAsync(string productId)
+        {
+            return await productRepository.DeleteProductAsync(productId);
+        }
+
         public async Task<bool> UpdateProductAsync(string id, TblProduct product)
         {
             var existingProduct = await productRepository.GetProductByIdAsync(id);
