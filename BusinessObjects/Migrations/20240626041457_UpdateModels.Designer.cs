@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BusinessObjects.Migrations
 {
     [DbContext(typeof(DiamondStoreContext))]
-    [Migration("20240619113331_UpdateModels")]
+    [Migration("20240626041457_UpdateModels")]
     partial class UpdateModels
     {
         /// <inheritdoc />
@@ -658,6 +658,9 @@ namespace BusinessObjects.Migrations
 
                     b.Property<DateTime?>("WarrantyEndDate")
                         .HasColumnType("datetime");
+
+                    b.Property<byte[]>("WarrantyPdf")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<DateTime?>("WarrantyStartDate")
                         .HasColumnType("datetime");

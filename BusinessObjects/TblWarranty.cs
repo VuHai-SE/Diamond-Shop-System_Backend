@@ -13,5 +13,7 @@ public partial class TblWarranty
 
     public DateTime? WarrantyEndDate { get; set; }
 
+    public byte[]? WarrantyPdf { get; set; }
+
     public virtual TblOrderDetail? OrderDetail { get; set; }
 }
