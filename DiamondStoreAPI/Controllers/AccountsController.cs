@@ -64,8 +64,13 @@ namespace DiamondStoreAPI.Controllers
             }
 
             var token = GenerateJwtToken(account);
+            var loginResponse = new LoginResponse() { Username = account.Username, Role = account.Role };
 
-            return Ok(new { Token = token });
+            return Ok(new
+            {
+                Token = token,
+                LoginResponse = loginResponse
+            });
         }
 
         [HttpPost("register")]
