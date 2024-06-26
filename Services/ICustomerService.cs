@@ -11,10 +11,17 @@ namespace Services
     public interface ICustomerService
     {
         public List<TblCustomer> GetCustomers();
+
         public TblCustomer GetCustomerByID(int customerID);
+
         public TblCustomer GetCustomerByAccount(string username);
+
         public LoginResponse GetCustomerByAccountForLogin(string username);
+
+        Task<GenericResponse> UpdateCustomerProfileAsync(int customerId, UpdateCustomerProfileRequest request);
+
         public bool IsEmailExisted(string email);
+
         public bool isPhoneExisted(string phone);
     }
 }
