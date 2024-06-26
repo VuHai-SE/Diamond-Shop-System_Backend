@@ -55,7 +55,7 @@ namespace DiamondStoreAPI.Controllers
             return Ok(result.Message);
         }
 
-        [HttpPut("UpdateProduct{id}")]
+        [HttpPut("UpdateProduct/{id}")]
         public async Task<IActionResult> UpdateProduct(string id, [FromBody] CreateProductRequest request)
         {
             var result = await _productService.UpdateProductAsync(id, request);
@@ -70,7 +70,7 @@ namespace DiamondStoreAPI.Controllers
             return Ok(result.Message);
         }
 
-        [HttpDelete("DeleteProduct{id}")]
+        [HttpDelete("DeleteProduct/{id}")]
         public async Task<IActionResult> DeleteProduct(string id)
         {
             var result = await _productService.DeleteProductAsync(id);
@@ -102,19 +102,19 @@ namespace DiamondStoreAPI.Controllers
             return Ok("Product updated successfully.");
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetProductById(string id)
-        {
-            var product = await _productService.GetProductByIdAsync(id);
-            if (product == null)
-            {
-                return NotFound();
-            }
-            return Ok(product);
-        }
+        //[HttpGet("{id}")]
+        //public async Task<IActionResult> GetProductById(string id)
+        //{
+        //    var product = await _productService.GetProductByIdAsync(id);
+        //    if (product == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return Ok(product);
+        //}
 
         // GET: api/Products/5
-        [HttpGet("Price/{productId}")]
+        [HttpGet("{productId}")]
         public async Task<IActionResult> GetProductPrice(string productId)
         {
             var response = await _productService.GetProductAndPriceByIdAsync(productId);
@@ -131,7 +131,7 @@ namespace DiamondStoreAPI.Controllers
         {
             var category = _productCategoryService.GetCategoryByName(categoryName);
             var pruductList = await _productService.filterProductsByCategoryID(category.CategoryId);
-            
+
             if (pruductList == null)
             {
                 return NotFound();
@@ -142,7 +142,7 @@ namespace DiamondStoreAPI.Controllers
         [HttpGet("ProductName/{name}")]
         public async Task<IActionResult> GetProductsByName(string name)
         {
-            
+
             var pruductList = await _productService.GetProductsByName(name);
 
             if (pruductList == null)
@@ -163,105 +163,4 @@ namespace DiamondStoreAPI.Controllers
             return Ok("Update successfully");
         }
     }
-    //[Route("api/[controller]")]
-    //[ApiController]
-    //public class ProductsController : ControllerBase
-    //{
-    //    private readonly IProductService iProductService;
-
-    //    public ProductsController()
-    //    {
-    //        iProductService = new ProductService();
-    //    }
-
-    //    // GET: api/Products
-    //    [HttpGet]
-    //    public async Task<ActionResult<IEnumerable<TblProduct>>> GetTblProducts()
-    //    {
-    //        if (iProductService.GetProducts() == null)
-    //        {
-    //            return NotFound();
-    //        }
-    //        return iProductService.GetProducts().ToList();
-    //    }
-
-    //    // GET: api/Products/5
-    //    [HttpGet("{id}")]
-    //    public async Task<ActionResult<TblProduct>> GetTblProduct(string id)
-    //    {
-    //        if (iProductService.GetProducts() == null)
-    //        {
-    //            return NotFound();
-    //        }
-    //        var tblProduct = iProductService.GetProduct(id);
-
-    //        if (tblProduct == null)
-    //        {
-    //            return NotFound();
-    //        }
-
-    //        return tblProduct;
-    //    }
-
-    //    // PUT: api/Products/5
-    //    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-    //    //[HttpPut("{id}")]
-    //    //public async Task<IActionResult> PutTblProduct(string id, TblProduct tblProduct)
-    //    //{
-    //    //    if (id != tblProduct.ProductId)
-    //    //    {
-    //    //        return BadRequest();
-    //    //    }
-
-    //    //    iProductService.Entry(tblProduct).State = EntityState.Modified;
-
-    //    //    try
-    //    //    {
-    //    //        await iProductService.SaveChangesAsync();
-    //    //    }
-    //    //    catch (DbUpdateConcurrencyException)
-    //    //    {
-    //    //        if (!TblProductExists(id))
-    //    //        {
-    //    //            return NotFound();
-    //    //        }
-    //    //        else
-    //    //        {
-    //    //            throw;
-    //    //        }
-    //    //    }
-
-    //    //    return NoContent();
-    //    //}
-
-    //    // POST: api/Products
-    //    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-    //    [HttpPost]
-    //    public async Task<ActionResult<TblProduct>> PostTblProduct(TblProduct tblProduct)
-    //    {
-    //        var newProduct = iProductService.AddProduct(tblProduct);
-    //        return CreatedAtAction("GetTblProduct", new { id = tblProduct.ProductId }, tblProduct);
-    //    }
-
-    //    // DELETE: api/Products/5
-    //    //[HttpDelete("{id}")]
-    //    //public async Task<IActionResult> DeleteTblProduct(string id)
-    //    //{
-    //    //    var tblProduct = await iProductService.TblProducts.FindAsync(id);
-    //    //    if (tblProduct == null)
-    //    //    {
-    //    //        return NotFound();
-    //    //    }
-
-    //    //    iProductService.TblProducts.Remove(tblProduct);
-    //    //    await iProductService.SaveChangesAsync();
-
-    //    //    return NoContent();
-    //    //}
-
-    //    //private bool TblProductExists(string id)
-    //    //{
-    //    //    return iProductService.TblProducts.Any(e => e.ProductId == id);
-    //    //}
-    //}
 }

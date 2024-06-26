@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects;
+using BusinessObjects.ResponseModels;
 using DAOs;
 
 namespace Repositories.Implement
@@ -22,6 +23,9 @@ namespace Repositories.Implement
 
         public TblCustomer GetCustomerByAccount(string username)
             => customerDAO.GetCustomerByAccount(username);
+
+        public LoginResponse GetCustomerByAccountForLogin(string username)
+            => customerDAO.GetCustomerByAccountForLogin(username);
 
         public TblCustomer GetCustomerByID(int customerID)
             => customerDAO.GetCustomerByID(customerID);

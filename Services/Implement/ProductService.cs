@@ -9,11 +9,13 @@ using BusinessObjects;
 using BusinessObjects.RequestModels;
 using BusinessObjects.ResponseModels;
 using DAOs;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Repositories;
 using Repositories.Implement;
 using Services.DTOs.Request;
 using Services.DTOs.Response;
+using Microsoft.Extensions.Logging;
 
 namespace Services.Implement
 {
@@ -25,7 +27,8 @@ namespace Services.Implement
         private readonly IMaterialCategoryRepository materialCategoryRepository;
         private readonly IGemRepository gemRepository;
         private readonly IMaterialPriceListRepository materialPriceListRepository;
-        public ProductService(IProductRepository _productRepository, IProductCategoryRepository _productCategoryRepository, IProductMaterialRepository _productMaterialRepository, IMaterialCategoryRepository _materialCategoryRepository, IGemRepository _gemRepository, IMaterialPriceListRepository _materialPriceLisRepository)
+        private readonly ILogger<ProductService> _logger;
+        public ProductService(IProductRepository _productRepository, IProductCategoryRepository _productCategoryRepository, IProductMaterialRepository _productMaterialRepository, IMaterialCategoryRepository _materialCategoryRepository, IGemRepository _gemRepository, IMaterialPriceListRepository _materialPriceLisRepository, ILogger<ProductService> logger)
         {
             productRepository = _productRepository;
             productCategoryRepository = _productCategoryRepository;
@@ -33,6 +36,7 @@ namespace Services.Implement
             materialCategoryRepository = _materialCategoryRepository;
             gemRepository = _gemRepository;
             materialPriceListRepository = _materialPriceLisRepository;
+            _logger = logger;
         }
 
         public async Task<double> CalculateProductPriceAsync(string productId)
@@ -50,7 +54,10 @@ namespace Services.Implement
             foreach (var product in productList)
             {
                 var productWithPrice = await GetProductAndPriceByIdAsync(product.ProductId);
-                productWithPriceList.Add(productWithPrice);
+                if (productWithPrice != null)
+                {
+                    productWithPriceList.Add(productWithPrice);
+                }
             }
             return productWithPriceList;
         }
@@ -117,6 +124,13 @@ namespace Services.Implement
             var price = await productRepository.CalculateProductPriceAsync(productId);
             var productMaterial = productMaterialRepository.GetProductMaterialProductID(productId);
             var gem = gemRepository.GetGemByProduct(productId);
+
+            if (productMaterial == null || gem == null)
+            {
+                _logger.LogError("Product material or gem is null for product ID: {ProductId}", productId);
+                return null;
+            }
+
             return new ProductWithPriceResponse
             {
                 ProductId = product.ProductId,
