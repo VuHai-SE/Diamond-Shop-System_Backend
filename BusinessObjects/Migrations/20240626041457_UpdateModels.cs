@@ -402,7 +402,8 @@ namespace BusinessObjects.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     OrderDetailID = table.Column<int>(type: "int", nullable: true),
                     WarrantyStartDate = table.Column<DateTime>(type: "datetime", nullable: true),
-                    WarrantyEndDate = table.Column<DateTime>(type: "datetime", nullable: true)
+                    WarrantyEndDate = table.Column<DateTime>(type: "datetime", nullable: true),
+                    WarrantyPdf = table.Column<byte[]>(type: "varbinary(max)", nullable: true)
                 },
                 constraints: table =>
                 {

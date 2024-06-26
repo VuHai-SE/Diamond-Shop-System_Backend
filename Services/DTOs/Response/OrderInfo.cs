@@ -23,7 +23,7 @@ namespace Services.DTOs.Response
         public double? TotalPrice { get; set; } = 0;
         public double? DiscountRate { get; set; }
         public double? FinalPrice { get; set; } = 0;
-        public DateTime? OrderDate { get; set; }
+        public DateTime OrderDate { get; set; }
         public string? OrderStatus { get; set; }
         public DateTime? ShippingDate { get; set; }
         public DateTime? ReceiveDate { get; set; }

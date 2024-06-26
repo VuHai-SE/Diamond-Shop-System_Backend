@@ -11,5 +11,6 @@ namespace Services
     {
         public TblOrderDetail AddOrderDetail(TblOrderDetail orderDetail);
         public List<TblOrderDetail> GetOrderDetailsByOrderID(int orderID);
+        public TblOrderDetail GetOrderDetailByID(int orderDetailID);
     }
 }
