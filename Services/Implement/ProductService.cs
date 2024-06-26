@@ -54,7 +54,10 @@ namespace Services.Implement
             foreach (var product in productList)
             {
                 var productWithPrice = await GetProductAndPriceByIdAsync(product.ProductId);
-                productWithPriceList.Add(productWithPrice);
+                if (productWithPrice != null)
+                {
+                    productWithPriceList.Add(productWithPrice);
+                }
             }
             return productWithPriceList;
         }
