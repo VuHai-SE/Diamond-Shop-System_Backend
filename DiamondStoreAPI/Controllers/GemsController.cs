@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BusinessObjects;
 using Services;
 using Services.Implement;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DiamondStoreAPI.Controllers
 {
@@ -24,6 +25,7 @@ namespace DiamondStoreAPI.Controllers
 
         // GET: api/Gems
         [HttpGet]
+        
         public async Task<ActionResult<IEnumerable<TblGem>>> GetTblGems()
         {
             if (iGemService.GetGems() == null)

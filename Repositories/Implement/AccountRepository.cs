@@ -22,6 +22,11 @@ namespace Repositories.Implement
             return await _accountDAO.GetAccountByUsernameAsync(username);
         }
 
+        public async Task AddAccountAsync(TblAccount account)
+        {
+            await _accountDAO.AddAccountAsync(account);
+        }
+
         public TblAccount AddAccount(TblAccount account)
         {
             return _accountDAO.AddAccount(account);
