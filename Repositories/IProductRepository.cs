@@ -29,6 +29,10 @@ namespace Repositories
 
         Task<GenericResponse> CreateProductAsync(CreateProductRequest request);
 
+        Task<GenericResponse> UpdateProductAsync(string productId, CreateProductRequest request);
+
+        Task<GenericResponse> DeleteProductAsync(string productId);
+
         Task UpdateAsync(string id, TblProduct product);
 
         Task SaveChangesAsync();
