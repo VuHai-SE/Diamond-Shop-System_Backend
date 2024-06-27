@@ -214,7 +214,7 @@ namespace DAOs
             }
 
             //Check gemID đã dùng cho product khác chưa
-            if (_context.TblProductGems.Any(pg => pg.GemId.Equals(request.GemId)))
+            if (_context.TblProductGems.Any(pg => (pg.GemId.Equals(request.GemId) && !pg.ProductId.Equals(productId))))
             {
                 return new GenericResponse
                 {
