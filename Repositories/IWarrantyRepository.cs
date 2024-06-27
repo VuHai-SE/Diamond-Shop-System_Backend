@@ -16,6 +16,6 @@ namespace Repositories
         public TblWarranty GetWarrantyOrderDetailID(int orderDetailID);
 
         public TblWarranty AddWarranty(TblWarranty warranty);
-        public void SaveWarrantyPdf(int warrantyId, byte[] bytes);
+        public void SaveWarrantyImg(int warrantyId, byte[] bytes);
     }
 }

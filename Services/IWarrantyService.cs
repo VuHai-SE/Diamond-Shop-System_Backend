@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects;
+using Services.DTOs.Response;
 
 namespace Services
 {
@@ -15,6 +16,7 @@ namespace Services
         public TblWarranty GetWarrantyOrderDetailID(int orderDetailID);
 
         public TblWarranty AddWarranty(TblWarranty warranty);
-        public void SaveWarrantyPdf(int warrantyId, byte[] bytes);
+        public void SaveWarrantyImg(int warrantyId, byte[] bytes);
+        Task<WarrantyResponse> GetWarrantyInfo(int orderDetailID);
     }
 }

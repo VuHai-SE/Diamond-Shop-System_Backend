@@ -29,7 +29,7 @@ namespace Repositories.Implement
         public TblWarranty GetWarrantyOrderDetailID(int orderDetailID)
             => _warrantyDAO.GetWarrantyOrderDetailID(orderDetailID);
 
-        public void SaveWarrantyPdf(int warrantyId, byte[] bytes)
+        public void SaveWarrantyImg(int warrantyId, byte[] bytes)
         {
             var warranty = _warrantyDAO.GetWarrantyByID(warrantyId);
             if (warranty != null)
