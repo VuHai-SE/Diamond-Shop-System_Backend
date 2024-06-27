@@ -74,6 +74,29 @@ namespace Services.Implement
             _customerRepository.AddCustomer(customer);
         }
 
+        public async Task<string> ForgotPasswordAsync(ForgotPasswordRequest request)
+        {
+            var account = await _accountRepository.GetAccountByUsernameAsync(request.Username);
+            if (account == null)
+            {
+                return "Account not found.";
+            }
+
+            if (!BCrypt.Net.BCrypt.Verify(request.OldPassword, account.Password))
+            {
+                return "Old password does not match.";
+            }
+
+            if (BCrypt.Net.BCrypt.Verify(request.NewPassword, account.Password))
+            {
+                return "New password cannot be the same as the old password.";
+            }
+
+            await _accountRepository.UpdatePasswordAsync(request.Username, request.NewPassword);
+            return "Password updated successfully.";
+        }
+
+
         public async Task<TblAccount> GetAccountByUsernameAsync(string username)
             => await _accountRepository.GetAccountByUsernameAsync(username);
 
