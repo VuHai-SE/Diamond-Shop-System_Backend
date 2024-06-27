@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects;
 using Repositories;
+using Services.DTOs.Request;
 using Services.DTOs.Response;
 
 namespace Services.Implement
@@ -67,5 +68,42 @@ namespace Services.Implement
 
         public bool UpdateMaterialPriceList(int id, TblMaterialPriceList materialPriceList)
             => materialPriceListRepository.UpdateMaterialPriceList(id, materialPriceList);
+
+        public async Task<string> CreateMaterialAsync(CreateMaterialRequest request)
+        {
+            if (materialPriceListRepository.IsMaterialIdExists(request.MaterialId))
+            {
+                return "Material ID already exists.";
+            }
+
+            if (materialPriceListRepository.IsMaterialNameExists(request.MaterialName))
+            {
+                return "Material Name already exists.";
+            }
+
+            var currentDate = DateTime.UtcNow;
+            if (request.EffDate > currentDate.AddHours(48) || request.EffDate < currentDate.AddMonths(-6))
+            {
+                return "Effective date must be within the last 6 months and not more than 48 hours in the future.";
+            }
+
+            var materialCategory = new TblMaterialCategory
+            {
+                MaterialId = request.MaterialId,
+                MaterialName = request.MaterialName
+            };
+
+            var materialPriceList = new TblMaterialPriceList
+            {
+                MaterialId = request.MaterialId,
+                UnitPrice = request.UnitPrice,
+                EffDate = request.EffDate
+            };
+
+            materialCategoryRepository.AddMaterialCategory(materialCategory);
+            materialPriceListRepository.AddMaterialPriceList(materialPriceList);
+
+            return "Material created successfully.";
+        }
     }
 }

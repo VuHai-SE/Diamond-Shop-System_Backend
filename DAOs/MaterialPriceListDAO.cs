@@ -55,5 +55,11 @@ namespace DAOs
         {
             return false;
         }
+
+        public bool IsMaterialIdExists(string materialId)
+        => dbContext.TblMaterialCategories.Any(mc => mc.MaterialId.Equals(materialId));
+
+        public bool IsMaterialNameExists(string materialName)
+            => dbContext.TblMaterialCategories.Any(mc => mc.MaterialName.Equals(materialName));
     }
 }

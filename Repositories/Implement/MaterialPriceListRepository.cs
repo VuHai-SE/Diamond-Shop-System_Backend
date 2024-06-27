@@ -34,5 +34,11 @@ namespace Repositories.Implement
 
         public bool UpdateMaterialPriceList(int id, TblMaterialPriceList materialPriceList)
            => materialPriceListDAO.UpdateMaterialPriceList(id, materialPriceList);
+
+        public bool IsMaterialIdExists(string materialId)
+        => materialPriceListDAO.IsMaterialIdExists(materialId);
+
+        public bool IsMaterialNameExists(string materialName)
+            => materialPriceListDAO.IsMaterialNameExists(materialName);
     }
 }

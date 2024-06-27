@@ -59,6 +59,19 @@ namespace DiamondStoreAPI.Controllers
             return material;
         }
 
+        [HttpPost("CreateMaterial")]
+        public async Task<IActionResult> CreateMaterial([FromBody] CreateMaterialRequest request)
+        {
+            var result = await iMaterialPriceListService.CreateMaterialAsync(request);
+
+            if (result == "Material ID already exists." || result == "Material Name already exists." || result.Contains("Effective date must be within"))
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
         // PUT: api/MaterialPriceLists/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("UpdateUnitPrice")]

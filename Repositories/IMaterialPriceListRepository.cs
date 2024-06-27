@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects;
+using DAOs;
 using Microsoft.EntityFrameworkCore;
 
 namespace Repositories
@@ -11,6 +12,7 @@ namespace Repositories
     public interface IMaterialPriceListRepository
     {
         public List<TblMaterialPriceList> GetMaterialPriceLists();
+
         public TblMaterialPriceList GetMaterialPriceList(int id);
 
         public TblMaterialPriceList AddMaterialPriceList(TblMaterialPriceList materialPriceList);
@@ -18,6 +20,11 @@ namespace Repositories
         public bool UpdateMaterialPriceList(int id, TblMaterialPriceList materialPriceList);
 
         public bool DeleteMaterialPriceList(int id);
+
         public TblMaterialPriceList GetMaterialPriceByMaterialID(string materialID);
+
+        public bool IsMaterialIdExists(string materialId);
+
+        public bool IsMaterialNameExists(string materialName);
     }
 }
