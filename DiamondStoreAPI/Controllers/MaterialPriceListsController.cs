@@ -42,7 +42,7 @@ namespace DiamondStoreAPI.Controllers
         }
 
         // GET: api/MaterialPriceLists/5
-        [HttpGet("{id}")]
+        [HttpGet("{materialId}")]
         public async Task<ActionResult<MaterialResponse>> GetMaterial(string id)
         {
             if (iMaterialPriceListService.GetMaterialList().IsNullOrEmpty())
@@ -57,6 +57,42 @@ namespace DiamondStoreAPI.Controllers
             }
 
             return material;
+        }
+
+        // POST: api/MaterialPriceLists
+        [HttpPost]
+        public async Task<IActionResult> CreateMaterial([FromBody] CreateMaterialRequest request)
+        {
+            var result = await iMaterialPriceListService.CreateMaterialAsync(request);
+
+            if (result == "Material ID already exists." || result == "Material Name already exists." || result.Contains("Effective date must be within"))
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
+        [HttpDelete("{materialId}")]
+        public async Task<IActionResult> DeleteMaterial(string materialId)
+        {
+            if (!iMaterialPriceListService.IsMaterialIdExists(materialId))
+            {
+                return NotFound("Material ID does not exist.");
+            }
+
+            if (iMaterialPriceListService.IsMaterialIdInProductMaterial(materialId))
+            {
+                return BadRequest("Material ID is being used in products and cannot be deleted.");
+            }
+
+            var result = iMaterialPriceListService.DeleteMaterial(materialId);
+            if (!result)
+            {
+                return BadRequest("Failed to delete material.");
+            }
+
+            return Ok("Material deleted successfully.");
         }
 
         // PUT: api/MaterialPriceLists/5
@@ -80,37 +116,5 @@ namespace DiamondStoreAPI.Controllers
             }
             return Ok();
         }
-
-        // POST: api/MaterialPriceLists
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<TblMaterialPriceList>> PostTblMaterialPriceList(TblMaterialPriceList tblMaterialPriceList)
-        {
-            if (iMaterialPriceListService.GetMaterialList() == null)
-            {
-                return NotFound();
-            }
-            
-            var newMaterialPriceList = iMaterialPriceListService.AddMaterialPriceList(tblMaterialPriceList);
-            return CreatedAtAction("GetTblMaterialPriceList", new { id = tblMaterialPriceList.Id }, tblMaterialPriceList);
-        }
-
-        // DELETE: api/MaterialPriceLists/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteTblMaterialPriceList(int id)
-        //{
-        //    if (iMaterialPriceListService.GetMaterialPriceLists() == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    var isDelete = iMaterialPriceListService.DeleteMaterialPriceList(id);
-
-        //    return NoContent();
-        //}
-
-        //private bool TblMaterialPriceListExists(int id)
-        //{
-        //    return iMaterialPriceListService.TblMaterialPriceLists.Any(e => e.Id == id);
-        //}
     }
 }

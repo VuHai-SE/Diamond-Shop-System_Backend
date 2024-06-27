@@ -29,8 +29,9 @@ namespace Services.Implement
         private readonly IAccountRepository _accountRepository;
         private readonly ISaleStaffRepository _saleStaffRepository;
         private readonly IShipperRepository _shipperRepository;
+        private readonly IWarrantyRepository _warrantyRepository;
 
-        public OrderService(IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository, ICustomerRepository customerRepository, IProductRepository productRepository, IProductMaterialRepository productMaterialRepository, IMaterialCategoryRepository materialCategoryRepository, IPaymentRepository paymentRepository, IAccountRepository accountRepository, ISaleStaffRepository saleStaffRepository, IShipperRepository shipperRepository)
+        public OrderService(IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository, ICustomerRepository customerRepository, IProductRepository productRepository, IProductMaterialRepository productMaterialRepository, IMaterialCategoryRepository materialCategoryRepository, IPaymentRepository paymentRepository, IAccountRepository accountRepository, ISaleStaffRepository saleStaffRepository, IShipperRepository shipperRepository, IWarrantyRepository warrantyRepository)
         {
             _orderDetailRepository = orderDetailRepository;
             _customerRepository = customerRepository;
@@ -42,6 +43,7 @@ namespace Services.Implement
             _accountRepository = accountRepository;
             _saleStaffRepository = saleStaffRepository;
             _shipperRepository = shipperRepository;
+            _warrantyRepository = warrantyRepository;
         }
 
         public async Task<bool> UpdateOrderStatus(OrderStatusRequest request)
@@ -87,6 +89,17 @@ namespace Services.Implement
                     order.ReceiveDate = request.ReceivedDate;
                     order.ShipStatus = _accountRepository.GetAccountSaleStaff(order.StaffId).Username
                         + "," + _accountRepository.GetAccountShipper(order.ShipperId).Username + "-Done";
+                    var orderInfor = GetOrderInfo(order.OrderId);
+                    foreach (var product in orderInfor.products)
+                    {
+                        var newWarranty = new TblWarranty()
+                        {
+                            OrderDetailId = product.OrderDetailID,
+                            WarrantyStartDate = orderInfor.OrderDate.Date,
+                            WarrantyEndDate = orderInfor.OrderDate.Date.AddYears(1),
+                        };
+                        var createdWarranty = _warrantyRepository.AddWarranty(newWarranty);
+                    }
                 }   
                 else if (request.ButtonValue.Equals("CANCEL"))
                 {
@@ -185,7 +198,7 @@ namespace Services.Implement
                     orderInfo.Shipper = accShipper.Username;
                 }
                 orderInfo.DiscountRate = customer.DiscountRate;
-                orderInfo.OrderDate = order.OrderDate;
+                orderInfo.OrderDate = (DateTime)order.OrderDate;
                 orderInfo.OrderStatus = order.OrderStatus;
                 orderInfo.ShippingDate = order.ShippingDate;
                 orderInfo.ReceiveDate = order.ReceiveDate;
@@ -199,6 +212,7 @@ namespace Services.Implement
                     var productMaterial = _productMaterialRepository.GetProductMaterialProductID(product.ProductId);
                     orderInfo.products.Add(new ProductBuyingResponse()
                     {
+                        OrderDetailID = orderDetail.OrderDetailId,
                         ProductID = product.ProductId,
                         ProductName = product.ProductName,
                         Material = _materialCategoryRepository.GetMaterialCategory(productMaterial.MaterialId).MaterialName,

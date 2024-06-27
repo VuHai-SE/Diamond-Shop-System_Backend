@@ -34,6 +34,9 @@ namespace Services.Implement
         public List<TblCustomer> GetCustomers()
             => customerRepository.GetCustomers();
 
+        public Task<GenericResponse> UpdateCustomerProfileAsync(int customerId, UpdateCustomerProfileRequest request)
+        => customerRepository.UpdateCustomerProfileAsync(customerId, request);
+
         public bool IsEmailExisted(string email)
             => customerRepository.IsEmailExisted(email);
 

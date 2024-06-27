@@ -35,5 +35,8 @@ namespace DAOs
             }
             return new List<TblOrderDetail>();
         }
+
+        public TblOrderDetail GetOrderDetailByID(int orderDetailID)
+            => dbContext.TblOrderDetails.FirstOrDefault(o => o.OrderDetailId.Equals(orderDetailID));
     }
 }

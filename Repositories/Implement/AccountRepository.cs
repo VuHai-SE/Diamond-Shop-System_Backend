@@ -32,6 +32,11 @@ namespace Repositories.Implement
             return _accountDAO.AddAccount(account);
         }
 
+        public async Task UpdatePasswordAsync(string username, string newPassword)
+        {
+            await _accountDAO.UpdatePasswordAsync(username, newPassword);
+        }
+
         public async Task AddAccountByManagerAsync(TblAccount account)
         {
             _accountDAO.AddAccount(account);

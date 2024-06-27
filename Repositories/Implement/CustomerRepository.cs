@@ -36,6 +36,9 @@ namespace Repositories.Implement
         public TblCustomer AddCustomer(TblCustomer customer)
             => customerDAO.AddCustomer(customer);
 
+        public Task<GenericResponse> UpdateCustomerProfileAsync(int customerId, UpdateCustomerProfileRequest request)
+        => customerDAO.UpdateCustomerProfileAsync(customerId, request);
+
         public bool IsEmailExisted(string email)
             => customerDAO.IsEmailExisted(email);
 

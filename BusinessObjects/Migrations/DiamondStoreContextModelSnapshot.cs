@@ -656,6 +656,9 @@ namespace BusinessObjects.Migrations
                     b.Property<DateTime?>("WarrantyEndDate")
                         .HasColumnType("datetime");
 
+                    b.Property<byte[]>("WarrantyPdf")
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<DateTime?>("WarrantyStartDate")
                         .HasColumnType("datetime");
 

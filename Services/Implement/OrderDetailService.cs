@@ -24,6 +24,9 @@ namespace Services.Implement
         public TblOrderDetail AddOrderDetail(TblOrderDetail orderDetail)
             => orderDetailRepository.AddOrderDetail(orderDetail);
 
+        public TblOrderDetail GetOrderDetailByID(int orderDetailID)
+            => orderDetailRepository.GetOrderDetailByID(orderDetailID);
+
         public List<TblOrderDetail> GetOrderDetailsByOrderID(int orderID)
             => orderDetailRepository.GetOrderDetailsByOrderID(orderID);
     }

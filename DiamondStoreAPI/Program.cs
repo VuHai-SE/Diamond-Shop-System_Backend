@@ -1,4 +1,4 @@
-using BusinessObjects;
+﻿using BusinessObjects;
 using DAOs;
 using Microsoft.EntityFrameworkCore;
 using Repositories.Implement;
@@ -114,6 +114,10 @@ services.AddScoped<IMaterialPriceListService, MaterialPriceListService>();
 services.AddScoped<GemPriceListDAO>();
 services.AddScoped<IGemPriceListRepository, GemPriceListRepository>();
 services.AddScoped<IGemPriceListService, GemPriceListService>();
+
+services.AddScoped<WarrantyDAO>();
+services.AddScoped<IWarrantyRepository, WarrantyRepository>();
+services.AddScoped<IWarrantyService, WarrantyService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

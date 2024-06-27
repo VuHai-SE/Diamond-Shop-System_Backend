@@ -55,5 +55,33 @@ namespace DAOs
         {
             return false;
         }
+
+        // Method to check if a MaterialId exists
+        public bool IsMaterialIdExists(string materialId)
+        => dbContext.TblMaterialCategories.Any(mc => mc.MaterialId.Equals(materialId));
+
+        // Method to check if a MaterialName exists
+        public bool IsMaterialNameExists(string materialName)
+            => dbContext.TblMaterialCategories.Any(mc => mc.MaterialName.Equals(materialName));
+
+        // Method to check if a MaterialId exists in TblProductMaterial
+        public bool IsMaterialIdInProductMaterial(string materialId)
+            => dbContext.TblProductMaterials.Any(pm => pm.MaterialId.Equals(materialId));
+
+        // Method to delete a Material
+        public bool DeleteMaterial(string materialId)
+        {
+            var material = dbContext.TblMaterialCategories.FirstOrDefault(mc => mc.MaterialId.Equals(materialId));
+            if (material == null)
+            {
+                return false;
+            }
+
+            var materialPriceList = dbContext.TblMaterialPriceLists.Where(mp => mp.MaterialId.Equals(materialId)).ToList();
+            dbContext.TblMaterialPriceLists.RemoveRange(materialPriceList);
+            dbContext.TblMaterialCategories.Remove(material);
+            dbContext.SaveChanges();
+            return true;
+        }
     }
 }

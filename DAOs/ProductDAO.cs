@@ -84,6 +84,16 @@ namespace DAOs
                 };
             }
 
+            //Check gemID đã dùng cho product khác chưa
+            if (_context.TblProductGems.Any(pg => pg.GemId.Equals(request.GemId)))
+            {
+                return new GenericResponse
+                {
+                    Success = false,
+                    Message = "This GemID have already used for another Product!"
+                };
+            }
+
             // Bước 3: Tự động tạo mới productId
             //var productCount = await _context.TblProducts.CountAsync();
             //var newProductId = $"P{(productCount + 1).ToString("D3")}";
@@ -200,6 +210,16 @@ namespace DAOs
                 {
                     Success = false,
                     Message = "MaterialID not found."
+                };
+            }
+
+            //Check gemID đã dùng cho product khác chưa
+            if (_context.TblProductGems.Any(pg => pg.GemId.Equals(request.GemId)))
+            {
+                return new GenericResponse
+                {
+                    Success = false,
+                    Message = "This GemID have already used for another Product!"
                 };
             }
 

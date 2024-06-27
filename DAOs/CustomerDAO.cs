@@ -62,6 +62,37 @@ namespace DAOs
             return customer;
         }
 
+        //Update customer profile
+        public async Task<GenericResponse> UpdateCustomerProfileAsync(int customerId, UpdateCustomerProfileRequest request)
+        {
+            var customer = await dbContext.TblCustomers.FirstOrDefaultAsync(c => c.CustomerId == customerId);
+            if (customer == null)
+            {
+                return new GenericResponse
+                {
+                    Success = false,
+                    Message = "Customer not found."
+                };
+            }
+
+            customer.FirstName = request.FirstName ?? customer.FirstName;
+            customer.LastName = request.LastName ?? customer.LastName;
+            customer.Gender = request.Gender ?? customer.Gender;
+            customer.Birthday = request.Birthday ?? customer.Birthday;
+            customer.PhoneNumber = request.PhoneNumber ?? customer.PhoneNumber;
+            customer.Address = request.Address ?? customer.Address;
+
+            dbContext.TblCustomers.Update(customer);
+            await dbContext.SaveChangesAsync();
+
+            return new GenericResponse
+            {
+                Success = true,
+                Message = "Customer profile updated successfully."
+            };
+        }
+
+
         public bool IsEmailExisted(string email)
             => dbContext.TblCustomers.Any(c => c.Email.Equals(email));
 

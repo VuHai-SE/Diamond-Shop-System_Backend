@@ -14,6 +14,8 @@ namespace Repositories
 
         Task AddAccountAsync(TblAccount account);
 
+        Task UpdatePasswordAsync(string username, string newPassword);
+
         public TblAccount AddAccount(TblAccount account);
 
         Task AddAccountByManagerAsync(TblAccount account);
