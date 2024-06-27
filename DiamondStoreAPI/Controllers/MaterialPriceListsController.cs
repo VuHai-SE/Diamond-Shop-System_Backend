@@ -59,7 +59,8 @@ namespace DiamondStoreAPI.Controllers
             return material;
         }
 
-        [HttpPost("CreateMaterial")]
+        // POST: api/MaterialPriceLists
+        [HttpPost]
         public async Task<IActionResult> CreateMaterial([FromBody] CreateMaterialRequest request)
         {
             var result = await iMaterialPriceListService.CreateMaterialAsync(request);
@@ -93,37 +94,5 @@ namespace DiamondStoreAPI.Controllers
             }
             return Ok();
         }
-
-        // POST: api/MaterialPriceLists
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<TblMaterialPriceList>> PostTblMaterialPriceList(TblMaterialPriceList tblMaterialPriceList)
-        {
-            if (iMaterialPriceListService.GetMaterialList() == null)
-            {
-                return NotFound();
-            }
-            
-            var newMaterialPriceList = iMaterialPriceListService.AddMaterialPriceList(tblMaterialPriceList);
-            return CreatedAtAction("GetTblMaterialPriceList", new { id = tblMaterialPriceList.Id }, tblMaterialPriceList);
-        }
-
-        // DELETE: api/MaterialPriceLists/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteTblMaterialPriceList(int id)
-        //{
-        //    if (iMaterialPriceListService.GetMaterialPriceLists() == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    var isDelete = iMaterialPriceListService.DeleteMaterialPriceList(id);
-
-        //    return NoContent();
-        //}
-
-        //private bool TblMaterialPriceListExists(int id)
-        //{
-        //    return iMaterialPriceListService.TblMaterialPriceLists.Any(e => e.Id == id);
-        //}
     }
 }

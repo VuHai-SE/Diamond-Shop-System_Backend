@@ -35,10 +35,20 @@ namespace Repositories.Implement
         public bool UpdateMaterialPriceList(int id, TblMaterialPriceList materialPriceList)
            => materialPriceListDAO.UpdateMaterialPriceList(id, materialPriceList);
 
+        // Method to check if a MaterialId exists
         public bool IsMaterialIdExists(string materialId)
         => materialPriceListDAO.IsMaterialIdExists(materialId);
 
+        // Method to check if a MateriaName exists
         public bool IsMaterialNameExists(string materialName)
             => materialPriceListDAO.IsMaterialNameExists(materialName);
+
+        // Method to check if a MaterialId exists in TblProductMaterial
+        public bool IsMaterialIdInProductMaterial(string materialId)
+            => materialPriceListDAO.IsMaterialIdInProductMaterial(materialId);
+
+        // Method to delete a Material
+        public bool DeleteMaterial(string materialId)
+            => materialPriceListDAO.DeleteMaterial(materialId);
     }
 }

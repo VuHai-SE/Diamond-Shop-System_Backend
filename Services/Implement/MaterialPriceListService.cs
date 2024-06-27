@@ -105,5 +105,17 @@ namespace Services.Implement
 
             return "Material created successfully.";
         }
+
+        // Method to check if a MaterialId exists
+        public bool IsMaterialIdExists(string materialId)
+            => materialPriceListRepository.IsMaterialIdExists(materialId);
+
+        // Method to check if a MaterialId exists in TblProductMaterial
+        public bool IsMaterialIdInProductMaterial(string materialId)
+            => materialPriceListRepository.IsMaterialIdInProductMaterial(materialId);
+
+        // Method to delete a Material
+        public bool DeleteMaterial(string materialId)
+            => materialPriceListRepository.DeleteMaterial(materialId);
     }
 }

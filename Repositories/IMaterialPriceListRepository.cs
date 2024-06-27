@@ -23,8 +23,16 @@ namespace Repositories
 
         public TblMaterialPriceList GetMaterialPriceByMaterialID(string materialID);
 
+        // Method to check if a MaterialId exists
         public bool IsMaterialIdExists(string materialId);
 
+        // Method to check if a MaterialName exists
         public bool IsMaterialNameExists(string materialName);
+
+        // Method to check if a MaterialId exists in TblProductMaterial
+        public bool IsMaterialIdInProductMaterial(string materialId);
+
+        // Method to delete a Material
+        public bool DeleteMaterial(string materialId);
     }
 }
