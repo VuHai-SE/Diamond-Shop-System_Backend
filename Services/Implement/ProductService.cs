@@ -61,7 +61,7 @@ namespace Services.Implement
             }
             return productWithPriceList;
         }
-
+        
         public async Task<List<ProductWithPriceResponse>> FilterProducts(ProductFilterCriteria criteria)
         {
             var productWithPriceList = await GetAllProductsAndPricesAsync();
@@ -137,6 +137,13 @@ namespace Services.Implement
                 ProductName = product.ProductName,
                 ProductCode = product.ProductCode,
                 Description = product.Description,
+                CategoryID = product.CategoryId,//add mới cho Triều
+                GemCost = (decimal?)product.GemCost, //add mới cho Triều
+                ProductionCost = (decimal?)product.ProductionCost, //add mới cho Triều
+                PriceRate = (decimal?)product.PriceRate, //add mới cho Triều
+                GemId = gem.GemId,//add mới cho Triều
+                MaterialId = productMaterial.MaterialId,//add mới cho Triều
+                Weight = productMaterial.Weight,//add mới cho Triều
                 Category = productCategoryRepository.GetProductCategory(product.CategoryId).CategoryName,
                 Material = materialCategoryRepository.GetMaterialCategory(productMaterial.MaterialId).MaterialName,
                 GemOrigin = (gem.Origin == true) ? "Natural" : "Synthetic",

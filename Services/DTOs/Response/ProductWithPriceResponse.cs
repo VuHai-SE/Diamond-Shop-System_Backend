@@ -10,13 +10,16 @@ namespace Services.DTOs.Response
     public class ProductWithPriceResponse
     {
         public string ProductId { get; set; } = null!;
-
         public string? ProductName { get; set; }
-
         public string? ProductCode { get; set; }
-
         public string? Description { get; set; }
-
+        public string? CategoryID { get; set; } //add mới cho Triều
+        public decimal? GemCost { get; set; } //add mới cho Triều
+        public decimal? ProductionCost { get; set; } //add mới cho Triều
+        public decimal? PriceRate { get; set; } //add mới cho Triều
+        public string? GemId { get; set; } //add mới cho Triều
+        public string? MaterialId { get; set; } //add mới cho Triều
+        public double? Weight { get; set; } //add mới cho Triều
         public string? Category { get; set; }
         public string? Material {  get; set; }
         public string? GemOrigin { get; set; }
@@ -27,7 +30,6 @@ namespace Services.DTOs.Response
         public int? ProductSize { get; set; }
         public string? Image { get; set; }
         public bool? Status { get; set; }
-
         public double? UnitSizePrice { get; set; }
         public string? Gender { get; set; }
         public double? ProductPrice { get; set; }
