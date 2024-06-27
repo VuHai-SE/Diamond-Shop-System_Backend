@@ -1,5 +1,7 @@
-﻿using BusinessObjects;
+﻿using BCrypt.Net;
+using BusinessObjects;
 using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Crypto.Generators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +35,17 @@ namespace DAOs
             _context.TblAccounts.Add(account);
             _context.SaveChanges();
             return account;
+        }
+
+        public async Task UpdatePasswordAsync(string username, string newPassword)
+        {
+            var account = await _context.TblAccounts.FirstOrDefaultAsync(a => a.Username.Equals(username));
+            if (account != null)
+            {
+                account.Password = BCrypt.Net.BCrypt.HashPassword(newPassword);
+                _context.TblAccounts.Update(account);
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task AddAccountByManagerAsync(TblAccount account)

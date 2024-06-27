@@ -38,18 +38,6 @@ namespace DiamondStoreAPI.Controllers
             _jwtSecret = _configuration.GetValue<string>("Jwt:Day_la_key_JWT");
         }
 
-        //[HttpPost("login")]
-        //public async Task<IActionResult> Login([FromBody] Services.DTOs.Request.LoginRequest request)
-        //{
-        //    var account = await _accountService.AuthenticateAsync(request.Username, request.Password);
-        //    if (account == null)
-        //    {
-        //        return Unauthorized();
-        //    }
-        //    var loginResponse = new LoginResponse() { Username = account.Username, Role = account.Role };
-        //    return Ok(loginResponse);
-        //}
-
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] Services.DTOs.Request.LoginRequest request)
         {
@@ -81,25 +69,45 @@ namespace DiamondStoreAPI.Controllers
             return Ok();
         }
 
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] Services.DTOs.Request.ForgotPasswordRequest request)
+        {
+            if (string.IsNullOrEmpty(request.Username) || string.IsNullOrEmpty(request.OldPassword) || string.IsNullOrEmpty(request.NewPassword))
+            {
+                return BadRequest("Username, old password, and new password must be provided.");
+            }
+
+            var result = await _accountService.ForgotPasswordAsync(request);
+
+            if (result == "Account not found.")
+            {
+                return NotFound(result);
+            }
+            else if (result == "Old password does not match." || result == "New password cannot be the same as the old password.")
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
+
         [HttpPost("CheckUsernameExist")]
         public async Task<IActionResult> CheckUsernameExist(string username)
         {
-            var isUsernameExist = _accountService.IsUsernameExisted(username);
-            return Ok(isUsernameExist);
+            return Ok(_accountService.IsUsernameExisted(username));
         }
 
         [HttpPost("CheckEmailExist")]
         public async Task<IActionResult> CheckEmailExist(string email)
         {
-            var isEmailExist = _customerService.IsEmailExisted(email);
-            return Ok(isEmailExist);
+            return Ok(_customerService.IsEmailExisted(email));
         }
 
         [HttpPost("CheckPhoneExist")]
         public async Task<IActionResult> CheckPhoneExist(string phone)
         {
-            var isPhoneExist = _customerService.isPhoneExisted(phone);
-            return Ok(isPhoneExist);
+            return Ok(_customerService.isPhoneExisted(phone));
         }
 
         private string GenerateJwtToken(TblAccount account)
