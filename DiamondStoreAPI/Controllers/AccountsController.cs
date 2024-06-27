@@ -69,6 +69,29 @@ namespace DiamondStoreAPI.Controllers
             return Ok();
         }
 
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] Services.DTOs.Request.ForgotPasswordRequest request)
+        {
+            if (string.IsNullOrEmpty(request.Username) || string.IsNullOrEmpty(request.OldPassword) || string.IsNullOrEmpty(request.NewPassword))
+            {
+                return BadRequest("Username, old password, and new password must be provided.");
+            }
+
+            var result = await _accountService.ForgotPasswordAsync(request);
+
+            if (result == "Account not found.")
+            {
+                return NotFound(result);
+            }
+            else if (result == "Old password does not match." || result == "New password cannot be the same as the old password.")
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
+
         [HttpPost("CheckUsernameExist")]
         public async Task<IActionResult> CheckUsernameExist(string username)
         {
