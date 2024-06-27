@@ -42,7 +42,7 @@ namespace DiamondStoreAPI.Controllers
         }
 
         // GET: api/MaterialPriceLists/5
-        [HttpGet("{id}")]
+        [HttpGet("{materialId}")]
         public async Task<ActionResult<MaterialResponse>> GetMaterial(string id)
         {
             if (iMaterialPriceListService.GetMaterialList().IsNullOrEmpty())
