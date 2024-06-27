@@ -43,7 +43,7 @@ namespace DiamondStoreAPI.Controllers
 
         [HttpPost("CreateProduct")]
         //[Authorize(Roles = "Admin,Manager")]
-        [Authorize(Roles = "Customer")]
+        //[Authorize(Roles = "Customer")]
         public async Task<IActionResult> CreateProduct([FromBody] CreateProductRequest request)
         {
             var result = await _productService.CreateProductAsync(request);
