@@ -20,68 +20,69 @@ public class WarrantyController : ControllerBase
         _orderDetailService = orderDetailService;
     }
 
-    [HttpPost("create")]
-    public async Task<IActionResult> CreateWarranty([FromBody] WarrantyRequest request)
+    [HttpGet("WarrantyInfo")]
+    public async Task<IActionResult> GetWarrantyInfo(int orderDetailID)
     {
-        var orderDetail = _orderDetailService.GetOrderDetailByID(request.OrderDetailID);
-        if (orderDetail == null) { return NotFound(); }
+        var warrantyInfor = await _warrantyService.GetWarrantyInfo(orderDetailID);
+        if (warrantyInfor == null) return NotFound();
+        return Ok(warrantyInfor);
+    }
 
-        // Kiểm tra xem Warranty đã tồn tại cho OrderDetail này chưa
-        var existingWarranty = _warrantyService.GetWarrantyOrderDetailID(request.OrderDetailID);
-        if (existingWarranty != null)
+    [HttpPost("SaveWarrantyImg")]
+    public async Task<IActionResult> SaveWarrantyImage(int warrantyId, IFormFile imageFile)
+    {
+        var warranty = _warrantyService.GetWarrantyByID(warrantyId);
+        if (warranty == null)
         {
-            return Conflict("A warranty already exists for this OrderDetailID.");
+            return NotFound();
+        }
+        {
+            
+        }
+        if (imageFile == null || imageFile.Length == 0)
+        {
+            return BadRequest("No image file provided.");
         }
 
-        var newWarranty = new TblWarranty()
+        if (Path.GetExtension(imageFile.FileName).ToLower() != ".jpg")
         {
-            OrderDetailId = request.OrderDetailID,
-            WarrantyStartDate = request.orderDate.Date,
-            WarrantyEndDate = request.orderDate.Date.AddYears(1),
-        };
-        var createdWarranty = _warrantyService.AddWarranty(newWarranty);
+            return BadRequest("Only JPG images are allowed.");
+        }
 
-        // Tạo PDF từ thông tin bảo hành
-        var pdfStream = GenerateWarrantyPdf(createdWarranty);
+        using (var memoryStream = new MemoryStream())
+        {
+            await imageFile.CopyToAsync(memoryStream);
+            var imageBytes = memoryStream.ToArray();
+            _warrantyService.SaveWarrantyImg(warrantyId, imageBytes);
+        }
 
-        // Lưu PDF vào cơ sở dữ liệu
-        _warrantyService.SaveWarrantyPdf(createdWarranty.WarrantyId, pdfStream.ToArray());
-
-        return Ok(createdWarranty.WarrantyPdf);
+        return Ok("Image uploaded successfully.");
     }
 
-    private MemoryStream GenerateWarrantyPdf(TblWarranty warranty)
-    {
-        // Đặt giấy phép cho GemBox.Document
-        ComponentInfo.SetLicense("FREE-LIMITED-KEY");
+    //[HttpPost("SaveWarrantyImg")]
+    //public IActionResult SaveWarrantyImage([FromBody] SaveWarrantyImageRequest request)
+    //{
+    //    var warranty = _warrantyService.GetWarrantyByID(request.WarrantyId);
+    //    if (warranty == null)
+    //    {
+    //        return NotFound();
+    //    }
 
-        // Đường dẫn tới mẫu PDF
-        string relativePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "warranty.pdf");
-        string templatePath = Path.GetFullPath(relativePath); // Chuyển đổi đường dẫn tương đối thành tuyệt đối
+    //    if (string.IsNullOrEmpty(request.Base64Image))
+    //    {
+    //        return BadRequest("No image data provided.");
+    //    }
 
-        // Tải mẫu PDF
-        var document = DocumentModel.Load(templatePath);
+    //    try
+    //    {
+    //        byte[] imageBytes = Convert.FromBase64String(request.Base64Image);
+    //        _warrantyService.SaveWarrantyImg(request.WarrantyId, imageBytes);
+    //    }
+    //    catch (FormatException)
+    //    {
+    //        return BadRequest("Invalid Base64 string.");
+    //    }
 
-        // Điền dữ liệu vào mẫu PDF
-        var warrantyIdField = document.Content.Find("ID").FirstOrDefault();
-        var productIdField = document.Content.Find("Product id:").FirstOrDefault();
-        var productNameField = document.Content.Find("Product name:").FirstOrDefault();
-        var warrantyPeriodField = document.Content.Find("Warranty period from:").FirstOrDefault();
-
-        if (warrantyIdField != null)
-            warrantyIdField.LoadText($"ID: {warranty.WarrantyId}");
-        if (productIdField != null)
-            productIdField.LoadText($"Product id: {warranty.OrderDetailId}"); // Cập nhật đúng trường thông tin
-        if (productNameField != null)
-            productNameField.LoadText("Product name: Example Product"); // Cập nhật đúng trường thông tin
-        if (warrantyPeriodField != null)
-            warrantyPeriodField.LoadText($"Warranty period from: {warranty.WarrantyStartDate?.ToShortDateString()} To: {warranty.WarrantyEndDate?.ToShortDateString()}");
-
-        // Lưu tài liệu sang PDF
-        MemoryStream stream = new MemoryStream();
-        document.Save(stream, SaveOptions.PdfDefault);
-        stream.Position = 0;
-
-        return stream;
-    }
+    //    return Ok("Image uploaded successfully.");
+    //}
 }
