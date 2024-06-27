@@ -73,6 +73,28 @@ namespace DiamondStoreAPI.Controllers
             return Ok(result);
         }
 
+        [HttpDelete("{materialId}")]
+        public async Task<IActionResult> DeleteMaterial(string materialId)
+        {
+            if (!iMaterialPriceListService.IsMaterialIdExists(materialId))
+            {
+                return NotFound("Material ID does not exist.");
+            }
+
+            if (iMaterialPriceListService.IsMaterialIdInProductMaterial(materialId))
+            {
+                return BadRequest("Material ID is being used in products and cannot be deleted.");
+            }
+
+            var result = iMaterialPriceListService.DeleteMaterial(materialId);
+            if (!result)
+            {
+                return BadRequest("Failed to delete material.");
+            }
+
+            return Ok("Material deleted successfully.");
+        }
+
         // PUT: api/MaterialPriceLists/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("UpdateUnitPrice")]
