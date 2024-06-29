@@ -15,6 +15,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Configuration;
 using Services.DTOs.Response;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace DiamondStoreAPI.Controllers
@@ -25,11 +26,11 @@ namespace DiamondStoreAPI.Controllers
     {
         private readonly IAccountService _accountService;
 
-        
+
         public AccountsController(IAccountService accountService)
         {
             _accountService = accountService;
-            
+
         }
 
         [HttpPost("login")]
@@ -50,5 +51,20 @@ namespace DiamondStoreAPI.Controllers
             await _accountService.RegisterAsync(request);
             return Ok();
         }
+        [HttpGet]
+        [Route("view/{id}")]
+        public async Task<IActionResult> ViewAccount(int id)
+        {
+            var account = await _accountService.GetAccountByIdAsync(id);
+            if (account == null)
+            {
+                return NotFound();
+            }
+            return Ok(account);
+        }
+
+       
+        
     }
-}
+    }
+

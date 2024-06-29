@@ -1,5 +1,7 @@
 ﻿using BusinessObjects;
 using DAOs;
+using Microsoft.EntityFrameworkCore;
+using PayPal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,5 +39,10 @@ namespace Repositories.Implement
 
         public TblAccount GetAccountShipper(string shipperID)
             => _accountDAO.GetAccountShipper(shipperID);
+        public async Task<TblAccount> GetAccountByIdAsync(int id)
+        {
+            return await _accountDAO.GetAccountByIdAsync(id);
+        }
     }
 }
+

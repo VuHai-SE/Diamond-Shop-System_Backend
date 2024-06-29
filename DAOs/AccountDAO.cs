@@ -46,6 +46,11 @@ namespace DAOs
             var shipper = _context.TblShippers.FirstOrDefault(sh => sh.ShipperId.Equals(shipperID));
             return _context.TblAccounts.FirstOrDefault(a => a.AccountId.Equals(shipper.AccountId));
         }
+        public async Task<TblAccount> GetAccountByIdAsync(int id)
+        {
+            return await _context.TblAccounts.AsNoTracking().FirstOrDefaultAsync(a => a.AccountId == id);
+        }
+
 
     }
 }

@@ -1,4 +1,5 @@
 ﻿using BusinessObjects;
+using PayPal;
 using Services.DTOs.Request;
 using System;
 using System.Collections.Generic;
@@ -15,5 +16,8 @@ namespace Services
         Task<TblAccount> GetAccountByUsernameAsync(string username);
         public TblAccount GetAccountSaleStaff(string saleStaffID);
         public TblAccount GetAccountShipper(string shipperID);
+        Task<TblAccount> GetAccountByIdAsync(int id);
+
+        //Task<IEnumerable<TblAccount> SearchAccountsAsync(int id);//
     }
 }

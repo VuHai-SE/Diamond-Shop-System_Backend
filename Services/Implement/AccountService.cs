@@ -1,4 +1,5 @@
 ﻿using BusinessObjects;
+using Microsoft.EntityFrameworkCore;
 using Repositories;
 using Repositories.Implement;
 using Services.DTOs.Request;
@@ -17,7 +18,7 @@ namespace Services.Implement
 
         public AccountService(IAccountRepository accountRepository, ICustomerRepository customerRepository)
         {
-           _accountRepository = accountRepository;
+            _accountRepository = accountRepository;
             _customerRepository = customerRepository;
         }
 
@@ -41,9 +42,11 @@ namespace Services.Implement
         public TblAccount GetAccountShipper(string shipperID)
             => _accountRepository.GetAccountShipper(shipperID);
 
+
+
         public async Task RegisterAsync(RegisterRequest register)
         {
-           
+
             var account = new TblAccount
             {
                 Username = register.Username,
@@ -67,5 +70,20 @@ namespace Services.Implement
             };
             _customerRepository.AddCustomer(customer);
         }
-    }
+        public async Task<TblAccount> GetAccountByIdAsync(int id)
+        {
+            var account = await _accountRepository.GetAccountByIdAsync(id);
+            if (account == null)
+            {
+                return null;
+            }
+            return new TblAccount
+            {
+                AccountId = account.AccountId,
+                Username = account.Username,
+                Role = account.Role
+            };
+        }
+        }
+    
 }
