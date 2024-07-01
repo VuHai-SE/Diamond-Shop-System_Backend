@@ -163,7 +163,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowReact",
         builder =>
         {
-            builder.WithOrigins("http://localhost:3000" , "http://localhost:5173")
+            builder.WithOrigins("http://localhost:3000", "http://localhost:5173", "https://baongogia.github.io")
                    .AllowAnyHeader()
                    .AllowAnyMethod();
         });
