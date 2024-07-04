@@ -22,5 +22,7 @@ namespace DAOs
         public TblMembership GetMemberShipByRank(string rank)
             => _dbContext.TblMemberships.FirstOrDefault(m => m.Ranking.Equals(rank));
 
+        public List<TblMembership> GetMembershipList()
+            => _dbContext.TblMemberships.ToList();
     }
 }

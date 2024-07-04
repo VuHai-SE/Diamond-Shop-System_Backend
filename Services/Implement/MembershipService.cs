@@ -21,5 +21,8 @@ namespace Services.Implement
 
         public TblMembership GetMemberShipByRank(string rank)
             => _membershipRepository.GetMemberShipByRank(rank);
+
+        public List<TblMembership> GetMembershipList()
+            => _membershipRepository.GetMembershipList();
     }
 }
