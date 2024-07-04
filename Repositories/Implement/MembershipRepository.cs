@@ -22,5 +22,8 @@ namespace Repositories.Implement
 
         public TblMembership GetMemberShipByRank(string rank)
             => _membershipDAO.GetMemberShipByRank(rank);
+
+        public List<TblMembership> GetMembershipList()
+            => _membershipDAO.GetMembershipList();
     }
 }

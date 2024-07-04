@@ -12,5 +12,6 @@ namespace Repositories
     {
         public TblMembership GetMembershipByID(int id);
         public TblMembership GetMemberShipByRank(string rank);
+        public List<TblMembership> GetMembershipList();
     }
 }

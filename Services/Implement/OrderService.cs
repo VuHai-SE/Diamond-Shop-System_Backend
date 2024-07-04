@@ -115,15 +115,26 @@ namespace Services.Implement
                     if (membership.MaxSpend != null)
                     {
                         var spending = (double)customer.Spending;
-                        if (spending > membership.MaxSpend)
+                        var nextMembership = _membershipRepository.GetMembershipByID(membership.Id + 1);
+                        if (membership.Ranking == "Platinum")
                         {
-                            var nextMembership = _membershipRepository.GetMembershipByID(membership.Id + 1);
-                            customer.Ranking = nextMembership.Ranking;
-                            customer.DiscountRate = nextMembership.DiscountRate / 100;
-                            _customerRepository.UpdateCustomer(customer);
+                            if (spending >= nextMembership.MinSpend)
+                            {
+                                customer.Ranking = nextMembership.Ranking;
+                                customer.DiscountRate = nextMembership.DiscountRate / 100;
+                            }
                         }
-                    } 
-                }   
+                        else
+                        {
+                            if (spending > membership.MaxSpend)
+                            {
+                                customer.Ranking = nextMembership.Ranking;
+                                customer.DiscountRate = nextMembership.DiscountRate / 100;
+                            }
+                        }
+                    }
+                    _customerRepository.UpdateCustomer(customer);
+                }
                 else if (request.ButtonValue.Equals("CANCEL"))
                 {
                     //OrderNote
