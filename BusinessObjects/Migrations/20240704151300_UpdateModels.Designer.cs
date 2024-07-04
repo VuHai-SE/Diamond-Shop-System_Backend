@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BusinessObjects.Migrations
 {
     [DbContext(typeof(DiamondStoreContext))]
-    [Migration("20240626041457_UpdateModels")]
+    [Migration("20240704151300_UpdateModels")]
     partial class UpdateModels
     {
         /// <inheritdoc />
@@ -101,6 +101,9 @@ namespace BusinessObjects.Migrations
                     b.Property<string>("Ranking")
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
+
+                    b.Property<decimal>("Spending")
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<bool?>("Status")
                         .HasColumnType("bit");
@@ -288,6 +291,13 @@ namespace BusinessObjects.Migrations
 
             modelBuilder.Entity("BusinessObjects.TblMembership", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<double?>("DiscountRate")
                         .HasColumnType("float");
 
@@ -300,6 +310,8 @@ namespace BusinessObjects.Migrations
                     b.Property<string>("Ranking")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
 
                     b.ToTable("Tbl_Membership", (string)null);
                 });
@@ -320,6 +332,10 @@ namespace BusinessObjects.Migrations
                     b.Property<DateTime?>("OrderDate")
                         .HasColumnType("datetime");
 
+                    b.Property<string>("OrderNote")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<string>("OrderStatus")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
@@ -330,10 +346,6 @@ namespace BusinessObjects.Migrations
 
                     b.Property<DateTime?>("ReceiveDate")
                         .HasColumnType("datetime");
-
-                    b.Property<string>("ShipStatus")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("ShipperId")
                         .HasMaxLength(8)

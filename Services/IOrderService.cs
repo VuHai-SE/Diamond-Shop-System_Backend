@@ -16,10 +16,10 @@ namespace Services
         public List<TblOrder> GetOrdersByCustomerID(int customerID);
         public List<OrderInfo> GetOrderHistory(string username);
         public TblOrder getOrderByOrderID(int orderID);
-        public void CancelOrder(int orderID);
         public OrderInfo GetOrderInfo(int orderID);
         Task<bool> UpdateOrderStatus(OrderStatusRequest request);
         public List<OrderInfo> GetOrderInfoListForSaleStaff();
         public List<OrderInfo> GetOrderInforListForShipper();
+        Task<bool> UpdateOrder(TblOrder order);
     }
 }

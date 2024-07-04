@@ -83,6 +83,8 @@ namespace BusinessObjects.Migrations
                 name: "Tbl_Membership",
                 columns: table => new
                 {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     MinSpend = table.Column<double>(type: "float", nullable: true),
                     MaxSpend = table.Column<double>(type: "float", nullable: true),
                     DiscountRate = table.Column<double>(type: "float", nullable: true),
@@ -90,6 +92,7 @@ namespace BusinessObjects.Migrations
                 },
                 constraints: table =>
                 {
+                    table.PrimaryKey("PK_Tbl_Membership", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -120,7 +123,8 @@ namespace BusinessObjects.Migrations
                     Address = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
                     Ranking = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
                     DiscountRate = table.Column<double>(type: "float", nullable: true),
-                    Status = table.Column<bool>(type: "bit", nullable: true)
+                    Status = table.Column<bool>(type: "bit", nullable: true),
+                    Spending = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -259,7 +263,7 @@ namespace BusinessObjects.Migrations
                     ReceiveDate = table.Column<DateTime>(type: "datetime", nullable: true),
                     StaffID = table.Column<string>(type: "nvarchar(8)", maxLength: 8, nullable: true),
                     ShipperID = table.Column<string>(type: "nvarchar(8)", maxLength: 8, nullable: true),
-                    ShipStatus = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true)
+                    OrderNote = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {

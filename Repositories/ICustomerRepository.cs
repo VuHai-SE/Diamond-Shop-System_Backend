@@ -20,5 +20,6 @@ namespace Repositories
         Task<GenericResponse> UpdateCustomerProfileAsync(int customerId, UpdateCustomerProfileRequest request);
         public bool IsEmailExisted(string email);
         public bool isPhoneExisted(string phone);
+        public void UpdateCustomer(TblCustomer customer);
     }
 }
