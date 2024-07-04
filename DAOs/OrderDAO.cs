@@ -53,18 +53,6 @@ namespace DAOs
             var order = dbContext.TblOrders.FirstOrDefault(o => o.OrderId.Equals(orderID));
             return order;
         }
-           
-
-        public void CancelOrder(int orderID)
-        {
-            TblOrder oldOrder = getOrderByOrderID(orderID);
-            if (oldOrder != null)
-            {
-                oldOrder.OrderStatus = "Cancelled";
-                oldOrder.ShipStatus = "Cancel by customer";
-                dbContext.TblOrders.Update(oldOrder);
-                dbContext.SaveChanges();
-            }
-        }
+        
     }
 }

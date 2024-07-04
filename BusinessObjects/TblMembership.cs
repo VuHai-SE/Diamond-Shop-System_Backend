@@ -12,4 +12,6 @@ public partial class TblMembership
     public double? DiscountRate { get; set; }
 
     public string? Ranking { get; set; }
+
+    public int Id { get; set; }
 }

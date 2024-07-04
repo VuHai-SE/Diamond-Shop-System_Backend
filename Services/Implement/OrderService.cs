@@ -30,8 +30,9 @@ namespace Services.Implement
         private readonly ISaleStaffRepository _saleStaffRepository;
         private readonly IShipperRepository _shipperRepository;
         private readonly IWarrantyRepository _warrantyRepository;
+        private readonly IMembershipRepository _membershipRepository;
 
-        public OrderService(IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository, ICustomerRepository customerRepository, IProductRepository productRepository, IProductMaterialRepository productMaterialRepository, IMaterialCategoryRepository materialCategoryRepository, IPaymentRepository paymentRepository, IAccountRepository accountRepository, ISaleStaffRepository saleStaffRepository, IShipperRepository shipperRepository, IWarrantyRepository warrantyRepository)
+        public OrderService(IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository, ICustomerRepository customerRepository, IProductRepository productRepository, IProductMaterialRepository productMaterialRepository, IMaterialCategoryRepository materialCategoryRepository, IPaymentRepository paymentRepository, IAccountRepository accountRepository, ISaleStaffRepository saleStaffRepository, IShipperRepository shipperRepository, IWarrantyRepository warrantyRepository, IMembershipRepository membershipRepository)
         {
             _orderDetailRepository = orderDetailRepository;
             _customerRepository = customerRepository;
@@ -44,6 +45,7 @@ namespace Services.Implement
             _saleStaffRepository = saleStaffRepository;
             _shipperRepository = shipperRepository;
             _warrantyRepository = warrantyRepository;
+            _membershipRepository = membershipRepository;
         }
 
         public async Task<bool> UpdateOrderStatus(OrderStatusRequest request)
@@ -85,7 +87,7 @@ namespace Services.Implement
                 if (request.ButtonValue.Equals("CANCEL"))
                 {
                     //OrderNote
-                    order.ShipStatus = request.Username + "-" + "-Cancelled";
+                    order.OrderNote = request.Username + "-" + "-Cancelled";
                 }
             }
             else if (request.Role.Equals("Shipper"))
@@ -103,13 +105,29 @@ namespace Services.Implement
                 else if (btValue.Equals("DONE"))
                 {
                     order.ReceiveDate = request.ReceivedDate;
-                    order.ShipStatus = _accountRepository.GetAccountSaleStaff(order.StaffId).Username
+                    order.OrderNote = _accountRepository.GetAccountSaleStaff(order.StaffId).Username
                         + "," + _accountRepository.GetAccountShipper(order.ShipperId).Username + "-Done";
+                    //update customer's membership
+                    var customer = _customerRepository.GetCustomerByID((int)order.CustomerId);
+                    var orderInfo = GetOrderInfo(order.OrderId);
+                    customer.Spending = customer.Spending += (decimal)orderInfo.TotalPrice;
+                    var membership = _membershipRepository.GetMemberShipByRank(customer.Ranking);
+                    if (membership.MaxSpend != null)
+                    {
+                        var spending = (double)customer.Spending;
+                        if (spending > membership.MaxSpend)
+                        {
+                            var nextMembership = _membershipRepository.GetMembershipByID(membership.Id + 1);
+                            customer.Ranking = nextMembership.Ranking;
+                            customer.DiscountRate = nextMembership.DiscountRate / 100;
+                            _customerRepository.UpdateCustomer(customer);
+                        }
+                    } 
                 }   
                 else if (request.ButtonValue.Equals("CANCEL"))
                 {
                     //OrderNote
-                    order.ShipStatus = request.Username + "-Cancelled";
+                    order.OrderNote = request.Username + "-Cancelled";
                 }
             }
             return await _orderRepository.UpdateOrder(order);
@@ -149,8 +167,8 @@ namespace Services.Implement
         public TblOrder AddOrder(TblOrder order)
             => _orderRepository.AddOrder(order);
 
-        public void CancelOrder(int orderID)
-            => _orderRepository.CancelOrder(orderID);
+        //public void CancelOrder(int orderID)
+        //    => _orderRepository.CancelOrder(orderID);
 
         public List<TblOrder> GetOrdersByCustomerID(int customerID)
             => _orderRepository.getOrderByCustomerID(customerID);
@@ -207,7 +225,7 @@ namespace Services.Implement
                 orderInfo.OrderStatus = order.OrderStatus;
                 orderInfo.ShippingDate = order.ShippingDate;
                 orderInfo.ReceiveDate = order.ReceiveDate;
-                orderInfo.OrderNote = order.ShipStatus;
+                orderInfo.OrderNote = order.OrderNote;
                 var OrderDetail = _orderDetailRepository.GetOrderDetailsByOrderID(order.OrderId);
                 foreach (var orderDetail in OrderDetail)
                 {
@@ -267,5 +285,8 @@ namespace Services.Implement
             }
             return orderInforList;
         }
+
+        public Task<bool> UpdateOrder(TblOrder order)
+            => _orderRepository.UpdateOrder(order);
     }
 }

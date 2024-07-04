@@ -98,5 +98,11 @@ namespace DAOs
 
         public bool isPhoneExisted(string phone)
             => dbContext.TblCustomers.Any(c => c.PhoneNumber.Equals(phone));
+
+        public void UpdateCustomer(TblCustomer customer)
+        {
+            dbContext.TblCustomers.Update(customer);
+            dbContext.SaveChanges();
+        }
     }
 }

@@ -23,7 +23,7 @@ public partial class TblOrder
 
     public string? ShipperId { get; set; }
 
-    public string? ShipStatus { get; set; }
+    public string? OrderNote { get; set; }
 
     public virtual TblCustomer? Customer { get; set; }
 
