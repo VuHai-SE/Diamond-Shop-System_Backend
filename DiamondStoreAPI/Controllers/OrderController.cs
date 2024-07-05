@@ -218,9 +218,9 @@ namespace DiamondStoreAPI.Controllers
         }
 
         [HttpPut("CancelOrder")]
-        public async Task<IActionResult> CancelOrder(int id)
+        public async Task<IActionResult> CancelOrder([FromBody] CustomerCancelOrderRequest request)
         {
-            var orderToUpdate = iOrderService.getOrderByOrderID(id);
+            var orderToUpdate = iOrderService.getOrderByOrderID(request.OrderID);
             if (orderToUpdate == null)
             {
                 return NotFound();
@@ -231,8 +231,10 @@ namespace DiamondStoreAPI.Controllers
                 return BadRequest("Cannot cancel");
             } else
             {
-                iOrderService.CancelOrder(id);
-                return Ok();
+                orderToUpdate.OrderStatus = "Cancelled";
+                orderToUpdate.OrderNote = "Customer cancelled-" + request.Note.Trim();
+                var isUpdate = iOrderService.UpdateOrder(orderToUpdate);
+                return Ok("Cancel successfully");
             }
         }
 

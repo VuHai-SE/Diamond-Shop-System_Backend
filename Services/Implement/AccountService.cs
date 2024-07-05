@@ -1,4 +1,5 @@
 ﻿using BusinessObjects;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Repositories;
 using Repositories.Implement;
@@ -36,7 +37,20 @@ namespace Services.Implement
 
         public async Task<TblAccount> AuthenticateAsync(string username, string password)
         {
-            var account = await _accountRepository.GetAccountByUsernameAsync(username);
+            TblAccount account = null;
+            var accUsername = await _accountRepository.GetAccountByUsernameAsync(username);
+            
+            if (accUsername != null)
+            {
+                account = accUsername;
+            } else
+            {
+                var accEmail = await _accountRepository.GetAccountByEmailAsync(username);
+                if (accEmail != null)
+                {
+                    account = accEmail;
+                }
+            }
             if (account == null || !BCrypt.Net.BCrypt.Verify(password, account.Password))
             {
                 return null;

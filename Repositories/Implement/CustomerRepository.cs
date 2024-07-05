@@ -45,5 +45,8 @@ namespace Repositories.Implement
 
         public bool isPhoneExisted(string phone)
             => customerDAO.isPhoneExisted(phone);
+
+        public void UpdateCustomer(TblCustomer customer)
+            => customerDAO.UpdateCustomer(customer);
     }
 }

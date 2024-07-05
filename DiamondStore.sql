@@ -94,16 +94,22 @@ CREATE TABLE Tbl_Customer (
     Ranking NVARCHAR(10),
     DiscountRate FLOAT,
     Status BIT,
+	Spending DECIMAL(18, 2) NOT NULL DEFAULT 0,
     FOREIGN KEY (AccountID) REFERENCES Tbl_Account(AccountID) ON DELETE SET NULL
 );
-
+---------------------------------------------------
 CREATE TABLE Tbl_Membership (
     MinSpend FLOAT,
     MaxSpend FLOAT,
     DiscountRate FLOAT,
     Ranking NVARCHAR(50)
 );
+ALTER TABLE Tbl_Membership
+ADD ID INT IDENTITY(1,1);
 
+ALTER TABLE Tbl_Membership
+ADD CONSTRAINT PK_Tbl_Membership PRIMARY KEY (ID);
+---------------------------------------------------
 CREATE TABLE Tbl_Product (
     ProductID NVARCHAR(8) PRIMARY KEY,
     ProductName NVARCHAR(100),
@@ -150,7 +156,7 @@ CREATE TABLE Tbl_Order (
     ReceiveDate DATETIME,
     StaffID NVARCHAR(8),
     ShipperID NVARCHAR(8),
-    ShipStatus NVARCHAR(50),
+	OrderNote NVARCHAR(50),
     FOREIGN KEY (CustomerID) REFERENCES Tbl_Customer(CustomerID),
     FOREIGN KEY (StaffID) REFERENCES Tbl_SaleStaff(StaffID),
     FOREIGN KEY (ShipperID) REFERENCES Tbl_Shipper(ShipperID)

@@ -214,11 +214,11 @@ VALUES
 -- Insert sample data into Tbl_Membership
 INSERT INTO Tbl_Membership (MinSpend, MaxSpend, DiscountRate, Ranking)
 VALUES 
-(0.0, 999.99, 2.0, 'Bronze'),
-(1000.0, 4999.99, 5.0, 'Silver'),
-(5000.0, 9999.99, 10.0, 'Gold'),
-(10000.0, 19999.99, 15.0, 'Platinum'),
-(20000.0, NULL, 20.0, 'Diamond');
+(0.0, 50000, 2.0, 'Bronze'),
+(50000, 100000, 5.0, 'Silver'),
+(100000, 150000, 10.0, 'Gold'),
+(150000, 200000, 15.0, 'Platinum'),
+(200000, NULL, 20.0, 'Diamond');
 
 -- Insert sample data into Tbl_Product
 

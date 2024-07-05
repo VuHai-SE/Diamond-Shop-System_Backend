@@ -29,6 +29,8 @@ public partial class TblCustomer
 
     public bool? Status { get; set; }
 
+    public decimal Spending { get; set; }
+
     public virtual TblAccount? Account { get; set; }
 
     public virtual ICollection<TblOrder> TblOrders { get; set; } = new List<TblOrder>();

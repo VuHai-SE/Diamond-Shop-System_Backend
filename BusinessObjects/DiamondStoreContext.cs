@@ -96,6 +96,7 @@ public partial class DiamondStoreContext : DbContext
             entity.Property(e => e.LastName).HasMaxLength(100);
             entity.Property(e => e.PhoneNumber).HasMaxLength(10);
             entity.Property(e => e.Ranking).HasMaxLength(10);
+            entity.Property(e => e.Spending).HasColumnType("decimal(18, 2)");
 
             entity.HasOne(d => d.Account).WithOne(p => p.TblCustomer)
                 .HasForeignKey<TblCustomer>(d => d.AccountId)
@@ -190,10 +191,9 @@ public partial class DiamondStoreContext : DbContext
 
         modelBuilder.Entity<TblMembership>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("Tbl_Membership");
+            entity.ToTable("Tbl_Membership");
 
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Ranking).HasMaxLength(50);
         });
 
@@ -206,10 +206,10 @@ public partial class DiamondStoreContext : DbContext
             entity.Property(e => e.OrderId).HasColumnName("OrderID");
             entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
             entity.Property(e => e.OrderDate).HasColumnType("datetime");
+            entity.Property(e => e.OrderNote).HasMaxLength(50);
             entity.Property(e => e.OrderStatus).HasMaxLength(50);
             entity.Property(e => e.PaymentMethod).HasMaxLength(50);
             entity.Property(e => e.ReceiveDate).HasColumnType("datetime");
-            entity.Property(e => e.ShipStatus).HasMaxLength(50);
             entity.Property(e => e.ShipperId)
                 .HasMaxLength(8)
                 .HasColumnName("ShipperID");
