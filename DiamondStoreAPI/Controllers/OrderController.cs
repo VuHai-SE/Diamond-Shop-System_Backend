@@ -38,7 +38,7 @@ namespace DiamondStoreAPI.Controllers
             iMaterialCategoryService = materialCategoryService;
         }
 
-        [HttpPost("UpdateOrderStatus")]
+        [HttpPut("UpdateOrderStatus")]
         public async Task<IActionResult> AcceptOrder([FromBody] OrderStatusRequest request)
         {
             var result = await iOrderService.UpdateOrderStatus(request);
