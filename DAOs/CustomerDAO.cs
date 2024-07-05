@@ -52,6 +52,7 @@ namespace DAOs
                 response.Ranking = cus.Ranking;
                 response.DiscountRate = cus.DiscountRate;
                 response.Status = cus.Status;
+                response.Role = account.Role;
             }
             return response;
         }
