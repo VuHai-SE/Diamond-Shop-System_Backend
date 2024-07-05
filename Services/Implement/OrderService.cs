@@ -68,21 +68,6 @@ namespace Services.Implement
                     order.StaffId = SaleStaffID;
                 }
                 order.OrderStatus = HandleOrderStatus(btValue);
-                //create warranty information
-                if (order.OrderStatus == "Pending Delivery")
-                {
-                    var orderDetails = _orderDetailRepository.GetOrderDetailsByOrderID(order.OrderId);
-                    foreach (var od in orderDetails)
-                    {
-                        var newWarranty = new TblWarranty()
-                        {
-                            OrderDetailId = od.OrderDetailId,
-                            WarrantyStartDate = order.OrderDate?.Date,
-                            WarrantyEndDate = order.OrderDate?.Date.AddYears(1),
-                        };
-                        var createdWarranty = _warrantyRepository.AddWarranty(newWarranty);
-                    }
-                }
 
                 if (request.ButtonValue.Equals("CANCEL"))
                 {

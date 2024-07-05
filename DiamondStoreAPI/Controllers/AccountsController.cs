@@ -16,6 +16,7 @@ using System.Text;
 using System.Configuration;
 using Services.DTOs.Response;
 using BusinessObjects.ResponseModels;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 
 
 namespace DiamondStoreAPI.Controllers
@@ -38,6 +39,26 @@ namespace DiamondStoreAPI.Controllers
             _jwtSecret = _configuration.GetValue<string>("Jwt:Day_la_key_JWT");
         }
 
+
+        [HttpPost("LoginGoogle")]
+        public async Task<IActionResult> LoginByGoogle(string email)
+        {
+           
+            var account = _accountService.GetAccountByEmail(email);
+            if (account == null)
+            {
+                return Unauthorized();
+            }
+
+            var token = GenerateJwtToken(account);
+            BusinessObjects.ResponseModels.LoginResponse customerInfo = _customerService.GetCustomerByAccountForLogin(account.Username);
+
+            return Ok(new
+            {
+                Token = token,
+                CustomerInfo = customerInfo
+            });
+        }
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] Services.DTOs.Request.LoginRequest request)
         {

@@ -6,6 +6,8 @@ using BusinessObjects;
 using Services;
 using GemBox.Document;
 using Services.DTOs.Request;
+using Services.DTOs.Response;
+using System.Text.Json;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -13,11 +15,13 @@ public class WarrantyController : ControllerBase
 {
     private readonly IWarrantyService _warrantyService;
     private readonly IOrderDetailService _orderDetailService;
+    private readonly IOrderService _orderService;
 
-    public WarrantyController(IWarrantyService warrantyService, IOrderDetailService orderDetailService)
+    public WarrantyController(IWarrantyService warrantyService, IOrderDetailService orderDetailService, IOrderService orderService)
     {
         _warrantyService = warrantyService;
         _orderDetailService = orderDetailService;
+        _orderService = orderService;
     }
 
     [HttpGet("WarrantyInfo")]
@@ -28,61 +32,19 @@ public class WarrantyController : ControllerBase
         return Ok(warrantyInfor);
     }
 
-    [HttpPost("SaveWarrantyImg")]
-    public async Task<IActionResult> SaveWarrantyImage(int warrantyId, IFormFile imageFile)
+    [HttpPost("CreateWarranty")]
+    public async Task<IActionResult> CreateWarranty([FromBody] WarrantyRequest request)
     {
-        var warranty = _warrantyService.GetWarrantyByID(warrantyId);
-        if (warranty == null)
+        var newWarranty = new TblWarranty()
         {
-            return NotFound();
-        }
-        {
-            
-        }
-        if (imageFile == null || imageFile.Length == 0)
-        {
-            return BadRequest("No image file provided.");
-        }
-
-        if (Path.GetExtension(imageFile.FileName).ToLower() != ".jpg")
-        {
-            return BadRequest("Only JPG images are allowed.");
-        }
-
-        using (var memoryStream = new MemoryStream())
-        {
-            await imageFile.CopyToAsync(memoryStream);
-            var imageBytes = memoryStream.ToArray();
-            _warrantyService.SaveWarrantyImg(warrantyId, imageBytes);
-        }
-
-        return Ok("Image uploaded successfully.");
+            OrderDetailId= request.OrderDetailID,
+            WarrantyStartDate = request.OrderDate?.Date,
+            WarrantyEndDate = request.OrderDate?.Date.AddYears(1),
+        };
+        var createdWarranty = _warrantyService.AddWarranty(newWarranty);
+        var warrantyInfo = await _warrantyService.GetWarrantyInfo((int)createdWarranty.OrderDetailId);
+        return Ok(warrantyInfo);
     }
-
-    //[HttpPost("SaveWarrantyImg")]
-    //public IActionResult SaveWarrantyImage([FromBody] SaveWarrantyImageRequest request)
-    //{
-    //    var warranty = _warrantyService.GetWarrantyByID(request.WarrantyId);
-    //    if (warranty == null)
-    //    {
-    //        return NotFound();
-    //    }
-
-    //    if (string.IsNullOrEmpty(request.Base64Image))
-    //    {
-    //        return BadRequest("No image data provided.");
-    //    }
-
-    //    try
-    //    {
-    //        byte[] imageBytes = Convert.FromBase64String(request.Base64Image);
-    //        _warrantyService.SaveWarrantyImg(request.WarrantyId, imageBytes);
-    //    }
-    //    catch (FormatException)
-    //    {
-    //        return BadRequest("Invalid Base64 string.");
-    //    }
-
-    //    return Ok("Image uploaded successfully.");
-    //}
 }
+
+

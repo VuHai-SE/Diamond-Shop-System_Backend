@@ -45,7 +45,7 @@ namespace Services.Implement
                 account = accUsername;
             } else
             {
-                var accEmail = await _accountRepository.GetAccountByEmailAsync(username);
+                var accEmail = _accountRepository.GetAccountByEmail(username);
                 if (accEmail != null)
                 {
                     account = accEmail;
@@ -123,7 +123,7 @@ namespace Services.Implement
         public bool IsUsernameExisted(string username)
             => _accountRepository.IsUsernameExisted(username);
 
-        
-
+        public TblAccount GetAccountByEmail(string email)
+            => _accountRepository.GetAccountByEmail(email);
     }
 }
