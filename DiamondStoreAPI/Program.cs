@@ -119,6 +119,9 @@ services.AddScoped<WarrantyDAO>();
 services.AddScoped<IWarrantyRepository, WarrantyRepository>();
 services.AddScoped<IWarrantyService, WarrantyService>();
 
+services.AddScoped<MembershipDAO>();
+services.AddScoped<IMembershipRepository, MembershipRepository>();
+services.AddScoped<IMembershipService, MembershipService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
