@@ -31,5 +31,6 @@ namespace BusinessObjects.ResponseModels
         public double? DiscountRate { get; set; }
 
         public bool? Status { get; set; }
+        public string Role { get; set; }
     }
 }
