@@ -262,7 +262,7 @@ namespace DiamondStoreAPI.Controllers
             return Ok(acceptedOrderInfoList);
         }
 
-        [HttpGet]
+        [HttpGet("GetSumOrderbyMonthAndYear")]
         public async Task<IActionResult> GetSumOrderbyMonthAndYear([FromQuery] int month, [FromQuery] int year)
         {
             var result = iOrderService.GetSumOrderByMonth(month, year);
@@ -272,7 +272,7 @@ namespace DiamondStoreAPI.Controllers
             }
             return Ok(result);
         }
-        [HttpGet]
+        [HttpGet("GetRevenue")]
         public async Task<IActionResult> GetRevenue([FromQuery] int month, [FromQuery] int year)
         {
             var result = iOrderService.GetSumRevenue(month, year);
@@ -282,7 +282,7 @@ namespace DiamondStoreAPI.Controllers
             }
             return Ok(result);
         }
-        [HttpGet]
+        [HttpGet("GetStaffs")]
         public async Task<IActionResult> GetStaffs()
         {
             var result = iOrderService.GetStaffs();

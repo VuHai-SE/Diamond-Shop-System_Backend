@@ -63,6 +63,7 @@ public partial class DiamondStoreContext : DbContext
         return strConn;
     }
 
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer(GetConnectionString());
 

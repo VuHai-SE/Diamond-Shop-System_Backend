@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BusinessObjects.Migrations
 {
     [DbContext(typeof(DiamondStoreContext))]
-    [Migration("20240704151300_UpdateModels")]
+    [Migration("20240706091833_UpdateModels")]
     partial class UpdateModels
     {
         /// <inheritdoc />
