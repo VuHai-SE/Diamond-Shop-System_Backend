@@ -15,9 +15,11 @@ namespace Services.Implement
         public SaleStaffService(ISaleStaffRepository saleStaffRepository)
         {
             _saleStaffRepository = saleStaffRepository;
-        }   
+        }
 
         public TblSaleStaff GetSaleStaffByUsername(string username)
             => _saleStaffRepository.GetSaleStaffByUsername(username);
+
+
     }
 }

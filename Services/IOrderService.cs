@@ -21,5 +21,12 @@ namespace Services
         Task<bool> UpdateOrderStatus(OrderStatusRequest request);
         public List<OrderInfo> GetOrderInfoListForSaleStaff();
         public List<OrderInfo> GetOrderInforListForShipper();
+
+        public int GetSumOrderByMonth(int month, int year);
+
+        public int GetStaffs();
+
+        public Task<decimal> GetSumRevenue(int month, int year);
+
     }
 }

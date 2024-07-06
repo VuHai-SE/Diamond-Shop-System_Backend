@@ -10,5 +10,7 @@ namespace Services
     public interface ISaleStaffService
     {
         public TblSaleStaff GetSaleStaffByUsername(string username);
+
+
     }
 }

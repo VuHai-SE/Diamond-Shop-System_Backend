@@ -1,5 +1,6 @@
 ﻿using BusinessObjects;
 using Microsoft.EntityFrameworkCore;
+using PayPal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,5 +23,7 @@ namespace Repositories
         public TblAccount GetAccountSaleStaff(string saleStaffID);
         public TblAccount GetAccountShipper(string shipperID);
         public bool IsUsernameExisted(string username);
+
+        List<TblAccount> GetAllStaff();
     }
 }

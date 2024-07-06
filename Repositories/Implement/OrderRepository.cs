@@ -45,5 +45,9 @@ namespace Repositories.Implement
         {
             return await orderDAO.UpdateOrder(order);
         }
+        public async Task<List<TblOrder>> GetDeliveredOrdersByMonthAndYearAsync(int month, int year)
+        {
+            return await orderDAO.GetDeliveredOrdersByMonthAndYearAsync(month, year);
+        }
     }
 }

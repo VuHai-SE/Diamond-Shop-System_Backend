@@ -1,5 +1,6 @@
 ﻿using BusinessObjects;
 using DAOs;
+using PayPal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,5 +51,10 @@ namespace Repositories.Implement
 
         public bool IsUsernameExisted(string username)
             => _accountDAO.IsUsernameExisted(username);
+
+        public List<TblAccount> GetAllStaff()
+        {
+            return _accountDAO.GetAllStaff();
+        }
     }
 }

@@ -17,5 +17,6 @@ namespace Repositories
         public void CancelOrder(int orderID);
         Task<TblOrder> GetOrderById(int orderId);
         Task<bool> UpdateOrder(TblOrder order);
+        Task<List<TblOrder>> GetDeliveredOrdersByMonthAndYearAsync(int month, int year);
     }
 }

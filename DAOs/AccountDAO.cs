@@ -17,6 +17,7 @@ namespace DAOs
         public AccountDAO()
         {
             _context = new DiamondStoreContext();
+
         }
 
         public async Task<TblAccount> GetAccountByUsernameAsync(string username)
@@ -68,5 +69,10 @@ namespace DAOs
 
         public bool IsUsernameExisted(string username)
             => _context.TblAccounts.Any(a => a.Username.Equals(username));
+
+        public List<TblAccount> GetAllStaff()
+        {
+            return _context.TblAccounts.Where(a => a.Role == "Staff").ToList();
+        }
     }
 }
