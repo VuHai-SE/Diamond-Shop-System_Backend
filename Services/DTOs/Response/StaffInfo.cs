@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Services.DTOs.Response
 {
-    public class LoginResponse
+    public class StaffInfo: AccountInfo
     {
-        public string Username { get; set; }
-        public string Role {  get; set; }
+        public string StaffId { get; set; }
     }
 }

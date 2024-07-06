@@ -19,6 +19,10 @@ namespace DAOs
             _context = new DiamondStoreContext();
         }
 
+        public List<TblAccount> GetAllAccount()
+        {
+            return _context.TblAccounts.ToList();
+        }
         public TblAccount GetAccountByEmail(string email)
         {
             var customer = _context.TblCustomers.FirstOrDefault(c => c.Email.Equals(email));
@@ -77,6 +81,13 @@ namespace DAOs
         public List<TblAccount> GetAllStaff()
         {
             return _context.TblAccounts.Where(a => a.Role == "Staff").ToList();
+        }
+
+        public bool UpdateAccount(TblAccount account)
+        {
+            _context.TblAccounts.Update(account);
+            _context.SaveChanges();
+            return true;
         }
     }
 }

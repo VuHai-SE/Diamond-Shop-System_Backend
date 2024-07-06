@@ -131,6 +131,53 @@ namespace DiamondStoreAPI.Controllers
             return Ok(_customerService.isPhoneExisted(phone));
         }
 
+        [HttpGet("GetAccountList")]
+        public async Task<IActionResult> GetAccountList()
+        {
+            var accountList = await _accountService.GetAccountInfoList();
+            if (accountList.IsNullOrEmpty()) return NotFound();
+            return Ok(accountList);
+        }
+
+        [HttpGet("GetCustomerList")]
+        public async Task<IActionResult> GetCustomerList()
+        {
+            var customerList = await _accountService.GetAccountInfoList();
+            if (customerList.IsNullOrEmpty()) return NotFound();
+            return Ok(customerList);
+        }
+
+        [HttpGet("GetSaleStaffList")]
+        public async Task<IActionResult> GetSaleStaffList()
+        {
+            var saleStaffList = await _accountService.GetSaleInfoList();
+            if (saleStaffList.IsNullOrEmpty()) return NotFound();
+            return Ok(saleStaffList);
+        }
+
+        [HttpGet("GetShipperList")]
+        public async Task<IActionResult> GetShipperList()
+        {
+            var shipperList = await _accountService.GetShipperInfoList();
+            if (shipperList.IsNullOrEmpty()) return NotFound();
+            return Ok(shipperList);
+        }
+
+        [HttpPost("ChangeRole")]
+        public async Task<IActionResult> ChangeRole([FromBody] UpdateRoleRequest request)
+        {
+            var isSuccess = await _accountService.ChangeAccountRole(request);
+            if (!isSuccess) return BadRequest("Update fail");
+            return Ok(request.UsertName + "'s role has change into " + request.Role);
+        }
+
+        [HttpPost("DisableAccount")]
+        public async Task<IActionResult> DisableAccount(string username)
+        {
+            var isSuccess = await _accountService.DisableAccount(username);
+            if (!isSuccess) return BadRequest("Update fail");
+            return Ok(username + " has been disabled");
+        }
         private string GenerateJwtToken(TblAccount account)
         {
             var tokenHandler = new JwtSecurityTokenHandler();

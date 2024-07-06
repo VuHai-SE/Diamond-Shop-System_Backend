@@ -24,5 +24,8 @@ namespace Repositories
         public bool IsUsernameExisted(string username);
         public TblAccount GetAccountByEmail(string email);
         List<TblAccount> GetAllStaff();
+
+        public List<TblAccount> GetAllAccount();
+        public bool UpdateAccount(TblAccount account);
     }
 }

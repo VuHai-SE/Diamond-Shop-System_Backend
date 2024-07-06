@@ -4,6 +4,8 @@ using Microsoft.Extensions.Options;
 using Repositories;
 using Repositories.Implement;
 using Services.DTOs.Request;
+using Services.DTOs.Response;
+using SixLabors.ImageSharp.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,11 +19,15 @@ namespace Services.Implement
     {
         private readonly IAccountRepository _accountRepository;
         private readonly ICustomerRepository _customerRepository;
+        private readonly ISaleStaffRepository _saleStaffRepository;
+        private readonly IShipperRepository _shipperRepository;
 
-        public AccountService(IAccountRepository accountRepository, ICustomerRepository customerRepository)
+        public AccountService(IAccountRepository accountRepository, ICustomerRepository customerRepository, ISaleStaffRepository saleStaffRepository, IShipperRepository shipperRepository)
         {
            _accountRepository = accountRepository;
             _customerRepository = customerRepository;
+            _saleStaffRepository = saleStaffRepository;
+            _shipperRepository = shipperRepository;
         }
 
         //public async Task<TblAccount> AuthenticateAsync(string username, string password)
@@ -110,7 +116,6 @@ namespace Services.Implement
             return "Password updated successfully.";
         }
 
-
         public async Task<TblAccount> GetAccountByUsernameAsync(string username)
             => await _accountRepository.GetAccountByUsernameAsync(username);
 
@@ -125,5 +130,149 @@ namespace Services.Implement
 
         public TblAccount GetAccountByEmail(string email)
             => _accountRepository.GetAccountByEmail(email);
+
+        public async Task<AccountInfo> GetAccountInfo(string username)
+        {
+            var account = await _accountRepository.GetAccountByUsernameAsync(username);
+            var detailInfo = _customerRepository.GetCustomerByAccount(username);
+            if (account == null && detailInfo == null) { return null; }
+            return new AccountInfo()
+            {
+                AccountId = account.AccountId,
+                UserName = username,
+                FirstName = detailInfo.FirstName,
+                LastName = detailInfo.LastName,
+                Role = account.Role,
+                Gender = (detailInfo.Gender == true) ? "Male" : "Female",
+                Birthday = detailInfo.Birthday,
+                Email = detailInfo.Email,
+                PhoneNumber = detailInfo.PhoneNumber,
+                Address = detailInfo.Address,
+                Ranking = detailInfo.Ranking,
+                DiscountRate = detailInfo.DiscountRate,
+                Status = detailInfo.Status,
+            };
+        }
+
+        public async Task<StaffInfo> GetStaffInfo(string username)
+        {
+            var accountInfo = await GetAccountInfo(username);
+            if (accountInfo == null) return null;
+            StaffInfo staffInfo = (StaffInfo)accountInfo;
+            if (accountInfo.Role == "SaleStaff")
+            {
+                var saleStaff = _saleStaffRepository.GetSaleStaffByUsername(username);
+                staffInfo.StaffId = staffInfo.StaffId;
+            }
+            else if (accountInfo.Role == "Shipper")
+            {
+                var shipper = _shipperRepository.GetShipperByUsername(username);
+                staffInfo.StaffId = shipper.ShipperId;
+            }
+            return staffInfo;
+        }
+
+        public async Task<List<AccountInfo>> GetAccountInfoList()
+        {
+            var accountInfoList = new List<AccountInfo>();
+            var accountList = _accountRepository.GetAllAccount();
+            foreach (var a in accountList)
+            {
+                var acc = await GetAccountInfo(a.Username);
+                accountInfoList.Add(acc);
+            }
+            return accountInfoList;
+        }
+
+        public async Task<List<AccountInfo>> GetCustomerInfoList()
+        {
+            var customerInfoList = new List<AccountInfo>();
+            var accountList = _accountRepository.GetAllAccount();
+            foreach (var a in accountList)
+            {
+                if (a.Role == "Customer")
+                {
+                    var cus = await GetAccountInfo(a.Username);
+                    customerInfoList.Add(cus);
+                }
+            }
+            return customerInfoList;
+        }
+
+        public async Task<List<StaffInfo>> GetSaleInfoList()
+        {
+            var saleStaffInfoList = new List<StaffInfo>();
+            var accountList = _accountRepository.GetAllAccount();
+            foreach (var a in accountList)
+            {
+                if (a.Role == "SaleStaff")
+                {
+                    var sale = await GetStaffInfo(a.Username);
+                    saleStaffInfoList.Add(sale);
+                }
+            }
+            return saleStaffInfoList;
+        }
+
+        public async Task<List<StaffInfo>> GetShipperInfoList()
+        {
+            var shipperInfoList = new List<StaffInfo>();
+            var accountList = _accountRepository.GetAllAccount();
+            foreach (var a in accountList)
+            {
+                if (a.Role == "Shipper")
+                {
+                    var ship = await GetStaffInfo(a.Username);
+                    shipperInfoList.Add(ship);
+                }
+            }
+            return shipperInfoList;
+        }
+
+        public void AddToStaffTables(string staffId, AccountInfo accountInfo)
+        {
+            if (accountInfo.Role == "SaleStaff")
+            {
+                var sale = new TblSaleStaff()
+                {
+                    StaffId = staffId,
+                    AccountId = accountInfo.AccountId,
+                    FirstName = accountInfo.FirstName,
+                    LastName = accountInfo.LastName,
+                };
+            }
+            else if (accountInfo.Role == "Shipper")
+            {
+                var shipper = new TblShipper()
+                {
+                    ShipperId = staffId,
+                    AccountId = accountInfo.AccountId,
+                    FirstName = accountInfo.FirstName,
+                    LastName = accountInfo.LastName,
+                };
+            }
+        }
+
+        public async Task<bool> ChangeAccountRole(UpdateRoleRequest request)
+        {
+            var account = await _accountRepository.GetAccountByUsernameAsync(request.UsertName);
+            if (account == null) return false;
+            account.Role = request.Role.Trim();
+            var isUpdate = _accountRepository.UpdateAccount(account);
+            if (!isUpdate) { return false; }
+            var accountInfo = await GetAccountInfo(request.UsertName);
+            AddToStaffTables(request.StaffId, accountInfo);
+            return isUpdate;
+        }
+
+        public async Task<bool> DisableAccount(string username)
+        {
+            var account = await GetAccountByUsernameAsync(username);
+            if (account == null) return false;
+            var accountDetail = _customerRepository.GetCustomerByAccount(username);
+            accountDetail.Status = false;
+            _customerRepository.UpdateCustomer(accountDetail);
+            return true;
+        }
     }
 }
