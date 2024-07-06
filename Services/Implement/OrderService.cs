@@ -89,17 +89,6 @@ namespace Services.Implement
                     order.ReceiveDate = request.ReceivedDate;
                     order.OrderNote = _accountRepository.GetAccountSaleStaff(order.StaffId).Username
                         + "," + _accountRepository.GetAccountShipper(order.ShipperId).Username + "-Done";
-                    var orderInfor = GetOrderInfo(order.OrderId);
-                    foreach (var product in orderInfor.products)
-                    {
-                        var newWarranty = new TblWarranty()
-                        {
-                            OrderDetailId = product.OrderDetailID,
-                            WarrantyStartDate = orderInfor.OrderDate.Date,
-                            WarrantyEndDate = orderInfor.OrderDate.Date.AddYears(1),
-                        };
-                        var createdWarranty = _warrantyRepository.AddWarranty(newWarranty);
-                    }
                 }
                 else if (request.ButtonValue.Equals("CANCEL"))
                 {
