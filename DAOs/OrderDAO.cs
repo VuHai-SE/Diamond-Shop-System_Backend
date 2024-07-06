@@ -59,7 +59,7 @@ namespace DAOs
             if (oldOrder != null)
             {
                 oldOrder.OrderStatus = "Cancelled";
-                oldOrder.ShipStatus = "Cancel by customer";
+                oldOrder.OrderNote = "Cancel by customer";
                 dbContext.TblOrders.Update(oldOrder);
                 dbContext.SaveChanges();
             }

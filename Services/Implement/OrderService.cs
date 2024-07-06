@@ -69,7 +69,7 @@ namespace Services.Implement
                 if (request.ButtonValue.Equals("CANCEL"))
                 {
                     //OrderNote
-                    order.ShipStatus = request.Username + "-" + "-Cancelled";
+                    order.OrderNote = request.Username + "-" + "-Cancelled";
                 }
             }
             else if (request.Role.Equals("Shipper"))
@@ -87,7 +87,7 @@ namespace Services.Implement
                 else if (btValue.Equals("DONE"))
                 {
                     order.ReceiveDate = request.ReceivedDate;
-                    order.ShipStatus = _accountRepository.GetAccountSaleStaff(order.StaffId).Username
+                    order.OrderNote = _accountRepository.GetAccountSaleStaff(order.StaffId).Username
                         + "," + _accountRepository.GetAccountShipper(order.ShipperId).Username + "-Done";
                     var orderInfor = GetOrderInfo(order.OrderId);
                     foreach (var product in orderInfor.products)
@@ -104,7 +104,7 @@ namespace Services.Implement
                 else if (request.ButtonValue.Equals("CANCEL"))
                 {
                     //OrderNote
-                    order.ShipStatus = request.Username + "-Cancelled";
+                    order.OrderStatus = request.Username + "-Cancelled";
                 }
             }
             return await _orderRepository.UpdateOrder(order);
@@ -202,7 +202,7 @@ namespace Services.Implement
                 orderInfo.OrderStatus = order.OrderStatus;
                 orderInfo.ShippingDate = order.ShippingDate;
                 orderInfo.ReceiveDate = order.ReceiveDate;
-                orderInfo.OrderNote = order.ShipStatus;
+                orderInfo.OrderNote = order.OrderNote;
                 var OrderDetail = _orderDetailRepository.GetOrderDetailsByOrderID(order.OrderId);
                 foreach (var orderDetail in OrderDetail)
                 {
@@ -272,7 +272,7 @@ public int GetSumOrderByMonth(int month, int year)
             // Filter orders by the specified month and year
             var filteredOrders = orders.Where(o => o.OrderDate.HasValue
                                                     && o.OrderDate.Value.Month == month
-                                                    && o.OrderDate.Value.Year == year && o.ShipStatus == "delivered");
+                                                    && o.OrderDate.Value.Year == year && o.OrderStatus == "delivered");
 
             // Return the count of filtered orders
             return filteredOrders.Count();
