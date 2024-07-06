@@ -55,37 +55,6 @@ namespace DiamondStoreAPI.Controllers
             return tblGem;
         }
 
-        // PUT: api/Gems/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutTblGsem(string id, TblGem tblGem)
-        //{
-        //    if (id != tblGem.GemId)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    iGemService.Entry(tblGem).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await iGemService.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!TblGemExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
-
         // POST: api/Gems
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
@@ -95,26 +64,5 @@ namespace DiamondStoreAPI.Controllers
 
             return CreatedAtAction("GetTblGem", new { id = tblGem.GemId }, tblGem);
         }
-
-        // DELETE: api/Gems/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteTblGem(string id)
-        //{
-        //    var tblGem = await iGemService.TblGems.FindAsync(id);
-        //    if (tblGem == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    iGemService.TblGems.Remove(tblGem);
-        //    await iGemService.SaveChangesAsync();
-
-        //    return NoContent();
-        //}
-
-        //private bool TblGemExists(string id)
-        //{
-        //    return iGemService.TblGems.Any(e => e.GemId == id);
-        //}
     }
 }
