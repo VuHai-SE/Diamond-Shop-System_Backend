@@ -53,5 +53,9 @@ namespace Repositories.Implement
 
         public TblAccount GetAccountByEmail(string email)
             => _accountDAO.GetAccountByEmail(email);
+        public List<TblAccount> GetAllStaff()
+        {
+            return _accountDAO.GetAllStaff();
+        }
     }
 }
