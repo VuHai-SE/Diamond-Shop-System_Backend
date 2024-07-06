@@ -53,6 +53,26 @@ namespace DAOs
             var order = dbContext.TblOrders.FirstOrDefault(o => o.OrderId.Equals(orderID));
             return order;
         }
-        
+        public void CancelOrder(int orderID)
+        {
+            TblOrder oldOrder = getOrderByOrderID(orderID);
+            if (oldOrder != null)
+            {
+                oldOrder.OrderStatus = "Cancelled";
+                oldOrder.ShipStatus = "Cancel by customer";
+                dbContext.TblOrders.Update(oldOrder);
+                dbContext.SaveChanges();
+            }
+        }
+
+        public async Task<List<TblOrder>> GetDeliveredOrdersByMonthAndYearAsync(int month, int year)
+        {
+            return await dbContext.TblOrders
+                .Where(o => o.OrderDate.HasValue &&
+                            o.OrderDate.Value.Month == month &&
+                            o.OrderDate.Value.Year == year &&
+                            o.OrderStatus == "Delivered")
+                .ToListAsync();
+        }
     }
 }

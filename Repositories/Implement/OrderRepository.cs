@@ -23,7 +23,8 @@ namespace Repositories.Implement
 
         public TblOrder AddOrder(TblOrder order)
             => orderDAO.AddOrder(order);
-
+        public void CancelOrder(int orderID)
+           => orderDAO.CancelOrder(orderID);
         public List<TblOrder> getOrderByCustomerID(int customerID)
             => orderDAO.getOrderByCustomerID(customerID);
 
@@ -37,10 +38,14 @@ namespace Repositories.Implement
         {
             return await orderDAO.GetOrderById(orderId);
         }
-
+          
         public async Task<bool> UpdateOrder(TblOrder order)
         {
             return await orderDAO.UpdateOrder(order);
+        }
+        public async Task<List<TblOrder>> GetDeliveredOrdersByMonthAndYearAsync(int month, int year)
+        {
+            return await orderDAO.GetDeliveredOrdersByMonthAndYearAsync(month, year);
         }
     }
 }

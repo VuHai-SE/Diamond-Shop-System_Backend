@@ -14,8 +14,9 @@ namespace Repositories
         public TblOrder AddOrder(TblOrder order);
         public List<TblOrder> getOrderByCustomerID(int customerID);
         public TblOrder getOrderByOrderID(int orderID);
-
+        public void CancelOrder(int orderID);
         Task<TblOrder> GetOrderById(int orderId);
         Task<bool> UpdateOrder(TblOrder order);
+        Task<List<TblOrder>> GetDeliveredOrdersByMonthAndYearAsync(int month, int year);
     }
 }

@@ -30,9 +30,8 @@ namespace Services.Implement
         private readonly ISaleStaffRepository _saleStaffRepository;
         private readonly IShipperRepository _shipperRepository;
         private readonly IWarrantyRepository _warrantyRepository;
-        private readonly IMembershipRepository _membershipRepository;
 
-        public OrderService(IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository, ICustomerRepository customerRepository, IProductRepository productRepository, IProductMaterialRepository productMaterialRepository, IMaterialCategoryRepository materialCategoryRepository, IPaymentRepository paymentRepository, IAccountRepository accountRepository, ISaleStaffRepository saleStaffRepository, IShipperRepository shipperRepository, IWarrantyRepository warrantyRepository, IMembershipRepository membershipRepository)
+        public OrderService(IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository, ICustomerRepository customerRepository, IProductRepository productRepository, IProductMaterialRepository productMaterialRepository, IMaterialCategoryRepository materialCategoryRepository, IPaymentRepository paymentRepository, IAccountRepository accountRepository, ISaleStaffRepository saleStaffRepository, IShipperRepository shipperRepository, IWarrantyRepository warrantyRepository)
         {
             _orderDetailRepository = orderDetailRepository;
             _customerRepository = customerRepository;
@@ -45,7 +44,6 @@ namespace Services.Implement
             _saleStaffRepository = saleStaffRepository;
             _shipperRepository = shipperRepository;
             _warrantyRepository = warrantyRepository;
-            _membershipRepository = membershipRepository;
         }
 
         public async Task<bool> UpdateOrderStatus(OrderStatusRequest request)
@@ -68,11 +66,10 @@ namespace Services.Implement
                     order.StaffId = SaleStaffID;
                 }
                 order.OrderStatus = HandleOrderStatus(btValue);
-
                 if (request.ButtonValue.Equals("CANCEL"))
                 {
                     //OrderNote
-                    order.OrderNote = request.Username + "-" + "-Cancelled";
+                    order.ShipStatus = request.Username + "-" + "-Cancelled";
                 }
             }
             else if (request.Role.Equals("Shipper"))
@@ -90,40 +87,24 @@ namespace Services.Implement
                 else if (btValue.Equals("DONE"))
                 {
                     order.ReceiveDate = request.ReceivedDate;
-                    order.OrderNote = _accountRepository.GetAccountSaleStaff(order.StaffId).Username
+                    order.ShipStatus = _accountRepository.GetAccountSaleStaff(order.StaffId).Username
                         + "," + _accountRepository.GetAccountShipper(order.ShipperId).Username + "-Done";
-                    //update customer's membership
-                    var customer = _customerRepository.GetCustomerByID((int)order.CustomerId);
-                    var orderInfo = GetOrderInfo(order.OrderId);
-                    customer.Spending = customer.Spending += (decimal)orderInfo.TotalPrice;
-                    var membership = _membershipRepository.GetMemberShipByRank(customer.Ranking);
-                    if (membership.MaxSpend != null)
+                    var orderInfor = GetOrderInfo(order.OrderId);
+                    foreach (var product in orderInfor.products)
                     {
-                        var spending = (double)customer.Spending;
-                        var nextMembership = _membershipRepository.GetMembershipByID(membership.Id + 1);
-                        if (membership.Ranking == "Platinum")
+                        var newWarranty = new TblWarranty()
                         {
-                            if (spending >= nextMembership.MinSpend)
-                            {
-                                customer.Ranking = nextMembership.Ranking;
-                                customer.DiscountRate = nextMembership.DiscountRate / 100;
-                            }
-                        }
-                        else
-                        {
-                            if (spending > membership.MaxSpend)
-                            {
-                                customer.Ranking = nextMembership.Ranking;
-                                customer.DiscountRate = nextMembership.DiscountRate / 100;
-                            }
-                        }
+                            OrderDetailId = product.OrderDetailID,
+                            WarrantyStartDate = orderInfor.OrderDate.Date,
+                            WarrantyEndDate = orderInfor.OrderDate.Date.AddYears(1),
+                        };
+                        var createdWarranty = _warrantyRepository.AddWarranty(newWarranty);
                     }
-                    _customerRepository.UpdateCustomer(customer);
                 }
                 else if (request.ButtonValue.Equals("CANCEL"))
                 {
                     //OrderNote
-                    order.OrderNote = request.Username + "-Cancelled";
+                    order.ShipStatus = request.Username + "-Cancelled";
                 }
             }
             return await _orderRepository.UpdateOrder(order);
@@ -163,8 +144,8 @@ namespace Services.Implement
         public TblOrder AddOrder(TblOrder order)
             => _orderRepository.AddOrder(order);
 
-        //public void CancelOrder(int orderID)
-        //    => _orderRepository.CancelOrder(orderID);
+        public void CancelOrder(int orderID)
+            => _orderRepository.CancelOrder(orderID);
 
         public List<TblOrder> GetOrdersByCustomerID(int customerID)
             => _orderRepository.getOrderByCustomerID(customerID);
@@ -221,7 +202,7 @@ namespace Services.Implement
                 orderInfo.OrderStatus = order.OrderStatus;
                 orderInfo.ShippingDate = order.ShippingDate;
                 orderInfo.ReceiveDate = order.ReceiveDate;
-                orderInfo.OrderNote = order.OrderNote;
+                orderInfo.OrderNote = order.ShipStatus;
                 var OrderDetail = _orderDetailRepository.GetOrderDetailsByOrderID(order.OrderId);
                 foreach (var orderDetail in OrderDetail)
                 {
@@ -281,8 +262,40 @@ namespace Services.Implement
             }
             return orderInforList;
         }
-
         public Task<bool> UpdateOrder(TblOrder order)
-            => _orderRepository.UpdateOrder(order);
+           => _orderRepository.UpdateOrder(order);
+    
+public int GetSumOrderByMonth(int month, int year)
+        {
+            var orders = _orderRepository.GetOrders();
+
+            // Filter orders by the specified month and year
+            var filteredOrders = orders.Where(o => o.OrderDate.HasValue
+                                                    && o.OrderDate.Value.Month == month
+                                                    && o.OrderDate.Value.Year == year && o.ShipStatus == "delivered");
+
+            // Return the count of filtered orders
+            return filteredOrders.Count();
+        }
+
+        public int GetStaffs()
+        {
+            var staffMembers = _accountRepository.GetAllStaff();
+            return staffMembers.Count;
+        }
+
+        public async Task<decimal> GetSumRevenue(int month, int year)
+        {
+            var deliveredOrders = await _orderRepository.GetDeliveredOrdersByMonthAndYearAsync(month, year);
+            decimal totalRevenue = 0;
+
+            foreach (var order in deliveredOrders)
+            {
+                var orderDetails = _orderDetailRepository.GetOrderDetailsByOrderID(order.OrderId);
+                totalRevenue += orderDetails.Sum(od => (decimal)(od.FinalPrice ?? 0));
+            }
+
+            return totalRevenue;
+        }
     }
 }
