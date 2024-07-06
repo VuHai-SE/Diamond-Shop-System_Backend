@@ -13,6 +13,7 @@ using Microsoft.Identity.Client;
 using Services.DTOs.Response;
 using Humanizer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DiamondStoreAPI.Controllers
 {
@@ -39,6 +40,7 @@ namespace DiamondStoreAPI.Controllers
         }
 
         [HttpPut("UpdateOrderStatus")]
+        //[Authorize(Roles = "SaleStaff, Shipper")]
         public async Task<IActionResult> AcceptOrder([FromBody] OrderStatusRequest request)
         {
             var result = await iOrderService.UpdateOrderStatus(request);
