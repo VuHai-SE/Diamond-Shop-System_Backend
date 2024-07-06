@@ -10,7 +10,6 @@ namespace Services
     public interface ISaleStaffService
     {
         public TblSaleStaff GetSaleStaffByUsername(string username);
-
-
+        public bool isSaleStaffIdExist(string staffId);
     }
 }

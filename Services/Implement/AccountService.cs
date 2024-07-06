@@ -259,9 +259,6 @@ namespace Services.Implement
             if (account == null) return false;
             account.Role = request.Role.Trim();
             var isUpdate = _accountRepository.UpdateAccount(account);
-            if (!isUpdate) { return false; }
-            var accountInfo = await GetAccountInfo(request.UsertName);
-            AddToStaffTables(request.StaffId, accountInfo);
             return isUpdate;
         }
 

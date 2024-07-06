@@ -18,5 +18,8 @@ namespace Services.Implement
         }
         public TblShipper GetShipperByUsername(string username)
             => _shipperRepository.GetShipperByUsername(username);
+
+        public bool IsShipperIdExist(string shipperId)
+            => _shipperRepository.IsShipperIdExist(shipperId);
     }
 }

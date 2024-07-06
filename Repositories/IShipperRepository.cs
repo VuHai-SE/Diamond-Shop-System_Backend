@@ -10,5 +10,6 @@ namespace Repositories
     public interface IShipperRepository
     {
         public TblShipper GetShipperByUsername(string username);
+        public bool IsShipperIdExist(string shipperId);
     }
 }

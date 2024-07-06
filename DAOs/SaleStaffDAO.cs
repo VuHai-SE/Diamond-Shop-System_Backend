@@ -22,5 +22,7 @@ namespace DAOs
             return _dbContext.TblSaleStaffs.FirstOrDefault(s => s.AccountId.Equals(acc.AccountId));
         }
 
+        public bool isSaleStaffIdExist(string staffId)
+            => _dbContext.TblAccounts.Any(s => s.Equals(staffId));
     }
 }

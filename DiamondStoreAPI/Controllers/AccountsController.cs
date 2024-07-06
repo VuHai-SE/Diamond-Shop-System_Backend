@@ -29,6 +29,8 @@ namespace DiamondStoreAPI.Controllers
         private readonly ICustomerService _customerService;
         private readonly string _jwtSecret;
         private readonly IConfiguration _configuration;
+        private readonly ISaleStaffService _saleStaffService;
+        private readonly IShipperService _shipperService;
 
 
         public AccountsController(IAccountService accountService, ICustomerService customerService, IConfiguration configuration)
@@ -163,7 +165,7 @@ namespace DiamondStoreAPI.Controllers
             return Ok(shipperList);
         }
 
-        [HttpPost("ChangeRole")]
+        [HttpPut("ChangeRole")]
         public async Task<IActionResult> ChangeRole([FromBody] UpdateRoleRequest request)
         {
             var isSuccess = await _accountService.ChangeAccountRole(request);
@@ -171,13 +173,59 @@ namespace DiamondStoreAPI.Controllers
             return Ok(request.UsertName + "'s role has change into " + request.Role);
         }
 
-        [HttpPost("DisableAccount")]
+        [HttpPut("DisableAccount")]
         public async Task<IActionResult> DisableAccount(string username)
         {
             var isSuccess = await _accountService.DisableAccount(username);
             if (!isSuccess) return BadRequest("Update fail");
             return Ok(username + " has been disabled");
         }
+
+        [HttpPost("AddStaffId")]
+        public async Task<IActionResult> AddToStaffTables([FromBody] AddStaffTables request)
+        {
+            var accountInfo = await _accountService.GetAccountInfo(request.Username);
+            if (accountInfo == null) return NotFound();
+            _accountService.AddToStaffTables(request.StaffId, accountInfo);
+            return Ok(request.StaffId + " has been added");
+        }
+
+        [HttpPost("CreateStaffAccount")]
+        public async Task<IActionResult> CreateStaffAccount([FromBody] CreateStaffAccountRequest request)
+        {
+            var registerRequest = new Services.DTOs.Request.RegisterRequest()
+            {
+                Username = request.Username,
+                Password = request.Password,
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                Gender = request.Gender,
+                Birthday = request.Birthday,
+                Email = request.Email,
+                PhoneNumber = request.PhoneNumber,
+                Address = request.Address,
+            };
+            _accountService.RegisterAsync(registerRequest);
+            var accountInfo = await _accountService.GetStaffInfo(request.Username);
+            _accountService.AddToStaffTables(request.StaffId, accountInfo);
+            var staffInfo = _accountService.GetStaffInfo(request.Username);
+            return Ok(staffInfo);
+        }
+
+        [HttpGet("CheckSaleStaffIdExist")]
+        public async Task<IActionResult> CheckSaleStaffIdExist(string saleStaffId)
+        {
+            bool isExist = _saleStaffService.isSaleStaffIdExist(saleStaffId);
+            return Ok(isExist);
+        }
+
+        [HttpGet("CheckShipperIdExist")]
+        public async Task<IActionResult> CheckShipperIdExist(string shipperId)
+        {
+            bool isExist = _shipperService.IsShipperIdExist(shipperId);
+            return Ok(isExist);
+        }
+
         private string GenerateJwtToken(TblAccount account)
         {
             var tokenHandler = new JwtSecurityTokenHandler();

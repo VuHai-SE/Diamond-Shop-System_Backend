@@ -19,5 +19,8 @@ namespace Repositories.Implement
 
         public TblShipper GetShipperByUsername(string username)
             => _shipperDAO.GetShipperByUsername(username);
+
+        public bool IsShipperIdExist(string shipperId)
+            => _shipperDAO.IsShipperIdExist(shipperId);
     }
 }
