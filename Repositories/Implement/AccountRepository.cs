@@ -51,7 +51,11 @@ namespace Repositories.Implement
         public bool IsUsernameExisted(string username)
             => _accountDAO.IsUsernameExisted(username);
 
-        public Task<TblAccount> GetAccountByEmailAsync(string email)
-            => _accountDAO.GetAccountByEmailAsync(email);
+        public TblAccount GetAccountByEmail(string email)
+            => _accountDAO.GetAccountByEmail(email);
+        public List<TblAccount> GetAllStaff()
+        {
+            return _accountDAO.GetAllStaff();
+        }
     }
 }

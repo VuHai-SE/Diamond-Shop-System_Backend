@@ -19,10 +19,10 @@ namespace DAOs
             _context = new DiamondStoreContext();
         }
 
-        public async Task<TblAccount> GetAccountByEmailAsync(string email)
+        public TblAccount GetAccountByEmail(string email)
         {
             var customer = _context.TblCustomers.FirstOrDefault(c => c.Email.Equals(email));
-            return await _context.TblAccounts.AsNoTracking().FirstOrDefaultAsync(a => a.AccountId.Equals(customer.AccountId));
+            return _context.TblAccounts.FirstOrDefault(a => a.AccountId.Equals(customer.AccountId));
         }
 
         public async Task<TblAccount> GetAccountByUsernameAsync(string username)
@@ -74,5 +74,9 @@ namespace DAOs
 
         public bool IsUsernameExisted(string username)
             => _context.TblAccounts.Any(a => a.Username.Equals(username));
+        public List<TblAccount> GetAllStaff()
+        {
+            return _context.TblAccounts.Where(a => a.Role == "Staff").ToList();
+        }
     }
 }

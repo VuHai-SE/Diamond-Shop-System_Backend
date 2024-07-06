@@ -23,5 +23,6 @@ namespace Services
         public TblAccount GetAccountShipper(string shipperID);
 
         public bool IsUsernameExisted(string username);
+        public TblAccount GetAccountByEmail(string email);
     }
 }

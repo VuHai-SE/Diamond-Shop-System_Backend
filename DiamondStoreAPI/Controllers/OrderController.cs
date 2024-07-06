@@ -13,7 +13,6 @@ using Microsoft.Identity.Client;
 using Services.DTOs.Response;
 using Humanizer;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Authorization;
 
 namespace DiamondStoreAPI.Controllers
 {
@@ -40,7 +39,7 @@ namespace DiamondStoreAPI.Controllers
         }
 
         [HttpPut("UpdateOrderStatus")]
-        //[Authorize(Roles = "SaleStaff, Shipper")]
+
         public async Task<IActionResult> AcceptOrder([FromBody] OrderStatusRequest request)
         {
             var result = await iOrderService.UpdateOrderStatus(request);
@@ -204,7 +203,7 @@ namespace DiamondStoreAPI.Controllers
                 OrderId = order.OrderId,
                 CustomerId = customer.CustomerId,
                 PaymentMethod = order.PaymentMethod,
-                Deposits = newOrderRequest.Deposits      ,
+                Deposits = newOrderRequest.Deposits,
             };
             newPayMent.PayDetail = newPayMent.PaymentMethod + "-Deposits: " + newPayMent.Deposits;
             var payment = iPaymentService.AddPayment(newPayMent);
@@ -231,7 +230,8 @@ namespace DiamondStoreAPI.Controllers
             if (orderToUpdate.OrderStatus.Equals("Deliverying") || orderToUpdate.OrderStatus.Equals("Deliveried") || orderToUpdate.Equals("Cancelled"))
             {
                 return BadRequest("Cannot cancel");
-            } else
+            }
+            else
             {
                 orderToUpdate.OrderStatus = "Cancelled";
                 orderToUpdate.OrderNote = "Customer cancelled-" + request.Note.Trim();
@@ -260,6 +260,37 @@ namespace DiamondStoreAPI.Controllers
                 return NotFound();
             }
             return Ok(acceptedOrderInfoList);
+        }
+
+        [HttpGet("GetSumOrderbyMonthAndYear")]
+        public async Task<IActionResult> GetSumOrderbyMonthAndYear([FromQuery] int month, [FromQuery] int year)
+        {
+            var result = iOrderService.GetSumOrderByMonth(month, year);
+            if (result == 0)
+            {
+                return NotFound();
+            }
+            return Ok(result);
+        }
+        [HttpGet("GetRevenue")]
+        public async Task<IActionResult> GetRevenue([FromQuery] int month, [FromQuery] int year)
+        {
+            var result = iOrderService.GetSumRevenue(month, year);
+            if (result == null)
+            {
+                return NotFound();
+            }
+            return Ok(result);
+        }
+        [HttpGet("GetStaffs")]
+        public async Task<IActionResult> GetStaffs()
+        {
+            var result = iOrderService.GetStaffs();
+            if (result == 0)
+            {
+                return NotFound();
+            }
+            return Ok(result);
         }
     }
 }
