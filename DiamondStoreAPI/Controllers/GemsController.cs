@@ -56,58 +56,75 @@ namespace DiamondStoreAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<TblGem>> AddGem(AddGemRequest addGemRequest)
+        public async Task<ActionResult> AddGem(AddGemRequest addGemRequest)
         {
-            if (string.IsNullOrEmpty(addGemRequest.GemId) ||
-                string.IsNullOrEmpty(addGemRequest.GemName) ||
-                string.IsNullOrEmpty(addGemRequest.Polish) ||
-                string.IsNullOrEmpty(addGemRequest.Symmetry) ||
-                string.IsNullOrEmpty(addGemRequest.Fluorescence) ||
-                !addGemRequest.Origin.HasValue ||
-                !addGemRequest.CaratWeight.HasValue ||
-                string.IsNullOrEmpty(addGemRequest.Color) ||
-                string.IsNullOrEmpty(addGemRequest.Cut) ||
-                string.IsNullOrEmpty(addGemRequest.Clarity) ||
-                string.IsNullOrEmpty(addGemRequest.Shape) ||
-                !addGemRequest.GenerateDate.HasValue ||
-                string.IsNullOrEmpty(addGemRequest.Image))
+            try
             {
-                return BadRequest("All fields are required.");
+                if (string.IsNullOrEmpty(addGemRequest.GemId) ||
+                    string.IsNullOrEmpty(addGemRequest.GemName) ||
+                    string.IsNullOrEmpty(addGemRequest.Polish) ||
+                    string.IsNullOrEmpty(addGemRequest.Symmetry) ||
+                    string.IsNullOrEmpty(addGemRequest.Fluorescence) ||
+                    !addGemRequest.Origin.HasValue ||
+                    !addGemRequest.CaratWeight.HasValue ||
+                    string.IsNullOrEmpty(addGemRequest.Color) ||
+                    string.IsNullOrEmpty(addGemRequest.Cut) ||
+                    string.IsNullOrEmpty(addGemRequest.Clarity) ||
+                    string.IsNullOrEmpty(addGemRequest.Shape) ||
+                    !addGemRequest.GenerateDate.HasValue ||
+                    string.IsNullOrEmpty(addGemRequest.Image))
+                {
+                    return BadRequest("All fields are required.");
+                }
+
+                var existingGem = _gemService.GetGem(addGemRequest.GemId);
+                if (existingGem != null)
+                {
+                    return BadRequest("Gem with the same ID already exists.");
+                }
+
+                var gem = new TblGem
+                {
+                    GemId = addGemRequest.GemId,
+                    GemName = addGemRequest.GemName,
+                    Polish = addGemRequest.Polish,
+                    Symmetry = addGemRequest.Symmetry,
+                    Fluorescence = addGemRequest.Fluorescence,
+                    Origin = addGemRequest.Origin,
+                    CaratWeight = addGemRequest.CaratWeight,
+                    Color = addGemRequest.Color,
+                    Cut = addGemRequest.Cut,
+                    Clarity = addGemRequest.Clarity,
+                    Shape = addGemRequest.Shape
+                };
+
+                var addedGem = _gemService.AddGem(gem);
+
+                var report = new TblDiamondGradingReport
+                {
+                    GemId = addedGem.GemId,
+                    GenerateDate = addGemRequest.GenerateDate,
+                    Image = addGemRequest.Image
+                };
+
+                _gemService.AddDiamondGradingReport(report);
+
+                var response = new
+                {
+                    Message = "Gem added successfully",
+                    Gem = addedGem
+                };
+
+                return CreatedAtAction(nameof(AddGem), new { id = addedGem.GemId }, response);
             }
-
-            var existingGem = _gemService.GetGem(addGemRequest.GemId);
-            if (existingGem != null)
+            catch (DbUpdateException dbEx)
             {
-                return BadRequest("Gem with the same ID already exists.");
+                return StatusCode(500, $"A database error occurred: {dbEx.InnerException?.Message ?? dbEx.Message}");
             }
-
-            var gem = new TblGem
+            catch (Exception ex)
             {
-                GemId = addGemRequest.GemId,
-                GemName = addGemRequest.GemName,
-                Polish = addGemRequest.Polish,
-                Symmetry = addGemRequest.Symmetry,
-                Fluorescence = addGemRequest.Fluorescence,
-                Origin = addGemRequest.Origin,
-                CaratWeight = addGemRequest.CaratWeight,
-                Color = addGemRequest.Color,
-                Cut = addGemRequest.Cut,
-                Clarity = addGemRequest.Clarity,
-                Shape = addGemRequest.Shape
-            };
-
-            var addedGem = _gemService.AddGem(gem);
-
-            var report = new TblDiamondGradingReport
-            {
-                GemId = addedGem.GemId,
-                GenerateDate = addGemRequest.GenerateDate,
-                Image = addGemRequest.Image
-            };
-
-            _gemService.AddDiamondGradingReport(report);
-
-            return CreatedAtAction(nameof(AddGem), new { id = addedGem.GemId }, addedGem);
+                return StatusCode(500, $"An unexpected error occurred: {ex.Message}");
+            }
         }
     }
 }
