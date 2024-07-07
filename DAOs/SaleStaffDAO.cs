@@ -9,11 +9,14 @@ namespace DAOs
 {
     public  class SaleStaffDAO
     {
-        private readonly DiamondStoreContext _dbContext;
+        private readonly DiamondStoreContext _dbContext = null;
 
-        public SaleStaffDAO(DiamondStoreContext dbContext)
+        public SaleStaffDAO()
         {
-            _dbContext = dbContext;
+            if (_dbContext == null)
+            {
+                _dbContext = new DiamondStoreContext();
+            }
         }
 
         public TblSaleStaff GetSaleStaffByUsername(string username)

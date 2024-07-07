@@ -158,7 +158,22 @@ namespace Services.Implement
         {
             var accountInfo = await GetAccountInfo(username);
             if (accountInfo == null) return null;
-            StaffInfo staffInfo = (StaffInfo)accountInfo;
+            var staffInfo = new StaffInfo()
+            {
+                AccountId = accountInfo.AccountId,
+                UserName = accountInfo.UserName,
+                FirstName = accountInfo.FirstName,
+                LastName = accountInfo.LastName,
+                Role = accountInfo.Role,
+                Gender = accountInfo.Gender,
+                Birthday = accountInfo.Birthday,
+                Email = accountInfo.Email,
+                PhoneNumber = accountInfo.PhoneNumber,
+                Address = accountInfo.Address,
+                Ranking = accountInfo.Ranking,
+                DiscountRate = accountInfo.DiscountRate,
+                Status = accountInfo.Status
+            };
             if (accountInfo.Role == "SaleStaff")
             {
                 var saleStaff = _saleStaffRepository.GetSaleStaffByUsername(username);
@@ -190,7 +205,7 @@ namespace Services.Implement
             var accountList = _accountRepository.GetAllAccount();
             foreach (var a in accountList)
             {
-                if (a.Role == "Customer")
+                if (a.Role.Equals("Customer"))
                 {
                     var cus = await GetAccountInfo(a.Username);
                     customerInfoList.Add(cus);

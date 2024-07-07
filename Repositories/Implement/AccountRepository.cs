@@ -12,9 +12,9 @@ namespace Repositories.Implement
     {
         private readonly AccountDAO _accountDAO;
 
-        public AccountRepository()
+        public AccountRepository(AccountDAO accountDAO)
         {
-            _accountDAO = new AccountDAO();
+            _accountDAO = accountDAO;
         }
 
         public async Task<TblAccount> GetAccountByUsernameAsync(string username)

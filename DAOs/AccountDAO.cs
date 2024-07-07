@@ -12,11 +12,14 @@ namespace DAOs
 {
     public class AccountDAO
     {
-        public readonly DiamondStoreContext _context;
+        private readonly DiamondStoreContext _context = null;
 
         public AccountDAO()
         {
-            _context = new DiamondStoreContext();
+            if (_context == null)
+            {
+                _context = new DiamondStoreContext();
+            }
         }
 
         public List<TblAccount> GetAllAccount()

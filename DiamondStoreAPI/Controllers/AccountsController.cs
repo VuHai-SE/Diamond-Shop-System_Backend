@@ -144,7 +144,7 @@ namespace DiamondStoreAPI.Controllers
         [HttpGet("GetCustomerList")]
         public async Task<IActionResult> GetCustomerList()
         {
-            var customerList = await _accountService.GetAccountInfoList();
+            var customerList = await _accountService.GetCustomerInfoList();
             if (customerList.IsNullOrEmpty()) return NotFound();
             return Ok(customerList);
         }
@@ -206,6 +206,8 @@ namespace DiamondStoreAPI.Controllers
                 Address = request.Address,
             };
             _accountService.RegisterAsync(registerRequest);
+            var updateRoleRequest = new UpdateRoleRequest() { Role = request.Role, UsertName = request.Username };
+            var isChanageRole = _accountService.ChangeAccountRole(updateRoleRequest);
             var accountInfo = await _accountService.GetStaffInfo(request.Username);
             _accountService.AddToStaffTables(request.StaffId, accountInfo);
             var staffInfo = _accountService.GetStaffInfo(request.Username);

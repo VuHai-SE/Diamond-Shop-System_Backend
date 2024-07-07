@@ -10,6 +10,5 @@ namespace Services.DTOs.Request
     {
         public string UsertName { get; set; }
         public string Role {  get; set; }
-        public string StaffId { get; set; }
     }
 }
