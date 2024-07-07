@@ -21,6 +21,9 @@ namespace Services.Implement
         public TblGem AddGem(TblGem gem)
             => gemRepository.AddGem(gem);
 
+        public TblDiamondGradingReport AddDiamondGradingReport(TblDiamondGradingReport report)
+            => gemRepository.AddDiamondGradingReport(report);
+
         public bool DeleteGem(string id)
             => gemRepository.DeleteGem(id);
 

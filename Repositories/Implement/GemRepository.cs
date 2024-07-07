@@ -20,6 +20,9 @@ namespace Repositories.Implement
         public TblGem AddGem(TblGem gem)
             => gemDAO.AddGem(gem);
 
+        public TblDiamondGradingReport AddDiamondGradingReport(TblDiamondGradingReport report)
+            => gemDAO.AddDiamondGradingReport(report);
+
         public bool DeleteGem(string id)
             => gemDAO.DeleteGem(id);
 

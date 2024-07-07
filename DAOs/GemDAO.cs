@@ -31,6 +31,13 @@ namespace DAOs
             return gem;
         }
 
+        public TblDiamondGradingReport AddDiamondGradingReport(TblDiamondGradingReport report)
+        {
+            dbContext.TblDiamondGradingReports.Add(report);
+            dbContext.SaveChanges();
+            return report;
+        }
+
         public bool UpdateGem(string id, TblGem gem)
         {
             return false;

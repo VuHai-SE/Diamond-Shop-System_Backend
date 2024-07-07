@@ -9,6 +9,7 @@ using BusinessObjects;
 using Services;
 using Services.Implement;
 using Microsoft.AspNetCore.Authorization;
+using BusinessObjects.RequestModels;
 
 namespace DiamondStoreAPI.Controllers
 {
@@ -16,11 +17,11 @@ namespace DiamondStoreAPI.Controllers
     [ApiController]
     public class GemsController : ControllerBase
     {
-        private readonly IGemService iGemService;
+        private readonly IGemService _gemService;
 
         public GemsController(IGemService gemService)
         {
-            iGemService = gemService;
+            _gemService = gemService;
         }
 
         // GET: api/Gems
@@ -28,23 +29,23 @@ namespace DiamondStoreAPI.Controllers
         //[Authorize(Roles = "Customer")]
         public async Task<ActionResult<IEnumerable<TblGem>>> GetTblGems()
         {
-            if (iGemService.GetGems() == null)
+            if (_gemService.GetGems() == null)
             {
                 return NotFound();
             }
-            return iGemService.GetGems();
+            return _gemService.GetGems().ToList();
         }
 
         // GET: api/Gems/5
         [HttpGet("{id}")]
         public async Task<ActionResult<TblGem>> GetTblGem(string id)
         {
-            if (iGemService.GetGems() == null)
+            if (_gemService.GetGems() == null)
             {
                 return NotFound();
             }
 
-            var tblGem = iGemService.GetGem(id);
+            var tblGem = _gemService.GetGem(id);
 
             if (tblGem == null)
             {
@@ -54,66 +55,36 @@ namespace DiamondStoreAPI.Controllers
             return tblGem;
         }
 
-        // PUT: api/Gems/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutTblGsem(string id, TblGem tblGem)
-        //{
-        //    if (id != tblGem.GemId)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    iGemService.Entry(tblGem).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await iGemService.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!TblGemExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
-
-        // POST: api/Gems
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<TblGem>> PostTblGem(TblGem tblGem)
+        public async Task<ActionResult<TblGem>> AddGem(AddGemRequest addGemRequest)
         {
-            var newGem = iGemService.AddGem(tblGem);
+            var gem = new TblGem
+            {
+                GemId = addGemRequest.GemId,
+                GemName = addGemRequest.GemName,
+                Polish = addGemRequest.Polish,
+                Symmetry = addGemRequest.Symmetry,
+                Fluorescence = addGemRequest.Fluorescence,
+                Origin = addGemRequest.Origin,
+                CaratWeight = addGemRequest.CaratWeight,
+                Color = addGemRequest.Color,
+                Cut = addGemRequest.Cut,
+                Clarity = addGemRequest.Clarity,
+                Shape = addGemRequest.Shape
+            };
 
-            return CreatedAtAction("GetTblGem", new { id = tblGem.GemId }, tblGem);
+            var addedGem = _gemService.AddGem(gem);
+
+            var report = new TblDiamondGradingReport
+            {
+                GemId = addedGem.GemId,
+                GenerateDate = addGemRequest.GenerateDate,
+                Image = addGemRequest.Image
+            };
+
+            _gemService.AddDiamondGradingReport(report);
+
+            return CreatedAtAction(nameof(AddGem), new { id = addedGem.GemId }, addedGem);
         }
-
-        // DELETE: api/Gems/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteTblGem(string id)
-        //{
-        //    var tblGem = await iGemService.TblGems.FindAsync(id);
-        //    if (tblGem == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    iGemService.TblGems.Remove(tblGem);
-        //    await iGemService.SaveChangesAsync();
-
-        //    return NoContent();
-        //}
-
-        //private bool TblGemExists(string id)
-        //{
-        //    return iGemService.TblGems.Any(e => e.GemId == id);
-        //}
     }
 }
