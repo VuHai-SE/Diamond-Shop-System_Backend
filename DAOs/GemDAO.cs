@@ -21,8 +21,8 @@ namespace DAOs
 
         public List<TblGem> GetGems() => dbContext.TblGems.ToList();
 
-        public TblGem GetGem(string id)
-            => dbContext.TblGems.FirstOrDefault(m => m.GemId.Equals(id));
+        public TblGem GetGem(string gemId)
+            => dbContext.TblGems.FirstOrDefault(g => g.GemId == gemId);
 
         public TblGem AddGem(TblGem gem)
         {

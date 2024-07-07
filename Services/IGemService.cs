@@ -10,7 +10,7 @@ namespace Services
     public interface IGemService
     {
         List<TblGem> GetGems();
-        TblGem GetGem(string id);
+        TblGem GetGem(string gemId);
         TblGem AddGem(TblGem gem);
         TblDiamondGradingReport AddDiamondGradingReport(TblDiamondGradingReport report);
         bool UpdateGem(string id, TblGem gem);

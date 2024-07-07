@@ -26,8 +26,8 @@ namespace Repositories.Implement
         public bool DeleteGem(string id)
             => gemDAO.DeleteGem(id);
 
-        public TblGem GetGem(string id)
-            => gemDAO.GetGem(id);
+        public TblGem GetGem(string gemId)
+            => gemDAO.GetGem(gemId);
 
         public TblGem GetGemByProduct(string productId)
             => gemDAO.GetGemByProduct(productId);

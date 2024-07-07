@@ -27,8 +27,8 @@ namespace Services.Implement
         public bool DeleteGem(string id)
             => gemRepository.DeleteGem(id);
 
-        public TblGem GetGem(string id)
-            => gemRepository.GetGem(id);
+        public TblGem GetGem(string gemId)
+            => gemRepository.GetGem(gemId);
 
         public TblGem GetGemByProduct(string productId)
             => gemRepository.GetGemByProduct(productId);

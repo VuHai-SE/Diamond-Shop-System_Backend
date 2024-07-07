@@ -58,6 +58,29 @@ namespace DiamondStoreAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<TblGem>> AddGem(AddGemRequest addGemRequest)
         {
+            if (string.IsNullOrEmpty(addGemRequest.GemId) ||
+                string.IsNullOrEmpty(addGemRequest.GemName) ||
+                string.IsNullOrEmpty(addGemRequest.Polish) ||
+                string.IsNullOrEmpty(addGemRequest.Symmetry) ||
+                string.IsNullOrEmpty(addGemRequest.Fluorescence) ||
+                !addGemRequest.Origin.HasValue ||
+                !addGemRequest.CaratWeight.HasValue ||
+                string.IsNullOrEmpty(addGemRequest.Color) ||
+                string.IsNullOrEmpty(addGemRequest.Cut) ||
+                string.IsNullOrEmpty(addGemRequest.Clarity) ||
+                string.IsNullOrEmpty(addGemRequest.Shape) ||
+                !addGemRequest.GenerateDate.HasValue ||
+                string.IsNullOrEmpty(addGemRequest.Image))
+            {
+                return BadRequest("All fields are required.");
+            }
+
+            var existingGem = _gemService.GetGem(addGemRequest.GemId);
+            if (existingGem != null)
+            {
+                return BadRequest("Gem with the same ID already exists.");
+            }
+
             var gem = new TblGem
             {
                 GemId = addGemRequest.GemId,
