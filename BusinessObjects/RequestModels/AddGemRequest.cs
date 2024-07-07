@@ -29,5 +29,9 @@ namespace BusinessObjects.RequestModels
         public string? Clarity { get; set; }
 
         public string? Shape { get; set; }
+
+        public DateTime? GenerateDate { get; set; }
+
+        public string? Image { get; set; }
     }
 }

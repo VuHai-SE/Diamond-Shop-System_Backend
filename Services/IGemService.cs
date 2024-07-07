@@ -12,6 +12,7 @@ namespace Services
         List<TblGem> GetGems();
         TblGem GetGem(string id);
         TblGem AddGem(TblGem gem);
+        TblDiamondGradingReport AddDiamondGradingReport(TblDiamondGradingReport report);
         bool UpdateGem(string id, TblGem gem);
         bool DeleteGem(string id);
         TblGem GetGemByProduct(string productId);
