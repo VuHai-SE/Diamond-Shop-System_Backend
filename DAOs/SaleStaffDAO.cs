@@ -13,7 +13,7 @@ namespace DAOs
 
         public SaleStaffDAO(DiamondStoreContext dbContext)
         {
-            dbContext = _dbContext;
+            _dbContext = dbContext;
         }
 
         public TblSaleStaff GetSaleStaffByUsername(string username)
