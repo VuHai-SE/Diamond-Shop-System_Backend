@@ -9,14 +9,11 @@ namespace DAOs
 {
     public class ShipperDAO
     {
-        private readonly DiamondStoreContext _dbContext = null;
+        private readonly DiamondStoreContext _dbContext;
 
-        public ShipperDAO()
+        public ShipperDAO(DiamondStoreContext dbContext)
         {
-            if(_dbContext == null)
-            {
-                _dbContext = new DiamondStoreContext();
-            }
+           _dbContext = dbContext;
         }
 
         public TblShipper GetShipperByUsername(string username)
