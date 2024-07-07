@@ -14,14 +14,10 @@ using System.Text.Json;
 public class WarrantyController : ControllerBase
 {
     private readonly IWarrantyService _warrantyService;
-    private readonly IOrderDetailService _orderDetailService;
-    private readonly IOrderService _orderService;
 
-    public WarrantyController(IWarrantyService warrantyService, IOrderDetailService orderDetailService, IOrderService orderService)
+    public WarrantyController(IWarrantyService warrantyService)
     {
         _warrantyService = warrantyService;
-        _orderDetailService = orderDetailService;
-        _orderService = orderService;
     }
 
     [HttpGet("WarrantyInfo")]

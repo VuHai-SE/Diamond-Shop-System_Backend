@@ -11,14 +11,11 @@ namespace Services.Implement
 {
     public class MaterialCategoryService : IMaterialCategoryService
     {
-        private readonly IMaterialCategoryRepository materialCategoryRepository = null;
+        private readonly IMaterialCategoryRepository materialCategoryRepository;
 
-        public MaterialCategoryService()
+        public MaterialCategoryService(IMaterialCategoryRepository _materialCategoryRepository)
         {
-            if (materialCategoryRepository == null)
-            {
-                materialCategoryRepository = new MaterialCategoryRepository();
-            }
+            materialCategoryRepository = _materialCategoryRepository;
         }
 
         public TblMaterialCategory AddMaterialCategory(TblMaterialCategory category)

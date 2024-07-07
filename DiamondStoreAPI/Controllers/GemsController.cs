@@ -25,15 +25,14 @@ namespace DiamondStoreAPI.Controllers
 
         // GET: api/Gems
         [HttpGet]
-        [Authorize(Roles = "Customer")]
-
+        //[Authorize(Roles = "Customer")]
         public async Task<ActionResult<IEnumerable<TblGem>>> GetTblGems()
         {
             if (iGemService.GetGems() == null)
             {
                 return NotFound();
             }
-            return iGemService.GetGems().ToList();
+            return iGemService.GetGems();
         }
 
         // GET: api/Gems/5

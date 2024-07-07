@@ -10,14 +10,11 @@ namespace Repositories.Implement
 {
     public class PaymentRepository : IPaymentRepository
     {
-        private readonly PaymentDAO paymentDAO = null;
+        private readonly PaymentDAO paymentDAO;
 
-        public PaymentRepository()
+        public PaymentRepository(PaymentDAO _paymentDAO)
         {
-            if (paymentDAO == null)
-            {
-                paymentDAO = new PaymentDAO();
-            }
+            paymentDAO = _paymentDAO;
         }
 
         public TblPayment AddPayment(TblPayment payment)

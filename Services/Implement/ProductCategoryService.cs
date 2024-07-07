@@ -11,14 +11,11 @@ namespace Services.Implement
 {
     public class ProductCategoryService : IProductCategoryService
     {
-        private readonly IProductCategoryRepository productCategoryRepository = null;
+        private readonly IProductCategoryRepository productCategoryRepository;
 
-        public ProductCategoryService()
+        public ProductCategoryService(IProductCategoryRepository _productCategoryRepository)
         {
-            if (productCategoryRepository == null)
-            {
-                productCategoryRepository = new ProductCategoryRepository();
-            }
+            productCategoryRepository = _productCategoryRepository;
         }
 
         public TblProductCategory AddProductCategories(TblProductCategory productCategory)

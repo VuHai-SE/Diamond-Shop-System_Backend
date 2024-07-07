@@ -9,14 +9,11 @@ namespace DAOs
 {
     public class MaterialPriceListDAO
     {
-        private readonly DiamondStoreContext dbContext = null;
+        private readonly DiamondStoreContext dbContext;
 
-        public MaterialPriceListDAO()
+        public MaterialPriceListDAO(DiamondStoreContext _dbContext)
         {
-            if (dbContext == null)
-            {
-                dbContext = new DiamondStoreContext();
-            }
+            dbContext = _dbContext;
         }
 
         public List<TblMaterialPriceList> GetMaterialPriceLists()

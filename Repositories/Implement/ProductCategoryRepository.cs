@@ -10,14 +10,11 @@ namespace Repositories.Implement
 {
     public class ProductCategoryRepository : IProductCategoryRepository
     {
-        private readonly ProductCategoryDAO productCategoryDAO = null;
+        private readonly ProductCategoryDAO productCategoryDAO;
 
-        public ProductCategoryRepository()
+        public ProductCategoryRepository(ProductCategoryDAO _productCategoryDAO)
         {
-            if (productCategoryDAO == null)
-            {
-                productCategoryDAO = new ProductCategoryDAO();
-            }
+            productCategoryDAO = _productCategoryDAO;
         }
 
         public TblProductCategory AddProductCategories(TblProductCategory productCategory)
