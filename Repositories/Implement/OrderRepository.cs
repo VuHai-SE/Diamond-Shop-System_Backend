@@ -11,14 +11,11 @@ namespace Repositories.Implement
     public class OrderRepository : IOrderRepository
     {
 
-        private readonly OrderDAO orderDAO = null;
+        private readonly OrderDAO orderDAO;
 
-        public OrderRepository()
+        public OrderRepository(OrderDAO _orderDAO)
         {
-            if (orderDAO == null)
-            {
-                orderDAO = new OrderDAO();
-            }
+           orderDAO = _orderDAO;
         }
 
         public TblOrder AddOrder(TblOrder order)

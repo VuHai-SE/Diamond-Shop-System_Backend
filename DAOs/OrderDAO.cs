@@ -10,14 +10,11 @@ namespace DAOs
 {
     public class OrderDAO
     {
-        private readonly DiamondStoreContext dbContext = null;
+        private readonly DiamondStoreContext dbContext;
 
-        public OrderDAO()
+        public OrderDAO(DiamondStoreContext _dbContext)
         {
-            if (dbContext == null)
-            {
-                dbContext = new DiamondStoreContext();
-            }
+            dbContext = _dbContext;
         }
 
         public async Task<TblOrder> GetOrderById(int orderId)

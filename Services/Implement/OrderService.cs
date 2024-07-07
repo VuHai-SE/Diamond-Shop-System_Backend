@@ -29,9 +29,8 @@ namespace Services.Implement
         private readonly IAccountRepository _accountRepository;
         private readonly ISaleStaffRepository _saleStaffRepository;
         private readonly IShipperRepository _shipperRepository;
-        private readonly IWarrantyRepository _warrantyRepository;
 
-        public OrderService(IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository, ICustomerRepository customerRepository, IProductRepository productRepository, IProductMaterialRepository productMaterialRepository, IMaterialCategoryRepository materialCategoryRepository, IPaymentRepository paymentRepository, IAccountRepository accountRepository, ISaleStaffRepository saleStaffRepository, IShipperRepository shipperRepository, IWarrantyRepository warrantyRepository)
+        public OrderService(IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository, ICustomerRepository customerRepository, IProductRepository productRepository, IProductMaterialRepository productMaterialRepository, IMaterialCategoryRepository materialCategoryRepository, IPaymentRepository paymentRepository, IAccountRepository accountRepository, ISaleStaffRepository saleStaffRepository, IShipperRepository shipperRepository)
         {
             _orderDetailRepository = orderDetailRepository;
             _customerRepository = customerRepository;
@@ -43,7 +42,6 @@ namespace Services.Implement
             _accountRepository = accountRepository;
             _saleStaffRepository = saleStaffRepository;
             _shipperRepository = shipperRepository;
-            _warrantyRepository = warrantyRepository;
         }
 
         public async Task<bool> UpdateOrderStatus(OrderStatusRequest request)

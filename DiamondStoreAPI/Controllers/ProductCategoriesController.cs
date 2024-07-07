@@ -17,9 +17,9 @@ namespace DiamondStoreAPI.Controllers
     {
         private readonly IProductCategoryService iProductCategoryService;
 
-        public ProductCategoriesController()
+        public ProductCategoriesController(IProductCategoryService productCategoryService)
         {
-            iProductCategoryService = new ProductCategoryService();
+            iProductCategoryService = productCategoryService;
         }
 
         // GET: api/ProductCategories

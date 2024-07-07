@@ -12,14 +12,11 @@ namespace Repositories.Implement
 {
     public class CustomerRepository : ICustomerRepository
     {
-        private readonly CustomerDAO customerDAO = null;
+        private readonly CustomerDAO customerDAO;
 
-        public CustomerRepository()
+        public CustomerRepository(CustomerDAO _customerDAO)
         {
-            if (customerDAO == null)
-            {
-                customerDAO = new CustomerDAO();
-            }
+            customerDAO = _customerDAO;
         }
 
         public TblCustomer GetCustomerByAccount(string username)

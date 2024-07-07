@@ -13,14 +13,11 @@ namespace Services.Implement
 {
     public class CustomerService : ICustomerService
     {
-        private readonly ICustomerRepository customerRepository = null;
+        private readonly ICustomerRepository customerRepository;
 
-        public CustomerService()
+        public CustomerService(ICustomerRepository _customerRepository)
         {
-            if (customerRepository == null)
-            {
-                customerRepository = new CustomerRepository();
-            }
+            customerRepository = _customerRepository;
         }
 
         public TblCustomer GetCustomerByAccount(string username)

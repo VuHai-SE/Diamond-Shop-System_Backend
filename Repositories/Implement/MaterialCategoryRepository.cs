@@ -10,14 +10,11 @@ namespace Repositories.Implement
 {
     public class MaterialCategoryRepository : IMaterialCategoryRepository
     {
-        private readonly MaterialCategoryDAO materialCategoryDAO = null;
+        private readonly MaterialCategoryDAO materialCategoryDAO;
 
-        public MaterialCategoryRepository()
+        public MaterialCategoryRepository(MaterialCategoryDAO _materialCategoryDAO)
         {
-            if (materialCategoryDAO == null)
-            {
-                materialCategoryDAO = new MaterialCategoryDAO();
-            }
+            materialCategoryDAO = _materialCategoryDAO;
         }
 
         public bool DeleteMaterialCategory(string id)
