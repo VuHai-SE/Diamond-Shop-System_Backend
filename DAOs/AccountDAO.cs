@@ -14,9 +14,9 @@ namespace DAOs
     {
         public readonly DiamondStoreContext _context;
 
-        public AccountDAO()
+        public AccountDAO(DiamondStoreContext context)
         {
-            _context = new DiamondStoreContext();
+            _context = context;
         }
 
         public TblAccount GetAccountByEmail(string email)

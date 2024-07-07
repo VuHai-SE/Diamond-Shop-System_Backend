@@ -13,11 +13,11 @@ namespace DAOs
 {
     public class ProductDAO
     {
-        private readonly DiamondStoreContext _context = null;
+        private readonly DiamondStoreContext _context;
 
-        public ProductDAO()
+        public ProductDAO(DiamondStoreContext context)
         {
-            _context = new DiamondStoreContext();
+            _context = context;
         }
 
         public TblProduct AddProduct(TblProduct product)

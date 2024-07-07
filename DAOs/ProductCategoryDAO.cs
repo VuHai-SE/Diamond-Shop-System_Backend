@@ -11,14 +11,11 @@ namespace DAOs
 {
     public class ProductCategoryDAO
     {
-        private readonly DiamondStoreContext dbContext = null;
+        private readonly DiamondStoreContext dbContext;
 
-        public ProductCategoryDAO()
+        public ProductCategoryDAO(DiamondStoreContext _dbContext)
         {
-            if (dbContext == null)
-            {
-                dbContext = new DiamondStoreContext();
-            }
+            dbContext = _dbContext;
         }
 
         public List<TblProductCategory> GetProductCategories() 

@@ -10,14 +10,11 @@ namespace Repositories.Implement
 {
     public class OrderDetailRepository : IOrderDetailRepository
     {
-        private readonly OrderDetailDAO orderDetailDAO = null;
+        private readonly OrderDetailDAO orderDetailDAO;
 
-        public OrderDetailRepository()
+        public OrderDetailRepository(OrderDetailDAO _orderDetailDAO)
         {
-            if (orderDetailDAO == null)
-            {
-                orderDetailDAO = new OrderDetailDAO();
-            }
+           orderDetailDAO = _orderDetailDAO;
         }
 
         public TblOrderDetail AddOrderDetail(TblOrderDetail orderDetail)

@@ -9,14 +9,11 @@ namespace DAOs
 {
     public class OrderDetailDAO
     {
-        private readonly DiamondStoreContext dbContext = null;
+        private readonly DiamondStoreContext dbContext;
 
-        public OrderDetailDAO()
+        public OrderDetailDAO(DiamondStoreContext _dbcontext)
         {
-            if (dbContext == null)
-            {
-                dbContext = new DiamondStoreContext();
-            }
+            dbContext = _dbcontext;
         }
 
         public TblOrderDetail AddOrderDetail(TblOrderDetail orderDetail)
