@@ -38,12 +38,37 @@ namespace DAOs
             return report;
         }
 
-        public bool UpdateGem(string id, TblGem gem)
+        public bool GemExists(string gemId)
         {
-            return false;
+            return dbContext.TblGems.Any(g => g.GemId == gemId);
         }
 
-        public bool DeleteGem(string id)
+        public bool IsGemInProduct(string gemId)
+        {
+            return dbContext.TblProductGems.Any(pg => pg.GemId == gemId);
+        }
+
+        public void DeleteDiamondGradingReport(string gemId)
+        {
+            var report = dbContext.TblDiamondGradingReports.FirstOrDefault(r => r.GemId == gemId);
+            if (report != null)
+            {
+                dbContext.TblDiamondGradingReports.Remove(report);
+                dbContext.SaveChanges();
+            }
+        }
+
+        public void DeleteGem(string gemId)
+        {
+            var gem = dbContext.TblGems.FirstOrDefault(g => g.GemId == gemId);
+            if (gem != null)
+            {
+                dbContext.TblGems.Remove(gem);
+                dbContext.SaveChanges();
+            }
+        }
+
+        public bool UpdateGem(string id, TblGem gem)
         {
             return false;
         }

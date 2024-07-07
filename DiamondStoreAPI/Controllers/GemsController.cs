@@ -126,5 +126,31 @@ namespace DiamondStoreAPI.Controllers
                 return StatusCode(500, $"An unexpected error occurred: {ex.Message}");
             }
         }
+
+        [HttpDelete("{gemId}")]
+        public async Task<ActionResult> DeleteGem(string gemId)
+        {
+            try
+            {
+                if (!_gemService.GemExists(gemId))
+                {
+                    return NotFound("Gem with the specified ID does not exist.");
+                }
+
+                if (_gemService.IsGemInProduct(gemId))
+                {
+                    return BadRequest("Gem is associated with a product and cannot be deleted.");
+                }
+
+                _gemService.DeleteDiamondGradingReport(gemId);
+                _gemService.DeleteGem(gemId);
+
+                return Ok("Gem deleted successfully.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An unexpected error occurred: {ex.Message}");
+            }
+        }
     }
 }

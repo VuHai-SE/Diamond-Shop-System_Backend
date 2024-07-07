@@ -24,8 +24,25 @@ namespace Services.Implement
         public TblDiamondGradingReport AddDiamondGradingReport(TblDiamondGradingReport report)
             => gemRepository.AddDiamondGradingReport(report);
 
-        public bool DeleteGem(string id)
-            => gemRepository.DeleteGem(id);
+        public bool GemExists(string gemId)
+        {
+            return gemRepository.GemExists(gemId);
+        }
+
+        public bool IsGemInProduct(string gemId)
+        {
+            return gemRepository.IsGemInProduct(gemId);
+        }
+
+        public void DeleteDiamondGradingReport(string gemId)
+        {
+            gemRepository.DeleteDiamondGradingReport(gemId);
+        }
+
+        public void DeleteGem(string gemId)
+        {
+            gemRepository.DeleteGem(gemId);
+        }
 
         public TblGem GetGem(string gemId)
             => gemRepository.GetGem(gemId);

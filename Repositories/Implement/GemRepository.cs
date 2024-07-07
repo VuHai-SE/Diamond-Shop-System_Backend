@@ -23,8 +23,25 @@ namespace Repositories.Implement
         public TblDiamondGradingReport AddDiamondGradingReport(TblDiamondGradingReport report)
             => gemDAO.AddDiamondGradingReport(report);
 
-        public bool DeleteGem(string id)
-            => gemDAO.DeleteGem(id);
+        public bool GemExists(string gemId)
+        {
+            return gemDAO.GemExists(gemId);
+        }
+
+        public bool IsGemInProduct(string gemId)
+        {
+            return gemDAO.IsGemInProduct(gemId);
+        }
+
+        public void DeleteDiamondGradingReport(string gemId)
+        {
+            gemDAO.DeleteDiamondGradingReport(gemId);
+        }
+
+        public void DeleteGem(string gemId)
+        {
+            gemDAO.DeleteGem(gemId);
+        }
 
         public TblGem GetGem(string gemId)
             => gemDAO.GetGem(gemId);
