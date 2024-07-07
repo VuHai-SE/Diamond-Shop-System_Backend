@@ -11,14 +11,11 @@ namespace Services.Implement
 {
     public class OrderDetailService : IOrderDetailService
     {
-        private readonly IOrderDetailRepository orderDetailRepository = null;
+        private readonly IOrderDetailRepository orderDetailRepository;
 
-        public OrderDetailService()
+        public OrderDetailService(IOrderDetailRepository _orderDetailRepository)
         {
-            if (orderDetailRepository == null)
-            {
-                orderDetailRepository = new OrderDetailRepository();
-            }
+            orderDetailRepository = _orderDetailRepository;
         }
 
         public TblOrderDetail AddOrderDetail(TblOrderDetail orderDetail)

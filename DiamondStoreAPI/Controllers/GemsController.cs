@@ -9,6 +9,7 @@ using BusinessObjects;
 using Services;
 using Services.Implement;
 using Microsoft.AspNetCore.Authorization;
+using BusinessObjects.RequestModels;
 
 namespace DiamondStoreAPI.Controllers
 {
@@ -16,36 +17,35 @@ namespace DiamondStoreAPI.Controllers
     [ApiController]
     public class GemsController : ControllerBase
     {
-        private readonly IGemService iGemService;
+        private readonly IGemService _gemService;
 
         public GemsController(IGemService gemService)
         {
-            iGemService = gemService;
+            _gemService = gemService;
         }
 
         // GET: api/Gems
         [HttpGet]
-        [Authorize(Roles = "Customer")]
-
+        //[Authorize(Roles = "Customer")]
         public async Task<ActionResult<IEnumerable<TblGem>>> GetTblGems()
         {
-            if (iGemService.GetGems() == null)
+            if (_gemService.GetGems() == null)
             {
                 return NotFound();
             }
-            return iGemService.GetGems().ToList();
+            return _gemService.GetGems().ToList();
         }
 
         // GET: api/Gems/5
         [HttpGet("{id}")]
         public async Task<ActionResult<TblGem>> GetTblGem(string id)
         {
-            if (iGemService.GetGems() == null)
+            if (_gemService.GetGems() == null)
             {
                 return NotFound();
             }
 
-            var tblGem = iGemService.GetGem(id);
+            var tblGem = _gemService.GetGem(id);
 
             if (tblGem == null)
             {
@@ -55,66 +55,102 @@ namespace DiamondStoreAPI.Controllers
             return tblGem;
         }
 
-        // PUT: api/Gems/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutTblGsem(string id, TblGem tblGem)
-        //{
-        //    if (id != tblGem.GemId)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    iGemService.Entry(tblGem).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await iGemService.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!TblGemExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
-
-        // POST: api/Gems
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<TblGem>> PostTblGem(TblGem tblGem)
+        public async Task<ActionResult> AddGem(AddGemRequest addGemRequest)
         {
-            var newGem = iGemService.AddGem(tblGem);
+            try
+            {
+                if (string.IsNullOrEmpty(addGemRequest.GemId) ||
+                    string.IsNullOrEmpty(addGemRequest.GemName) ||
+                    string.IsNullOrEmpty(addGemRequest.Polish) ||
+                    string.IsNullOrEmpty(addGemRequest.Symmetry) ||
+                    string.IsNullOrEmpty(addGemRequest.Fluorescence) ||
+                    !addGemRequest.Origin.HasValue ||
+                    !addGemRequest.CaratWeight.HasValue ||
+                    string.IsNullOrEmpty(addGemRequest.Color) ||
+                    string.IsNullOrEmpty(addGemRequest.Cut) ||
+                    string.IsNullOrEmpty(addGemRequest.Clarity) ||
+                    string.IsNullOrEmpty(addGemRequest.Shape) ||
+                    !addGemRequest.GenerateDate.HasValue ||
+                    string.IsNullOrEmpty(addGemRequest.Image))
+                {
+                    return BadRequest("All fields are required.");
+                }
 
-            return CreatedAtAction("GetTblGem", new { id = tblGem.GemId }, tblGem);
+                var existingGem = _gemService.GetGem(addGemRequest.GemId);
+                if (existingGem != null)
+                {
+                    return BadRequest("Gem with the same ID already exists.");
+                }
+
+                var gem = new TblGem
+                {
+                    GemId = addGemRequest.GemId,
+                    GemName = addGemRequest.GemName,
+                    Polish = addGemRequest.Polish,
+                    Symmetry = addGemRequest.Symmetry,
+                    Fluorescence = addGemRequest.Fluorescence,
+                    Origin = addGemRequest.Origin,
+                    CaratWeight = addGemRequest.CaratWeight,
+                    Color = addGemRequest.Color,
+                    Cut = addGemRequest.Cut,
+                    Clarity = addGemRequest.Clarity,
+                    Shape = addGemRequest.Shape
+                };
+
+                var addedGem = _gemService.AddGem(gem);
+
+                var report = new TblDiamondGradingReport
+                {
+                    GemId = addedGem.GemId,
+                    GenerateDate = addGemRequest.GenerateDate,
+                    Image = addGemRequest.Image
+                };
+
+                _gemService.AddDiamondGradingReport(report);
+
+                var response = new
+                {
+                    Message = "Gem added successfully",
+                    Gem = addedGem
+                };
+
+                return CreatedAtAction(nameof(AddGem), new { id = addedGem.GemId }, response);
+            }
+            catch (DbUpdateException dbEx)
+            {
+                return StatusCode(500, $"A database error occurred: {dbEx.InnerException?.Message ?? dbEx.Message}");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An unexpected error occurred: {ex.Message}");
+            }
         }
 
-        // DELETE: api/Gems/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteTblGem(string id)
-        //{
-        //    var tblGem = await iGemService.TblGems.FindAsync(id);
-        //    if (tblGem == null)
-        //    {
-        //        return NotFound();
-        //    }
+        [HttpDelete("{gemId}")]
+        public async Task<ActionResult> DeleteGem(string gemId)
+        {
+            try
+            {
+                if (!_gemService.GemExists(gemId))
+                {
+                    return NotFound("Gem with the specified ID does not exist.");
+                }
 
-        //    iGemService.TblGems.Remove(tblGem);
-        //    await iGemService.SaveChangesAsync();
+                if (_gemService.IsGemInProduct(gemId))
+                {
+                    return BadRequest("Gem is associated with a product and cannot be deleted.");
+                }
 
-        //    return NoContent();
-        //}
+                _gemService.DeleteDiamondGradingReport(gemId);
+                _gemService.DeleteGem(gemId);
 
-        //private bool TblGemExists(string id)
-        //{
-        //    return iGemService.TblGems.Any(e => e.GemId == id);
-        //}
+                return Ok("Gem deleted successfully.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An unexpected error occurred: {ex.Message}");
+            }
+        }
     }
 }

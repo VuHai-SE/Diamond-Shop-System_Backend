@@ -9,14 +9,11 @@ namespace DAOs
 {
     public class PaymentDAO
     {
-        private readonly DiamondStoreContext dbContext = null;
+        private readonly DiamondStoreContext dbContext;
 
-        public PaymentDAO()
+        public PaymentDAO(DiamondStoreContext _dbContext)
         {
-            if (dbContext == null)
-            {
-                dbContext = new DiamondStoreContext();
-            }
+            dbContext = _dbContext;
         }
 
         public TblPayment AddPayment(TblPayment payment)

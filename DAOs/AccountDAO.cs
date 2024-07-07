@@ -14,12 +14,9 @@ namespace DAOs
     {
         private readonly DiamondStoreContext _context = null;
 
-        public AccountDAO()
+        public AccountDAO(DiamondStoreContext context)
         {
-            if (_context == null)
-            {
-                _context = new DiamondStoreContext();
-            }
+            _context = context;
         }
 
         public List<TblAccount> GetAllAccount()

@@ -21,8 +21,8 @@ namespace DAOs
 
         public List<TblGem> GetGems() => dbContext.TblGems.ToList();
 
-        public TblGem GetGem(string id)
-            => dbContext.TblGems.FirstOrDefault(m => m.GemId.Equals(id));
+        public TblGem GetGem(string gemId)
+            => dbContext.TblGems.FirstOrDefault(g => g.GemId == gemId);
 
         public TblGem AddGem(TblGem gem)
         {
@@ -31,12 +31,44 @@ namespace DAOs
             return gem;
         }
 
-        public bool UpdateGem(string id, TblGem gem)
+        public TblDiamondGradingReport AddDiamondGradingReport(TblDiamondGradingReport report)
         {
-            return false;
+            dbContext.TblDiamondGradingReports.Add(report);
+            dbContext.SaveChanges();
+            return report;
         }
 
-        public bool DeleteGem(string id)
+        public bool GemExists(string gemId)
+        {
+            return dbContext.TblGems.Any(g => g.GemId == gemId);
+        }
+
+        public bool IsGemInProduct(string gemId)
+        {
+            return dbContext.TblProductGems.Any(pg => pg.GemId == gemId);
+        }
+
+        public void DeleteDiamondGradingReport(string gemId)
+        {
+            var report = dbContext.TblDiamondGradingReports.FirstOrDefault(r => r.GemId == gemId);
+            if (report != null)
+            {
+                dbContext.TblDiamondGradingReports.Remove(report);
+                dbContext.SaveChanges();
+            }
+        }
+
+        public void DeleteGem(string gemId)
+        {
+            var gem = dbContext.TblGems.FirstOrDefault(g => g.GemId == gemId);
+            if (gem != null)
+            {
+                dbContext.TblGems.Remove(gem);
+                dbContext.SaveChanges();
+            }
+        }
+
+        public bool UpdateGem(string id, TblGem gem)
         {
             return false;
         }
