@@ -29,8 +29,9 @@ namespace Services.Implement
         private readonly IAccountRepository _accountRepository;
         private readonly ISaleStaffRepository _saleStaffRepository;
         private readonly IShipperRepository _shipperRepository;
+        private readonly IMembershipRepository _membershipRepository;
 
-        public OrderService(IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository, ICustomerRepository customerRepository, IProductRepository productRepository, IProductMaterialRepository productMaterialRepository, IMaterialCategoryRepository materialCategoryRepository, IPaymentRepository paymentRepository, IAccountRepository accountRepository, ISaleStaffRepository saleStaffRepository, IShipperRepository shipperRepository)
+        public OrderService(IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository, ICustomerRepository customerRepository, IProductRepository productRepository, IProductMaterialRepository productMaterialRepository, IMaterialCategoryRepository materialCategoryRepository, IPaymentRepository paymentRepository, IAccountRepository accountRepository, ISaleStaffRepository saleStaffRepository, IShipperRepository shipperRepository, IMembershipRepository membershipRepository)
         {
             _orderDetailRepository = orderDetailRepository;
             _customerRepository = customerRepository;
@@ -42,6 +43,7 @@ namespace Services.Implement
             _accountRepository = accountRepository;
             _saleStaffRepository = saleStaffRepository;
             _shipperRepository = shipperRepository;
+            _membershipRepository = membershipRepository;
         }
 
         public async Task<bool> UpdateOrderStatus(OrderStatusRequest request)
@@ -87,6 +89,33 @@ namespace Services.Implement
                     order.ReceiveDate = request.ReceivedDate;
                     order.OrderNote = _accountRepository.GetAccountSaleStaff(order.StaffId).Username
                         + "," + _accountRepository.GetAccountShipper(order.ShipperId).Username + "-Done";
+                    //update customer's membership
+                    var customer = _customerRepository.GetCustomerByID((int)order.CustomerId);
+                    var orderInfo = GetOrderInfo(order.OrderId);
+                    customer.Spending = customer.Spending += (decimal)orderInfo.TotalPrice;
+                    var membership = _membershipRepository.GetMemberShipByRank(customer.Ranking);
+                    if (membership.MaxSpend != null)
+                    {
+                        var spending = (double)customer.Spending;
+                        var nextMembership = _membershipRepository.GetMembershipByID(membership.Id + 1);
+                        if (membership.Ranking == "Platinum")
+                        {
+                            if (spending >= nextMembership.MinSpend)
+                            {
+                                customer.Ranking = nextMembership.Ranking;
+                                customer.DiscountRate = nextMembership.DiscountRate / 100;
+                            }
+                        }
+                        else
+                        {
+                            if (spending > membership.MaxSpend)
+                            {
+                                customer.Ranking = nextMembership.Ranking;
+                                customer.DiscountRate = nextMembership.DiscountRate / 100;
+                            }
+                        }
+                    }
+                    _customerRepository.UpdateCustomer(customer);
                 }
                 else if (request.ButtonValue.Equals("CANCEL"))
                 {
