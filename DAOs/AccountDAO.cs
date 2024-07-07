@@ -12,7 +12,7 @@ namespace DAOs
 {
     public class AccountDAO
     {
-        private readonly DiamondStoreContext _context = null;
+        private readonly DiamondStoreContext _context;
 
         public AccountDAO(DiamondStoreContext context)
         {
