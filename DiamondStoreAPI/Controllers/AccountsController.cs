@@ -70,7 +70,7 @@ namespace DiamondStoreAPI.Controllers
             }
 
             var account = await _accountService.AuthenticateAsync(request.Username, request.Password);
-            if (account == null)
+            if (account == null || _customerService.GetCustomerByAccountForLogin(request.Username).Status != true)
             {
                 return Unauthorized();
             }
