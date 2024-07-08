@@ -25,12 +25,12 @@ builder.Host.UseSerilog();
 var services = builder.Services;
 
 // Add services to the container.
-builder.Services.AddDbContext<DiamondStoreContext>(options =>
+services.AddDbContext<DiamondStoreContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection")).EnableSensitiveDataLogging();
 });
 
-builder.Services.AddControllers().AddJsonOptions(options =>
+services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.PropertyNamingPolicy = null;
     options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
@@ -38,7 +38,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 
 // Configure JWT authentication
 var key = Encoding.ASCII.GetBytes(builder.Configuration.GetValue<string>("Jwt:Day_la_key_JWT"));
-builder.Services.AddAuthentication(options =>
+services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -56,16 +56,14 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-
 // Add dependencies
+services.AddScoped<AccountDAO>();
+services.AddScoped<IAccountRepository, AccountRepository>();
+services.AddScoped<IAccountService, AccountService>();
 
-builder.Services.AddScoped<AccountDAO>();
-builder.Services.AddScoped<IAccountRepository, AccountRepository>();
-builder.Services.AddScoped<IAccountService, AccountService>();
-
-builder.Services.AddScoped<ProductDAO>();
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
-builder.Services.AddScoped<IProductService, ProductService>();
+services.AddScoped<ProductDAO>();
+services.AddScoped<IProductRepository, ProductRepository>();
+services.AddScoped<IProductService, ProductService>();
 
 services.AddScoped<ProductMaterialDAO>();
 services.AddScoped<IProductMaterialRepository, ProductMaterialRepository>();
@@ -123,11 +121,11 @@ services.AddScoped<MembershipDAO>();
 services.AddScoped<IMembershipRepository, MembershipRepository>();
 services.AddScoped<IMembershipService, MembershipService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+services.AddEndpointsApiExplorer();
+services.AddSwaggerGen();
 
 // Configure Swagger
-builder.Services.AddSwaggerGen(c =>
+services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "DiamondStoreAPI", Version = "v1" });
 
@@ -161,7 +159,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 // Add CORS policy
-builder.Services.AddCors(options =>
+services.AddCors(options =>
 {
     options.AddPolicy("AllowReact",
         builder =>

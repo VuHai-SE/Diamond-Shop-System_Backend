@@ -26,16 +26,14 @@ namespace Services.Implement
         private readonly IProductMaterialRepository productMaterialRepository;
         private readonly IMaterialCategoryRepository materialCategoryRepository;
         private readonly IGemRepository gemRepository;
-        private readonly IMaterialPriceListRepository materialPriceListRepository;
         private readonly ILogger<ProductService> _logger;
-        public ProductService(IProductRepository _productRepository, IProductCategoryRepository _productCategoryRepository, IProductMaterialRepository _productMaterialRepository, IMaterialCategoryRepository _materialCategoryRepository, IGemRepository _gemRepository, IMaterialPriceListRepository _materialPriceLisRepository, ILogger<ProductService> logger)
+        public ProductService(IProductRepository _productRepository, IProductCategoryRepository _productCategoryRepository, IProductMaterialRepository _productMaterialRepository, IMaterialCategoryRepository _materialCategoryRepository, IGemRepository _gemRepository, ILogger<ProductService> logger)
         {
             productRepository = _productRepository;
             productCategoryRepository = _productCategoryRepository;
             productMaterialRepository = _productMaterialRepository;
             materialCategoryRepository = _materialCategoryRepository;
             gemRepository = _gemRepository;
-            materialPriceListRepository = _materialPriceLisRepository;
             _logger = logger;
         }
 

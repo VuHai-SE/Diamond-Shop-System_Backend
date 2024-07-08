@@ -9,11 +9,15 @@ namespace Services
 {
     public interface IGemService
     {
-        public List<TblGem> GetGems();
-        public TblGem GetGem(string id);
-        public TblGem AddGem(TblGem gem);
-        public bool UpdateGem(string id, TblGem gem);
-        public bool DeleteGem(string id);
-        public TblGem GetGemByProduct(string productId);
+        List<TblGem> GetGems();
+        TblGem GetGem(string gemId);
+        TblGem AddGem(TblGem gem);
+        TblDiamondGradingReport AddDiamondGradingReport(TblDiamondGradingReport report);
+        bool UpdateGem(string id, TblGem gem);
+        public bool GemExists(string gemId);
+        public bool IsGemInProduct(string gemId);
+        public void DeleteDiamondGradingReport(string gemId);
+        public void DeleteGem(string gemId);
+        TblGem GetGemByProduct(string productId);
     }
 }

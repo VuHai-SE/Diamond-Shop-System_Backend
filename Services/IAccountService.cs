@@ -1,5 +1,6 @@
 ﻿using BusinessObjects;
 using Services.DTOs.Request;
+using Services.DTOs.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,5 +25,19 @@ namespace Services
 
         public bool IsUsernameExisted(string username);
         public TblAccount GetAccountByEmail(string email);
+        public Task<AccountInfo> GetAccountInfo(string username);
+
+        public Task<StaffInfo> GetStaffInfo(string username);
+
+        public Task<List<AccountInfo>> GetAccountInfoList();
+
+        public Task<List<AccountInfo>> GetCustomerInfoList();
+
+        public Task<List<StaffInfo>> GetSaleInfoList();
+
+        public Task<List<StaffInfo>> GetShipperInfoList();
+        public Task<bool> ChangeAccountRole(UpdateRoleRequest request);
+        public Task<bool> DisableAccount(string username);
+        public void AddToStaffTables(string staffId, AccountInfo accountInfo);
     }
 }

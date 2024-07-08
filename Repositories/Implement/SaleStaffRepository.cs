@@ -19,5 +19,8 @@ namespace Repositories.Implement
 
         public TblSaleStaff GetSaleStaffByUsername(string username)
             => _saleStaffDAO.GetSaleStaffByUsername(username);
+
+        public bool isSaleStaffIdExist(string staffId)
+            => _saleStaffDAO.isSaleStaffIdExist(staffId);
     }
 }

@@ -13,14 +13,11 @@ namespace DAOs
 {
     public class GemPriceListDAO
     {
-        private readonly DiamondStoreContext dbContext = null;
+        private readonly DiamondStoreContext dbContext;
 
-        public GemPriceListDAO()
+        public GemPriceListDAO(DiamondStoreContext _dbContext)
         {
-            if (dbContext == null)
-            {
-                dbContext = new DiamondStoreContext();
-            }
+            dbContext = _dbContext;
         }
 
         public List<TblGemPriceList> GetGemPriceLists()

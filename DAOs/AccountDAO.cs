@@ -12,13 +12,17 @@ namespace DAOs
 {
     public class AccountDAO
     {
-        public readonly DiamondStoreContext _context;
+        private readonly DiamondStoreContext _context;
 
-        public AccountDAO()
+        public AccountDAO(DiamondStoreContext context)
         {
-            _context = new DiamondStoreContext();
+            _context = context;
         }
 
+        public List<TblAccount> GetAllAccount()
+        {
+            return _context.TblAccounts.ToList();
+        }
         public TblAccount GetAccountByEmail(string email)
         {
             var customer = _context.TblCustomers.FirstOrDefault(c => c.Email.Equals(email));
@@ -77,6 +81,13 @@ namespace DAOs
         public List<TblAccount> GetAllStaff()
         {
             return _context.TblAccounts.Where(a => a.Role == "Staff").ToList();
+        }
+
+        public bool UpdateAccount(TblAccount account)
+        {
+            _context.TblAccounts.Update(account);
+            _context.SaveChanges();
+            return true;
         }
     }
 }

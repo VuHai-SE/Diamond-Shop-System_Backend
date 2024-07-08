@@ -12,13 +12,10 @@ namespace DAOs
 {
     public class CustomerDAO
     {
-        private readonly DiamondStoreContext dbContext = null;
-        public CustomerDAO ()
+        private readonly DiamondStoreContext dbContext;
+        public CustomerDAO (DiamondStoreContext _dbContext)
         {
-            if (dbContext == null)
-            {
-                dbContext = new DiamondStoreContext ();
-            }
+            dbContext = _dbContext;
         }
 
         public List<TblCustomer> GetCustomers()

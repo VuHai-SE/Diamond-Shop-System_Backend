@@ -11,14 +11,11 @@ namespace Services.Implement
 {
     public class PaymentService : IPaymentService
     {
-        private readonly IPaymentRepository paymentRepository = null;
+        private readonly IPaymentRepository paymentRepository;
 
-        public PaymentService()
+        public PaymentService(IPaymentRepository _paymentRepository)
         {
-            if (paymentRepository == null)
-            {
-                paymentRepository = new PaymentRepository();
-            }
+            paymentRepository = _paymentRepository;
         }
 
         public TblPayment AddPayment(TblPayment payment)

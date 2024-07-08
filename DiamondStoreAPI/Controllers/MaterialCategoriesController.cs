@@ -17,9 +17,9 @@ namespace DiamondStoreAPI.Controllers
     {
         private readonly IMaterialCategoryService iMaterialCategoryService;
 
-        public MaterialCategoriesController()
+        public MaterialCategoriesController(IMaterialCategoryService materialCategoryService)
         {
-            iMaterialCategoryService = new MaterialCategoryService();
+            iMaterialCategoryService = materialCategoryService;
         }
 
         // GET: api/MaterialCategories

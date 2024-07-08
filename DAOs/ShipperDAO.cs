@@ -11,9 +11,9 @@ namespace DAOs
     {
         private readonly DiamondStoreContext _dbContext;
 
-        public ShipperDAO (DiamondStoreContext dbContext)
+        public ShipperDAO(DiamondStoreContext dbContext)
         {
-            _dbContext = dbContext;
+           _dbContext = dbContext;
         }
 
         public TblShipper GetShipperByUsername(string username)
@@ -21,5 +21,8 @@ namespace DAOs
             var acc = _dbContext.TblAccounts.FirstOrDefault(a => a.Username.Equals(username));
             return _dbContext.TblShippers.FirstOrDefault(sh => sh.AccountId.Equals(acc.AccountId));
         }
+
+        public bool IsShipperIdExist(string shipperId)
+            => _dbContext.TblShippers.Any(s => s.Equals(shipperId));
     }
 }
