@@ -177,7 +177,7 @@ namespace Services.Implement
             if (accountInfo.Role == "SaleStaff")
             {
                 var saleStaff = _saleStaffRepository.GetSaleStaffByUsername(username);
-                staffInfo.StaffId = staffInfo.StaffId;
+                staffInfo.StaffId = saleStaff.StaffId;
             }
             else if (accountInfo.Role == "Shipper")
             {
