@@ -277,12 +277,12 @@ namespace Services.Implement
             return isUpdate;
         }
 
-        public async Task<bool> DisableAccount(string username)
+        public async Task<bool> UpdateAccountStatus(string username, bool status)
         {
             var account = await GetAccountByUsernameAsync(username);
             if (account == null) return false;
             var accountDetail = _customerRepository.GetCustomerByAccount(username);
-            accountDetail.Status = false;
+            accountDetail.Status = status;
             _customerRepository.UpdateCustomer(accountDetail);
             return true;
         }
