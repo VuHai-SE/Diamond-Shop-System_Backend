@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Services.DTOs.Response
+namespace Services.DTOs.Request
 {
-    public class LoginResponse
+    public class UpdateAccountStatusRequest
     {
         public string Username { get; set; }
-        public string Role {  get; set; }
+        public bool Status { get; set; }
     }
 }

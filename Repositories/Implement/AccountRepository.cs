@@ -57,5 +57,11 @@ namespace Repositories.Implement
         {
             return _accountDAO.GetAllStaff();
         }
+
+        public List<TblAccount> GetAllAccount()
+            => _accountDAO.GetAllAccount();
+
+        public bool UpdateAccount(TblAccount account)
+            => _accountDAO.UpdateAccount(account);
     }
 }

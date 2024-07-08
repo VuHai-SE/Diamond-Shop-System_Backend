@@ -10,5 +10,6 @@ namespace Repositories
     public interface ISaleStaffRepository
     {
         public TblSaleStaff GetSaleStaffByUsername(string username);
+        public bool isSaleStaffIdExist(string staffId);
     }
 }

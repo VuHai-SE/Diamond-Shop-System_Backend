@@ -29,6 +29,8 @@ namespace DiamondStoreAPI.Controllers
         private readonly ICustomerService _customerService;
         private readonly string _jwtSecret;
         private readonly IConfiguration _configuration;
+        private readonly ISaleStaffService _saleStaffService;
+        private readonly IShipperService _shipperService;
 
 
         public AccountsController(IAccountService accountService, ICustomerService customerService, IConfiguration configuration)
@@ -129,6 +131,101 @@ namespace DiamondStoreAPI.Controllers
         public async Task<IActionResult> CheckPhoneExist(string phone)
         {
             return Ok(_customerService.isPhoneExisted(phone));
+        }
+
+        [HttpGet("GetAccountList")]
+        public async Task<IActionResult> GetAccountList()
+        {
+            var accountList = await _accountService.GetAccountInfoList();
+            if (accountList.IsNullOrEmpty()) return NotFound();
+            return Ok(accountList);
+        }
+
+        [HttpGet("GetCustomerList")]
+        public async Task<IActionResult> GetCustomerList()
+        {
+            var customerList = await _accountService.GetCustomerInfoList();
+            if (customerList.IsNullOrEmpty()) return NotFound();
+            return Ok(customerList);
+        }
+
+        [HttpGet("GetSaleStaffList")]
+        public async Task<IActionResult> GetSaleStaffList()
+        {
+            var saleStaffList = await _accountService.GetSaleInfoList();
+            if (saleStaffList.IsNullOrEmpty()) return NotFound();
+            return Ok(saleStaffList);
+        }
+
+        [HttpGet("GetShipperList")]
+        public async Task<IActionResult> GetShipperList()
+        {
+            var shipperList = await _accountService.GetShipperInfoList();
+            if (shipperList.IsNullOrEmpty()) return NotFound();
+            return Ok(shipperList);
+        }
+
+        [HttpPut("ChangeRole")]
+        public async Task<IActionResult> ChangeRole([FromBody] UpdateRoleRequest request)
+        {
+            var isSuccess = await _accountService.ChangeAccountRole(request);
+            if (!isSuccess) return BadRequest("Update fail");
+            return Ok(request.UsertName + "'s role has change into " + request.Role);
+        }
+
+        [HttpPut("UpdateAccountStatus")]
+        public async Task<IActionResult> UpdateAccountStatus([FromBody] UpdateAccountStatusRequest request)
+        {
+            var isSuccess = await _accountService.UpdateAccountStatus(request.Username, request.Status);
+            if (!isSuccess) return BadRequest("Update fail");
+            return Ok(request.Username + "-" + request.Status);
+        }
+
+        [HttpPost("AddStaffId")]
+        public async Task<IActionResult> AddToStaffTables([FromBody] AddStaffTables request)
+        {
+            var accountInfo = await _accountService.GetAccountInfo(request.Username);
+            if (accountInfo == null) return NotFound();
+            _accountService.AddToStaffTables(request.StaffId, accountInfo);
+            return Ok(request.StaffId + " has been added");
+        }
+
+        [HttpPost("CreateStaffAccount")]
+        public async Task<IActionResult> CreateStaffAccount([FromBody] CreateStaffAccountRequest request)
+        {
+            var registerRequest = new Services.DTOs.Request.RegisterRequest()
+            {
+                Username = request.Username,
+                Password = request.Password,
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                Gender = request.Gender,
+                Birthday = request.Birthday,
+                Email = request.Email,
+                PhoneNumber = request.PhoneNumber,
+                Address = request.Address,
+            };
+            _accountService.RegisterAsync(registerRequest);
+            var updateRoleRequest = new UpdateRoleRequest() { Role = request.Role, UsertName = request.Username };
+            var isChanageRole = _accountService.ChangeAccountRole(updateRoleRequest);
+            var accountInfo = await _accountService.GetStaffInfo(request.Username);
+            _accountService.AddToStaffTables(request.StaffId, accountInfo);
+            var staffInfo = _accountService.GetStaffInfo(request.Username);
+            return Ok(staffInfo);
+        }
+
+        [HttpGet("CheckSaleStaffIdExist")]
+        public async Task<IActionResult> CheckSaleStaffIdExist(string saleStaffId)
+        {
+            bool isExist = _saleStaffService.isSaleStaffIdExist(saleStaffId);
+            return Ok(isExist);
+        }
+
+        [HttpGet("CheckShipperIdExist")]
+        public async Task<IActionResult> CheckShipperIdExist(string shipperId)
+        {
+            bool isExist = _shipperService.IsShipperIdExist(shipperId);
+            return Ok(isExist);
         }
 
         private string GenerateJwtToken(TblAccount account)

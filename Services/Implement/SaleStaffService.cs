@@ -20,6 +20,7 @@ namespace Services.Implement
         public TblSaleStaff GetSaleStaffByUsername(string username)
             => _saleStaffRepository.GetSaleStaffByUsername(username);
 
-
+        public bool isSaleStaffIdExist(string staffId)
+            => _saleStaffRepository.isSaleStaffIdExist(staffId);
     }
 }

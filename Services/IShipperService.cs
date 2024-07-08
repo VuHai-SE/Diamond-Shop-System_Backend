@@ -11,5 +11,6 @@ namespace Services
     public interface IShipperService
     {
         public TblShipper GetShipperByUsername(string username);
+        public bool IsShipperIdExist(string shipperId);
     }
 }
