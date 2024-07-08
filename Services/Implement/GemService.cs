@@ -55,5 +55,16 @@ namespace Services.Implement
 
         public bool UpdateGem(string id, TblGem gem)
             => gemRepository.UpdateGem(id, gem);
+
+        public TblDiamondGradingReport GetDiamondGradingReportByGemId(string gemId)
+        {
+            return gemRepository.GetDiamondGradingReportByGemId(gemId);
+        }
+
+        public void UpdateDiamondGradingReport(TblDiamondGradingReport report)
+        {
+            gemRepository.UpdateDiamondGradingReport(report);
+        }
+
     }
 }

@@ -54,5 +54,16 @@ namespace Repositories.Implement
 
         public bool UpdateGem(string id, TblGem gem)
             => gemDAO.UpdateGem(id, gem);
+
+        public TblDiamondGradingReport GetDiamondGradingReportByGemId(string gemId)
+        {
+            return gemDAO.GetDiamondGradingReportByGemId(gemId);
+        }
+
+        public void UpdateDiamondGradingReport(TblDiamondGradingReport report)
+        {
+            gemDAO.UpdateDiamondGradingReport(report);
+        }
+
     }
 }
