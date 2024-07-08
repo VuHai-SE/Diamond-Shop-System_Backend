@@ -188,5 +188,21 @@ namespace DiamondStoreAPI.Controllers
             }
         }
 
+        [HttpGet("GetDiamondGradingReport/{gemId}")]
+        public async Task<ActionResult<string>> GetDiamondGradingReport(string gemId)
+        {
+            if (string.IsNullOrEmpty(gemId))
+            {
+                return BadRequest("GemId is required.");
+            }
+
+            var report = _gemService.GetDiamondGradingReportByGemId(gemId);
+            if (report == null)
+            {
+                return NotFound("No Diamond Grading Report found for the specified GemId.");
+            }
+
+            return Ok(report.Image);
+        }
     }
 }

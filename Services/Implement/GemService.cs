@@ -58,7 +58,14 @@ namespace Services.Implement
 
         public TblDiamondGradingReport GetDiamondGradingReportByGemId(string gemId)
         {
-            return _gemRepository.GetDiamondGradingReportByGemId(gemId);
+            try
+            {
+                return _gemRepository.GetDiamondGradingReportByGemId(gemId);
+            }
+            catch (KeyNotFoundException)
+            {
+                return null;
+            }
         }
 
         public void UpdateDiamondGradingReport(TblDiamondGradingReport report)
