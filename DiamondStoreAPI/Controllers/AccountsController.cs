@@ -173,12 +173,12 @@ namespace DiamondStoreAPI.Controllers
             return Ok(request.UsertName + "'s role has change into " + request.Role);
         }
 
-        [HttpPut("DisableAccount")]
-        public async Task<IActionResult> DisableAccount(string username)
+        [HttpPut("UpdateAccountStatus")]
+        public async Task<IActionResult> UpdateAccountStatus([FromBody] UpdateAccountStatusRequest request)
         {
-            var isSuccess = await _accountService.DisableAccount(username);
+            var isSuccess = await _accountService.UpdateAccountStatus(request.Username, request.Status);
             if (!isSuccess) return BadRequest("Update fail");
-            return Ok(username + " has been disabled");
+            return Ok(request.Username + "-" + request.Status);
         }
 
         [HttpPost("AddStaffId")]
