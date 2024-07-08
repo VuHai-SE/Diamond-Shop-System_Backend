@@ -11,49 +11,67 @@ namespace Services.Implement
 {
     public class GemService : IGemService
     {
-        public readonly IGemRepository gemRepository;
+        public readonly IGemRepository _gemRepository;
 
-        public GemService(IGemRepository _gemRepository)
+        public GemService(IGemRepository gemRepository)
         {
-            gemRepository = _gemRepository;
+            _gemRepository = _gemRepository;
         }
 
         public TblGem AddGem(TblGem gem)
-            => gemRepository.AddGem(gem);
+            => _gemRepository.AddGem(gem);
 
         public TblDiamondGradingReport AddDiamondGradingReport(TblDiamondGradingReport report)
-            => gemRepository.AddDiamondGradingReport(report);
+            => _gemRepository.AddDiamondGradingReport(report);
 
         public bool GemExists(string gemId)
         {
-            return gemRepository.GemExists(gemId);
+            return _gemRepository.GemExists(gemId);
         }
 
         public bool IsGemInProduct(string gemId)
         {
-            return gemRepository.IsGemInProduct(gemId);
+            return _gemRepository.IsGemInProduct(gemId);
         }
 
         public void DeleteDiamondGradingReport(string gemId)
         {
-            gemRepository.DeleteDiamondGradingReport(gemId);
+            _gemRepository.DeleteDiamondGradingReport(gemId);
         }
 
         public void DeleteGem(string gemId)
         {
-            gemRepository.DeleteGem(gemId);
+            _gemRepository.DeleteGem(gemId);
         }
 
         public TblGem GetGem(string gemId)
-            => gemRepository.GetGem(gemId);
+            => _gemRepository.GetGem(gemId);
 
         public TblGem GetGemByProduct(string productId)
-            => gemRepository.GetGemByProduct(productId);
+            => _gemRepository.GetGemByProduct(productId);
 
         public List<TblGem> GetGems()
-            => gemRepository.GetGems();
+            => _gemRepository.GetGems();
 
         public bool UpdateGem(string id, TblGem gem)
-            => gemRepository.UpdateGem(id, gem);
+            => _gemRepository.UpdateGem(id, gem);
+
+        public TblDiamondGradingReport GetDiamondGradingReportByGemId(string gemId)
+        {
+            try
+            {
+                return _gemRepository.GetDiamondGradingReportByGemId(gemId);
+            }
+            catch (KeyNotFoundException)
+            {
+                return null;
+            }
+        }
+
+        public void UpdateDiamondGradingReport(TblDiamondGradingReport report)
+        {
+            _gemRepository.UpdateDiamondGradingReport(report);
+        }
+
     }
 }

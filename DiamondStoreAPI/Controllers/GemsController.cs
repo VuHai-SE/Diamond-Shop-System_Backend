@@ -152,5 +152,57 @@ namespace DiamondStoreAPI.Controllers
                 return StatusCode(500, $"An unexpected error occurred: {ex.Message}");
             }
         }
+
+        [HttpPut("{gemId}/gradingreport")]
+        public async Task<ActionResult> UpdateDiamondGradingReport(string gemId, UpdateDiamondGradingReportRequest updateRequest)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(gemId) ||
+                    !updateRequest.GenerateDate.HasValue ||
+                    string.IsNullOrEmpty(updateRequest.Image))
+                {
+                    return BadRequest("All fields are required.");
+                }
+
+                var existingReport = _gemService.GetDiamondGradingReportByGemId(gemId);
+                if (existingReport == null)
+                {
+                    return NotFound("Diamond Grading Report with the specified Gem ID does not exist.");
+                }
+
+                existingReport.GenerateDate = updateRequest.GenerateDate;
+                existingReport.Image = updateRequest.Image;
+
+                _gemService.UpdateDiamondGradingReport(existingReport);
+
+                return Ok("Diamond Grading Report updated successfully.");
+            }
+            catch (DbUpdateException dbEx)
+            {
+                return StatusCode(500, $"A database error occurred: {dbEx.InnerException?.Message ?? dbEx.Message}");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An unexpected error occurred: {ex.Message}");
+            }
+        }
+
+        [HttpGet("GetDiamondGradingReport/{gemId}")]
+        public async Task<ActionResult<string>> GetDiamondGradingReport(string gemId)
+        {
+            if (string.IsNullOrEmpty(gemId))
+            {
+                return BadRequest("GemId is required.");
+            }
+
+            var report = _gemService.GetDiamondGradingReportByGemId(gemId);
+            if (report == null)
+            {
+                return NotFound("No Diamond Grading Report found for the specified GemId.");
+            }
+
+            return Ok(report.Image);
+        }
     }
 }
