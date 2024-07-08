@@ -10,6 +10,7 @@ using Services;
 using Services.Implement;
 using Microsoft.AspNetCore.Authorization;
 using BusinessObjects.RequestModels;
+using Microsoft.IdentityModel.Tokens;
 
 namespace DiamondStoreAPI.Controllers
 {
@@ -196,13 +197,18 @@ namespace DiamondStoreAPI.Controllers
                 return BadRequest("GemId is required.");
             }
 
-            var report = _gemService.GetDiamondGradingReportByGemId(gemId);
-            if (report == null)
+            if (!_gemService.GemExists(gemId))
             {
                 return NotFound("No Diamond Grading Report found for the specified GemId.");
             }
 
-            return Ok(report.Image);
+            var report = _gemService.GetDiamondGradingReportByGemId(gemId);
+            if (report != null)
+            {
+                return Ok(report.Image);
+            }
+
+            return NotFound("No data in database.");
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Services.Implement
 
         public GemService(IGemRepository gemRepository)
         {
-            _gemRepository = _gemRepository;
+            _gemRepository = gemRepository;
         }
 
         public TblGem AddGem(TblGem gem)
