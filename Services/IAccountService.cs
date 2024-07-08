@@ -37,7 +37,7 @@ namespace Services
 
         public Task<List<StaffInfo>> GetShipperInfoList();
         public Task<bool> ChangeAccountRole(UpdateRoleRequest request);
-        public Task<bool> DisableAccount(string username);
+        public Task<bool> UpdateAccountStatus(string username, bool status);
         public void AddToStaffTables(string staffId, AccountInfo accountInfo);
     }
 }
