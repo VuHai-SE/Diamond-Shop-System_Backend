@@ -214,7 +214,13 @@ namespace Services.Implement
             {
                 return false;
             }
-            product.Status = false;
+            if (product.Status == true)
+            {
+                product.Status = false;
+            } else
+            {
+                product.Status = true;
+            }
             return await productRepository.UpdateProduct(productID, product);
         }
 
