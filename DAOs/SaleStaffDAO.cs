@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects;
+using Microsoft.EntityFrameworkCore;
 
 namespace DAOs
 {
@@ -16,13 +17,16 @@ namespace DAOs
             _dbContext = dbContext;
         }
 
-        public TblSaleStaff GetSaleStaffByUsername(string username)
+        public async Task<TblSaleStaff> GetSaleStaffByUsernameAsync(string username)
         {
-            var acc = _dbContext.TblAccounts.FirstOrDefault(a => a.Username.Equals(username));
-            return _dbContext.TblSaleStaffs.FirstOrDefault(s => s.AccountId.Equals(acc.AccountId));
+            var acc = await _dbContext.TblAccounts.FirstOrDefaultAsync(a => a.Username.Equals(username));
+            if (acc == null) return null;
+            return await _dbContext.TblSaleStaffs.FirstOrDefaultAsync(s => s.AccountId.Equals(acc.AccountId));
         }
 
-        public bool isSaleStaffIdExist(string staffId)
-            => _dbContext.TblAccounts.Any(s => s.Equals(staffId));
+        public async Task<bool> IsSaleStaffIdExistAsync(string staffId)
+        {
+            return await _dbContext.TblAccounts.AnyAsync(s => s.Equals(staffId));
+        }
     }
 }

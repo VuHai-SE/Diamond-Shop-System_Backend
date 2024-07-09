@@ -62,7 +62,7 @@ namespace Services.Implement
             {
                 if (string.IsNullOrEmpty(order.StaffId))
                 {
-                    var SaleStaffID = _saleStaffRepository.GetSaleStaffByUsername(username).StaffId;
+                    var SaleStaffID = _saleStaffRepository.GetSaleStaffByUsernameAsync(username).Result.StaffId;
                     order.StaffId = SaleStaffID;
                 }
                 order.OrderStatus = HandleOrderStatus(btValue);

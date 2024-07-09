@@ -176,7 +176,7 @@ namespace Services.Implement
             };
             if (accountInfo.Role == "SaleStaff")
             {
-                var saleStaff = _saleStaffRepository.GetSaleStaffByUsername(username);
+                var saleStaff = await _saleStaffRepository.GetSaleStaffByUsernameAsync(username);
                 staffInfo.StaffId = saleStaff.StaffId;
             }
             else if (accountInfo.Role == "Shipper")

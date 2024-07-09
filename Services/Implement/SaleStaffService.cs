@@ -17,10 +17,11 @@ namespace Services.Implement
             _saleStaffRepository = saleStaffRepository;
         }
 
-        public TblSaleStaff GetSaleStaffByUsername(string username)
-            => _saleStaffRepository.GetSaleStaffByUsername(username);
+        public Task<TblSaleStaff> GetSaleStaffByUsernameAsync(string username)
+            => _saleStaffRepository.GetSaleStaffByUsernameAsync(username);
 
-        public bool isSaleStaffIdExist(string staffId)
-            => _saleStaffRepository.isSaleStaffIdExist(staffId);
+        public Task<bool> IsSaleStaffIdExistAsync(string staffId)
+            => _saleStaffRepository.IsSaleStaffIdExistAsync(staffId);
+
     }
 }

@@ -1,93 +1,93 @@
-﻿using BCrypt.Net;
-using BusinessObjects;
-using Microsoft.EntityFrameworkCore;
-using Org.BouncyCastle.Crypto.Generators;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿    using BCrypt.Net;
+    using BusinessObjects;
+    using Microsoft.EntityFrameworkCore;
+    using Org.BouncyCastle.Crypto.Generators;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
 
-namespace DAOs
-{
-    public class AccountDAO
+    namespace DAOs
     {
-        private readonly DiamondStoreContext _context;
+        public class AccountDAO
+        {
+            private readonly DiamondStoreContext _context;
 
-        public AccountDAO(DiamondStoreContext context)
-        {
-            _context = context;
-        }
-
-        public List<TblAccount> GetAllAccount()
-        {
-            return _context.TblAccounts.ToList();
-        }
-        public TblAccount GetAccountByEmail(string email)
-        {
-            var customer = _context.TblCustomers.FirstOrDefault(c => c.Email.Equals(email));
-            return _context.TblAccounts.FirstOrDefault(a => a.AccountId.Equals(customer.AccountId));
-        }
-
-        public async Task<TblAccount> GetAccountByUsernameAsync(string username)
-        {
-            return await _context.TblAccounts.AsNoTracking().FirstOrDefaultAsync(a => a.Username.Equals(username));
-        }
-
-        public async Task AddAccountAsync(TblAccount account)
-        {
-            _context.TblAccounts.Add(account);
-            await _context.SaveChangesAsync();
-        }
-
-        public TblAccount AddAccount(TblAccount account)
-        {
-            _context.TblAccounts.Add(account);
-            _context.SaveChanges();
-            return account;
-        }
-
-        public async Task UpdatePasswordAsync(string username, string newPassword)
-        {
-            var account = await _context.TblAccounts.FirstOrDefaultAsync(a => a.Username.Equals(username));
-            if (account != null)
+            public AccountDAO(DiamondStoreContext context)
             {
-                account.Password = BCrypt.Net.BCrypt.HashPassword(newPassword);
-                _context.TblAccounts.Update(account);
+                _context = context;
+            }
+
+            public List<TblAccount> GetAllAccount()
+            {
+                return _context.TblAccounts.ToList();
+            }
+            public TblAccount GetAccountByEmail(string email)
+            {
+                var customer = _context.TblCustomers.FirstOrDefault(c => c.Email.Equals(email));
+                return _context.TblAccounts.FirstOrDefault(a => a.AccountId.Equals(customer.AccountId));
+            }
+
+            public async Task<TblAccount> GetAccountByUsernameAsync(string username)
+            {
+                return await _context.TblAccounts.AsNoTracking().FirstOrDefaultAsync(a => a.Username.Equals(username));
+            }
+
+            public async Task AddAccountAsync(TblAccount account)
+            {
+                _context.TblAccounts.Add(account);
                 await _context.SaveChangesAsync();
             }
-        }
 
-        public async Task AddAccountByManagerAsync(TblAccount account)
-        {
-            _context.TblAccounts.Add(account);
-            await _context.SaveChangesAsync();
-        }
+            public TblAccount AddAccount(TblAccount account)
+            {
+                _context.TblAccounts.Add(account);
+                _context.SaveChanges();
+                return account;
+            }
 
-        public TblAccount GetAccountSaleStaff(string saleStaffID)
-        {
-            var saleStaff = _context.TblSaleStaffs.FirstOrDefault(ss => ss.StaffId.Equals(saleStaffID));
-            return _context.TblAccounts.FirstOrDefault(a => a.AccountId.Equals(saleStaff.AccountId));
-        }
+            public async Task UpdatePasswordAsync(string username, string newPassword)
+            {
+                var account = await _context.TblAccounts.FirstOrDefaultAsync(a => a.Username.Equals(username));
+                if (account != null)
+                {
+                    account.Password = BCrypt.Net.BCrypt.HashPassword(newPassword);
+                    _context.TblAccounts.Update(account);
+                    await _context.SaveChangesAsync();
+                }
+            }
 
-        public TblAccount GetAccountShipper(string shipperID)
-        {
-            var shipper = _context.TblShippers.FirstOrDefault(sh => sh.ShipperId.Equals(shipperID));
-            return _context.TblAccounts.FirstOrDefault(a => a.AccountId.Equals(shipper.AccountId));
-        }
+            public async Task AddAccountByManagerAsync(TblAccount account)
+            {
+                _context.TblAccounts.Add(account);
+                await _context.SaveChangesAsync();
+            }
 
-        public bool IsUsernameExisted(string username)
-            => _context.TblAccounts.Any(a => a.Username.Equals(username));
-        public List<TblAccount> GetAllStaff()
-        {
-            return _context.TblAccounts.Where(a => a.Role == "Staff").ToList();
-        }
+            public TblAccount GetAccountSaleStaff(string saleStaffID)
+            {
+                var saleStaff = _context.TblSaleStaffs.FirstOrDefault(ss => ss.StaffId.Equals(saleStaffID));
+                return _context.TblAccounts.FirstOrDefault(a => a.AccountId.Equals(saleStaff.AccountId));
+            }
 
-        public bool UpdateAccount(TblAccount account)
-        {
-            _context.TblAccounts.Update(account);
-            _context.SaveChanges();
-            return true;
+            public TblAccount GetAccountShipper(string shipperID)
+            {
+                var shipper = _context.TblShippers.FirstOrDefault(sh => sh.ShipperId.Equals(shipperID));
+                return _context.TblAccounts.FirstOrDefault(a => a.AccountId.Equals(shipper.AccountId));
+            }
+
+            public bool IsUsernameExisted(string username)
+                => _context.TblAccounts.Any(a => a.Username.Equals(username));
+            public List<TblAccount> GetAllStaff()
+            {
+                return _context.TblAccounts.Where(a => a.Role == "Staff").ToList();
+            }
+
+            public bool UpdateAccount(TblAccount account)
+            {
+                _context.TblAccounts.Update(account);
+                _context.SaveChanges();
+                return true;
+            }
         }
     }
-}

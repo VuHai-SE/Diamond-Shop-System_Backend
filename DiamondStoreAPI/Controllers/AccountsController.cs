@@ -217,7 +217,7 @@ namespace DiamondStoreAPI.Controllers
         [HttpGet("CheckSaleStaffIdExist")]
         public async Task<IActionResult> CheckSaleStaffIdExist(string saleStaffId)
         {
-            bool isExist = _saleStaffService.isSaleStaffIdExist(saleStaffId);
+            bool isExist = await _saleStaffService.IsSaleStaffIdExistAsync(saleStaffId);
             return Ok(isExist);
         }
 

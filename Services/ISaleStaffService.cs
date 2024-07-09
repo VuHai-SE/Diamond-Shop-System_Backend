@@ -9,7 +9,8 @@ namespace Services
 {
     public interface ISaleStaffService
     {
-        public TblSaleStaff GetSaleStaffByUsername(string username);
-        public bool isSaleStaffIdExist(string staffId);
+        public Task<TblSaleStaff> GetSaleStaffByUsernameAsync(string username);
+
+        public Task<bool> IsSaleStaffIdExistAsync(string staffId);
     }
 }
