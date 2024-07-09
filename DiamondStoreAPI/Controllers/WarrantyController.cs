@@ -14,16 +14,24 @@ using System.Text.Json;
 public class WarrantyController : ControllerBase
 {
     private readonly IWarrantyService _warrantyService;
+    private readonly IOrderDetailService _orderDetailService;
+    private readonly IOrderService _orderService;
+    private readonly IProductService _productService;
+    private readonly ICustomerService _customerService;
 
-    public WarrantyController(IWarrantyService warrantyService)
+    public WarrantyController(IWarrantyService warrantyService, IOrderDetailService orderDetailService, IOrderService orderService,IProductService productService, ICustomerService customerService)
     {
         _warrantyService = warrantyService;
+        _orderDetailService = orderDetailService;
+        _orderService = orderService;
+        _productService = productService;
+        _customerService = customerService;
     }
 
     [HttpGet("WarrantyInfo")]
     public async Task<IActionResult> GetWarrantyInfo(int orderDetailID)
     {
-        var warrantyInfor = await _warrantyService.GetWarrantyInfo(orderDetailID);
+        var warrantyInfor = await GetWarrantyInformation(orderDetailID);
         if (warrantyInfor == null) return NotFound();
         return Ok(warrantyInfor);
     }
@@ -38,8 +46,34 @@ public class WarrantyController : ControllerBase
             WarrantyEndDate = request.OrderDate?.Date.AddYears(1),
         };
         var createdWarranty = _warrantyService.AddWarranty(newWarranty);
-        var warrantyInfo = await _warrantyService.GetWarrantyInfo((int)createdWarranty.OrderDetailId);
+        var warrantyInfo = await GetWarrantyInformation((int)createdWarranty.OrderDetailId);
         return Ok(warrantyInfo);
+    }
+
+    private async Task<WarrantyResponse> GetWarrantyInformation(int orderDetailID)
+    {
+        var orderDetail = _orderDetailService.GetOrderDetailByID(orderDetailID);
+        if (orderDetail == null) { return null; }
+        var warranty = _warrantyService.GetWarrantyOrderDetailID(orderDetailID);
+        var product = await _productService.GetProductAndPriceByIdAsync(orderDetail.ProductId);
+        var order = _orderService.getOrderByOrderID((int)orderDetail.OrderId);
+        var customer = _customerService.GetCustomerByID((int)order.CustomerId);
+        return new WarrantyResponse()
+        {
+            WarrantyID = warranty.WarrantyId,
+            CustomerName = customer.FirstName + " " + customer.LastName,
+            CustomerPhone = customer.PhoneNumber,
+            ProductID = product.ProductId,
+            ProductName = product.ProductName,
+            ProductImage = product.Image,
+            Category = product.Category,
+            Material = product.Material,
+            MaterialWeight = (double) product.Weight,
+            GemCaratWeight = (double) product.CaratWeight,
+            GemOrigin = product.GemOrigin,
+            StartDate = (DateTime)warranty.WarrantyStartDate,
+            EndDate = (DateTime)warranty.WarrantyEndDate,
+        };
     }
 }
 
