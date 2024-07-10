@@ -17,6 +17,9 @@ namespace Repositories.Implement
             _shipperDAO = shipperDAO;
         }
 
+        public async Task AddShipperAsync(TblShipper shipper)
+            => await _shipperDAO.AddShipperAsync(shipper);
+
         public TblShipper GetShipperByUsername(string username)
             => _shipperDAO.GetShipperByUsername(username);
 

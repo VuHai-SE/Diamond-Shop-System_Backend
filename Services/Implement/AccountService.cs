@@ -1,4 +1,5 @@
-﻿using BusinessObjects;
+﻿using Azure.Core;
+using BusinessObjects;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Repositories;
@@ -73,6 +74,36 @@ namespace Services.Implement
                 Username = register.Username,
                 Password = passwordHash,
                 Role = "Customer" // Mặc định role là Customer
+            };
+
+            await _accountRepository.AddAccountAsync(newAccount);
+
+            var customer = new TblCustomer()
+            {
+                AccountId = newAccount.AccountId,
+                FirstName = register.FirstName,
+                LastName = register.LastName,
+                Gender = (register.Gender.Equals("Male")) ? true : false,
+                Birthday = register.Birthday,
+                Email = register.Email,
+                PhoneNumber = register.PhoneNumber,
+                Address = register.Address,
+                DiscountRate = 0.02,
+                Ranking = "Bronze",
+                Status = true
+            };
+            _customerRepository.AddCustomer(customer);
+        }
+
+        public async Task RegisterStaffAsync(RegisterStaff register)
+        {
+            var passwordHash = BCrypt.Net.BCrypt.HashPassword(register.Password);
+
+            var newAccount = new TblAccount
+            {
+                Username = register.Username,
+                Password = passwordHash,
+                Role = register.Role // Mặc định role là Customer
             };
 
             await _accountRepository.AddAccountAsync(newAccount);
@@ -244,7 +275,7 @@ namespace Services.Implement
             return shipperInfoList;
         }
 
-        public void AddToStaffTables(string staffId, AccountInfo accountInfo)
+        public async Task AddToStaffTables(string staffId, AccountInfo accountInfo)
         {
             if (accountInfo.Role == "SaleStaff")
             {
@@ -255,6 +286,7 @@ namespace Services.Implement
                     FirstName = accountInfo.FirstName,
                     LastName = accountInfo.LastName,
                 };
+                await _saleStaffRepository.AddSaleStaffAsync(sale);
             }
             else if (accountInfo.Role == "Shipper")
             {
@@ -265,6 +297,7 @@ namespace Services.Implement
                     FirstName = accountInfo.FirstName,
                     LastName = accountInfo.LastName,
                 };
+                await _shipperRepository.AddShipperAsync(shipper);
             }
         }
 
