@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects;
+using Microsoft.EntityFrameworkCore;
 
 namespace DAOs
 {
@@ -23,6 +24,20 @@ namespace DAOs
         }
 
         public bool IsShipperIdExist(string shipperId)
-            => _dbContext.TblShippers.Any(s => s.Equals(shipperId));
+            => _dbContext.TblShippers.Any(s => s.ShipperId.Equals(shipperId));
+
+        public async Task AddShipperAsync(TblShipper shipper)
+        {
+            var existingEntity = await _dbContext.TblShippers.AsNoTracking().FirstOrDefaultAsync(s => s.ShipperId == shipper.ShipperId);
+            if (existingEntity == null)
+            {
+                await _dbContext.TblShippers.AddAsync(shipper);
+            }
+            else
+            {
+                _dbContext.Entry(shipper).State = EntityState.Modified;
+            }
+            await _dbContext.SaveChangesAsync();
+        }
     }
 }

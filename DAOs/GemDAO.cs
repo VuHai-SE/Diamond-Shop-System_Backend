@@ -95,5 +95,23 @@ namespace DAOs
 
             return gem;
         }
+
+        public TblDiamondGradingReport GetDiamondGradingReportByGemId(string gemId)
+        {
+            var report = dbContext.TblDiamondGradingReports.FirstOrDefault(r => r.GemId == gemId);
+            if (report == null)
+            {
+                throw new KeyNotFoundException($"No Diamond Grading Report found for GemId: {gemId}");
+            }
+            return report;
+        }
+
+
+        public void UpdateDiamondGradingReport(TblDiamondGradingReport report)
+        {
+            dbContext.TblDiamondGradingReports.Update(report);
+            dbContext.SaveChanges();
+        }
+
     }
 }

@@ -280,8 +280,8 @@ namespace Services.Implement
         }
         public Task<bool> UpdateOrder(TblOrder order)
            => _orderRepository.UpdateOrder(order);
-    
-public int GetSumOrderByMonth(int month, int year)
+
+        public int GetSumOrderByMonth(int month, int year)
         {
             var orders = _orderRepository.GetOrders();
 
