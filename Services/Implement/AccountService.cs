@@ -10,6 +10,7 @@ using SixLabors.ImageSharp.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
@@ -123,6 +124,36 @@ namespace Services.Implement
                 Status = true
             };
             _customerRepository.AddCustomer(customer);
+            var createdAccount = await _accountRepository.GetAccountByUsernameAsync(register.Username);
+            if (register.Role == "SaleStaff")
+            {
+                var lastSaleStaffId = _saleStaffRepository.GetLastStaffId();
+                var numericPart = lastSaleStaffId.Substring(1);
+                var nextNumericPart = (int.Parse(numericPart) + 1).ToString("D3");
+                var nextId = $"S{nextNumericPart}";
+                var sale = new TblSaleStaff()
+                {
+                    StaffId = nextId,
+                    AccountId = createdAccount.AccountId,
+                    FirstName = register.FirstName,
+                    LastName= register.LastName,
+                };
+                await _saleStaffRepository.AddSaleStaffAsync(sale);
+            } else if (register.Role == "Shipper")
+            {
+                var lastShipperId = _shipperRepository.GetLastShipperId();
+                var numericPart = lastShipperId.Substring(2);
+                var nextNumericPart = (int.Parse(numericPart) + 1).ToString("D3");
+                var nextId = $"SP{nextNumericPart}";
+                var shipper = new TblShipper()
+                {
+                    ShipperId = nextId,
+                    AccountId = createdAccount.AccountId,
+                    FirstName = register.FirstName,
+                    LastName = register.LastName,
+                };
+                await _shipperRepository.AddShipperAsync(shipper);
+            }
         }
 
         public async Task<string> ForgotPasswordAsync(ForgotPasswordRequest request)

@@ -39,5 +39,19 @@ namespace DAOs
             }
             await _dbContext.SaveChangesAsync();
         }
+
+        public string GetLastShipperId()
+        {
+            
+            var list = _dbContext.TblShippers.ToList();
+
+            
+            if (list.Count == 0) return "SP000";
+
+            
+            var lastShipper = list.OrderByDescending(s => s.ShipperId).FirstOrDefault().ShipperId;
+
+            return lastShipper;
+        }
     }
 }
