@@ -174,7 +174,12 @@ namespace Services.Implement
                 query = query.Where(x => x.p.Gender != null && x.p.Gender.Equals(criteria.Gender.Trim()));
             }
 
+            var totalRecords = await query.CountAsync();
+            var totalPages = (int)Math.Ceiling(totalRecords / (double)criteria.PageSize);
+
             var products = await query
+                .Skip((criteria.PageNumber - 1) * criteria.PageSize)
+                .Take(criteria.PageSize)
                 .Select(x => new ProductWithPriceResponse
                 {
                     ProductId = x.p.ProductId,
@@ -202,9 +207,6 @@ namespace Services.Implement
 
             return products;
         }
-
-
-
 
         public async Task<ProductWithPriceResponse> GetProductAndPriceByIdAsync(string productId)
         {

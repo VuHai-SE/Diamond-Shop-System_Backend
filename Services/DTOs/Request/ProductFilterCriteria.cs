@@ -17,5 +17,7 @@ namespace Services.DTOs.Request
         public string? Material { get; set; }
         public string? Category { get; set; }
         public string? Gender { get; set; }
+        public int PageNumber { get; set; } = 1; // Mặc định là trang đầu tiên
+        public int PageSize { get; set; } = 50; // Mặc định là 50 bản ghi mỗi trang
     }
 }

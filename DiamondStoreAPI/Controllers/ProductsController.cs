@@ -29,6 +29,18 @@ namespace DiamondStoreAPI.Controllers
             _productCategoryService = productCategoryService;
         }
 
+        //// GET: api/Products
+        //[HttpGet]
+        //public async Task<IActionResult> GetProductsAndPrices([FromQuery] ProductFilterCriteria criteria)
+        //{
+        //    var productWithPriceList = await _productService.FilterProducts(criteria);
+        //    if (productWithPriceList.IsNullOrEmpty())
+        //    {
+        //        return NotFound();
+        //    }
+        //    return Ok(productWithPriceList);
+        //}
+
         // GET: api/Products
         [HttpGet]
         public async Task<IActionResult> GetProductsAndPrices([FromQuery] ProductFilterCriteria criteria)
@@ -38,8 +50,15 @@ namespace DiamondStoreAPI.Controllers
             {
                 return NotFound();
             }
-            return Ok(productWithPriceList);
+
+            return Ok(new
+            {
+                TotalPages = (int)Math.Ceiling(productWithPriceList.Count / (double)criteria.PageSize),
+                CurrentPage = criteria.PageNumber,
+                Products = productWithPriceList
+            });
         }
+
 
         [HttpPost("CreateProduct")]
         //[Authorize(Roles = "Admin,Manager")]
