@@ -53,5 +53,10 @@ namespace DAOs
 
             return lastShipper;
         }
+
+        public List<TblShipper> GetAllShippers()
+        {
+            return _dbContext.TblShippers.ToList();
+        }
     }
 }

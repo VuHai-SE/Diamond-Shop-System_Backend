@@ -26,5 +26,9 @@ namespace Services
         public int GetStaffs();
 
         public Task<decimal> GetSumRevenue(int month, int year);
+
+        public List<TblOrder> GetDeliveriedOrdersByMonthYear(MonthYearCriteria criteria);
+
+        public decimal GetSumRevenue(MonthYearCriteria criteria);
     }
 }

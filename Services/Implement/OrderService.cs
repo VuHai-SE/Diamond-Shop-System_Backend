@@ -288,10 +288,43 @@ namespace Services.Implement
             // Filter orders by the specified month and year
             var filteredOrders = orders.Where(o => o.OrderDate.HasValue
                                                     && o.OrderDate.Value.Month == month
-                                                    && o.OrderDate.Value.Year == year && o.OrderStatus == "delivered");
+                                                    && o.OrderDate.Value.Year == year && o.OrderStatus == "Deliveried");
 
             // Return the count of filtered orders
             return filteredOrders.Count();
+        }
+
+        public List<TblOrder> GetDeliveriedOrdersByMonthYear(MonthYearCriteria criteria)
+        {
+            var orders = _orderRepository.GetOrders().Where(o => o.OrderStatus == "Deliveried").ToList();
+
+            if (criteria.Month > 0 && criteria.Year > 0)
+            {
+                orders = orders.Where(o => o.OrderDate?.Month == criteria.Month && o.OrderDate?.Year == criteria.Year).ToList();
+            }
+            else if (criteria.Month > 0)
+            {
+                orders = orders.Where(o => o.OrderDate?.Month == criteria.Month).ToList();
+            }
+            else if (criteria.Year > 0)
+            {
+                orders = orders.Where(o => o.OrderDate?.Year == criteria.Year).ToList();
+            }
+            return orders;
+        }
+
+        public decimal GetSumRevenue(MonthYearCriteria criteria)
+        {
+            var deliveredOrders = GetDeliveriedOrdersByMonthYear(criteria);
+            decimal totalRevenue = 0;
+
+            foreach (var order in deliveredOrders)
+            {
+                var orderDetails = _orderDetailRepository.GetOrderDetailsByOrderID(order.OrderId);
+                totalRevenue += orderDetails.Sum(od => (decimal)(od.FinalPrice ?? 0));
+            }
+
+            return totalRevenue;
         }
 
         public int GetStaffs()

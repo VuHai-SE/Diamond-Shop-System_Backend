@@ -270,23 +270,23 @@ namespace DiamondStoreAPI.Controllers
         }
 
         [HttpGet("GetSumOrderbyMonthAndYear")]
-        public async Task<IActionResult> GetSumOrderbyMonthAndYear([FromQuery] int month, [FromQuery] int year)
+        public async Task<IActionResult> GetSumOrderbyMonthAndYear([FromQuery] MonthYearCriteria criteria)
         {
-            var result = iOrderService.GetSumOrderByMonth(month, year);
-            if (result == 0)
-            {
-                return NotFound();
-            }
+            var result = iOrderService.GetDeliveriedOrdersByMonthYear(criteria).Count();
+            //if (result == 0)
+            //{
+            //    return NotFound();
+            //}
             return Ok(result);
         }
         [HttpGet("GetRevenue")]
-        public async Task<IActionResult> GetRevenue([FromQuery] int month, [FromQuery] int year)
+        public async Task<IActionResult> GetRevenue([FromQuery] MonthYearCriteria criteria)
         {
-            var result = iOrderService.GetSumRevenue(month, year);
-            if (result == null)
-            {
-                return NotFound();
-            }
+            var result = iOrderService.GetSumRevenue(criteria);
+            //if (result == null)
+            //{
+            //    return NotFound();
+            //}
             return Ok(result);
         }
         [HttpGet("GetStaffs")]

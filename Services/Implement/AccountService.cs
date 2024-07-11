@@ -350,5 +350,20 @@ namespace Services.Implement
             _customerRepository.UpdateCustomer(accountDetail);
             return true;
         }
+
+        public int NumbersOfStaffs()
+        {
+            return NumbersOfSaleStaff() + NumbersOfShipper();
+        }
+
+        public int NumbersOfSaleStaff()
+        {
+            return _saleStaffRepository.GetAllSaleStaffs().Count();
+        }
+
+        public int NumbersOfShipper()
+        {
+            return _shipperRepository.GetAllShippers().Count();
+        }
     }
 }

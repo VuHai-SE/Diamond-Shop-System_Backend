@@ -192,6 +192,18 @@ namespace DiamondStoreAPI.Controllers
             return Ok();
         }
 
+        [HttpGet("NumberOfEmployee")]
+        public async Task<IActionResult> NumberOfEmployee()
+        {
+            var numberOfEmployees = new NumberOfEmployee()
+            {
+                NumberOfStaffs = _accountService.NumbersOfStaffs(),
+                NumberOfSales = _accountService.NumbersOfSaleStaff(),
+                NumberOfShippers = _accountService.NumbersOfShipper()
+            };
+            return Ok(numberOfEmployees);
+        }
+
         //[HttpPost("AddStaffId")]
         //public async Task<IActionResult> AddToStaffTables([FromBody] AddStaffTables request)
         //{

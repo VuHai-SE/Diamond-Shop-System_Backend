@@ -68,8 +68,9 @@ namespace DAOs
                 .Where(o => o.OrderDate.HasValue &&
                             o.OrderDate.Value.Month == month &&
                             o.OrderDate.Value.Year == year &&
-                            o.OrderStatus == "Delivered")
+                            o.OrderStatus == "Deliveried")
                 .ToListAsync();
         }
+
     }
 }
