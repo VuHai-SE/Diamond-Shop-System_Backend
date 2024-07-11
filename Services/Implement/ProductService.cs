@@ -16,18 +16,20 @@ using Repositories.Implement;
 using Services.DTOs.Request;
 using Services.DTOs.Response;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 
 namespace Services.Implement
 {
     public class ProductService : IProductService
     {
+        private readonly DiamondStoreContext _context;
         private readonly IProductRepository productRepository;
         private readonly IProductCategoryRepository productCategoryRepository;
         private readonly IProductMaterialRepository productMaterialRepository;
         private readonly IMaterialCategoryRepository materialCategoryRepository;
         private readonly IGemRepository gemRepository;
         private readonly ILogger<ProductService> _logger;
-        public ProductService(IProductRepository _productRepository, IProductCategoryRepository _productCategoryRepository, IProductMaterialRepository _productMaterialRepository, IMaterialCategoryRepository _materialCategoryRepository, IGemRepository _gemRepository, ILogger<ProductService> logger)
+        public ProductService(IProductRepository _productRepository, IProductCategoryRepository _productCategoryRepository, IProductMaterialRepository _productMaterialRepository, IMaterialCategoryRepository _materialCategoryRepository, IGemRepository _gemRepository, ILogger<ProductService> logger, DiamondStoreContext context)
         {
             productRepository = _productRepository;
             productCategoryRepository = _productCategoryRepository;
@@ -35,6 +37,7 @@ namespace Services.Implement
             materialCategoryRepository = _materialCategoryRepository;
             gemRepository = _gemRepository;
             _logger = logger;
+            _context = context;
         }
 
         public async Task<double> CalculateProductPriceAsync(string productId)
@@ -59,57 +62,149 @@ namespace Services.Implement
             }
             return productWithPriceList;
         }
-        
+
+        //public async Task<List<ProductWithPriceResponse>> FilterProducts(ProductFilterCriteria criteria)
+        //{
+        //    var productWithPriceList = await GetAllProductsAndPricesAsync();
+        //    if (!string.IsNullOrEmpty(criteria.Category))
+        //    {
+        //        productWithPriceList = productWithPriceList.Where(p => p.Category != null && p.Category.Equals(criteria.Category.Trim())).ToList();
+        //    }
+
+        //    if (!string.IsNullOrEmpty(criteria.Material))
+        //    {
+        //        productWithPriceList = productWithPriceList.Where(p => p.Material != null && p.Material.Equals(criteria.Material.Trim())).ToList();
+        //    }
+
+        //    if (!string.IsNullOrEmpty(criteria.GemOrigin))
+        //    {
+        //        productWithPriceList = productWithPriceList.Where(p => p.GemOrigin != null && p.GemOrigin.Equals(criteria.GemOrigin.Trim())).ToList();
+        //    }
+
+        //    if (criteria.MinCaratWeight.HasValue)
+        //    {
+        //        productWithPriceList = productWithPriceList.Where(p => p.CaratWeight.HasValue && p.CaratWeight >= criteria.MinCaratWeight).ToList();
+        //    }
+
+        //    if (criteria.MaxCaratWeight.HasValue)
+        //    {
+        //        productWithPriceList = productWithPriceList.Where(p => p.CaratWeight.HasValue && p.CaratWeight <= criteria.MaxCaratWeight).ToList();
+        //    }
+
+        //    if (!string.IsNullOrEmpty(criteria.Cut))
+        //    {
+        //        productWithPriceList = productWithPriceList.Where(p => p.Cut != null && p.Cut.Equals(criteria.Cut.Trim())).ToList();
+        //    }
+
+        //    if (!string.IsNullOrEmpty(criteria.Clarity))
+        //    {
+        //        productWithPriceList = productWithPriceList.Where(p => p.Clarity != null && p.Clarity.Equals(criteria.Clarity.Trim())).ToList();
+        //    }
+
+        //    if (!string.IsNullOrEmpty(criteria.Color))
+        //    {
+        //        productWithPriceList = productWithPriceList.Where(p => p.Color != null && p.Color.Equals(criteria.Color.Trim())).ToList();
+        //    }
+
+        //    if (!string.IsNullOrEmpty(criteria.Gender))
+        //    {
+        //        productWithPriceList = productWithPriceList.Where(p => p.Gender != null && p.Gender.Equals(criteria.Gender.Trim())).ToList();
+        //    }
+
+        //    return productWithPriceList;
+        //}
+
         public async Task<List<ProductWithPriceResponse>> FilterProducts(ProductFilterCriteria criteria)
         {
-            var productWithPriceList = await GetAllProductsAndPricesAsync();
+            var query = from p in _context.TblProducts
+                        join pm in _context.TblProductMaterials on p.ProductId equals pm.ProductId into pmJoin
+                        from pm in pmJoin.DefaultIfEmpty()
+                        join pg in _context.TblProductGems on p.ProductId equals pg.ProductId into pgJoin
+                        from pg in pgJoin.DefaultIfEmpty()
+                        join c in _context.TblProductCategories on p.CategoryId equals c.CategoryId into cJoin
+                        from c in cJoin.DefaultIfEmpty()
+                        join m in _context.TblMaterialCategories on pm.MaterialId equals m.MaterialId into mJoin
+                        from m in mJoin.DefaultIfEmpty()
+                        join g in _context.TblGems on pg.GemId equals g.GemId into gJoin
+                        from g in gJoin.DefaultIfEmpty()
+                        select new { p, pm, pg, c, m, g };
+
             if (!string.IsNullOrEmpty(criteria.Category))
             {
-                productWithPriceList = productWithPriceList.Where(p => p.Category != null && p.Category.Equals(criteria.Category.Trim())).ToList();
+                query = query.Where(x => x.c != null && x.c.CategoryName.Equals(criteria.Category.Trim()));
             }
 
             if (!string.IsNullOrEmpty(criteria.Material))
             {
-                productWithPriceList = productWithPriceList.Where(p => p.Material != null && p.Material.Equals(criteria.Material.Trim())).ToList();
+                query = query.Where(x => x.m != null && x.m.MaterialName.Equals(criteria.Material.Trim()));
             }
 
             if (!string.IsNullOrEmpty(criteria.GemOrigin))
             {
-                productWithPriceList = productWithPriceList.Where(p => p.GemOrigin != null && p.GemOrigin.Equals(criteria.GemOrigin.Trim())).ToList();
+                query = query.Where(x => x.g != null && ((bool)x.g.Origin ? "Natural" : "Synthetic").Equals(criteria.GemOrigin.Trim()));
             }
 
             if (criteria.MinCaratWeight.HasValue)
             {
-                productWithPriceList = productWithPriceList.Where(p => p.CaratWeight.HasValue && p.CaratWeight >= criteria.MinCaratWeight).ToList();
+                query = query.Where(x => x.g != null && x.g.CaratWeight >= criteria.MinCaratWeight);
             }
 
             if (criteria.MaxCaratWeight.HasValue)
             {
-                productWithPriceList = productWithPriceList.Where(p => p.CaratWeight.HasValue && p.CaratWeight <= criteria.MaxCaratWeight).ToList();
+                query = query.Where(x => x.g != null && x.g.CaratWeight <= criteria.MaxCaratWeight);
             }
 
             if (!string.IsNullOrEmpty(criteria.Cut))
             {
-                productWithPriceList = productWithPriceList.Where(p => p.Cut != null && p.Cut.Equals(criteria.Cut.Trim())).ToList();
+                query = query.Where(x => x.g != null && x.g.Cut.Equals(criteria.Cut.Trim()));
             }
 
             if (!string.IsNullOrEmpty(criteria.Clarity))
             {
-                productWithPriceList = productWithPriceList.Where(p => p.Clarity != null && p.Clarity.Equals(criteria.Clarity.Trim())).ToList();
+                query = query.Where(x => x.g != null && x.g.Clarity.Equals(criteria.Clarity.Trim()));
             }
 
             if (!string.IsNullOrEmpty(criteria.Color))
             {
-                productWithPriceList = productWithPriceList.Where(p => p.Color != null && p.Color.Equals(criteria.Color.Trim())).ToList();
+                query = query.Where(x => x.g != null && x.g.Color.Equals(criteria.Color.Trim()));
             }
 
             if (!string.IsNullOrEmpty(criteria.Gender))
             {
-                productWithPriceList = productWithPriceList.Where(p => p.Gender != null && p.Gender.Equals(criteria.Gender.Trim())).ToList();
+                query = query.Where(x => x.p.Gender != null && x.p.Gender.Equals(criteria.Gender.Trim()));
             }
 
-            return productWithPriceList;
+            var products = await query
+                .Select(x => new ProductWithPriceResponse
+                {
+                    ProductId = x.p.ProductId,
+                    ProductName = x.p.ProductName,
+                    ProductCode = x.p.ProductCode,
+                    Description = x.p.Description,
+                    Category = x.c != null ? x.c.CategoryName : string.Empty,
+                    Material = x.m != null ? x.m.MaterialName : string.Empty,
+                    GemOrigin = x.g != null ? ((bool)x.g.Origin ? "Natural" : "Synthetic") : string.Empty,
+                    CaratWeight = x.g != null ? x.g.CaratWeight : 0,
+                    Clarity = x.g != null ? x.g.Clarity : string.Empty,
+                    Color = x.g != null ? x.g.Color : string.Empty,
+                    Cut = x.g != null ? x.g.Cut : string.Empty,
+                    ProductSize = x.p.ProductSize,
+                    Image = x.p.Image,
+                    Status = x.p.Status,
+                    UnitSizePrice = x.p.UnitSizePrice,
+                    Gender = x.p.Gender == 1 ? "Male" : (x.p.Gender == 0 ? "Unisex" : "Female")
+                }).ToListAsync();
+
+            foreach (var product in products)
+            {
+                product.ProductPrice = await CalculateProductPriceAsync(product.ProductId);
+            }
+
+            return products;
         }
+
+
+
 
         public async Task<ProductWithPriceResponse> GetProductAndPriceByIdAsync(string productId)
         {
