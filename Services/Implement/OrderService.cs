@@ -296,6 +296,10 @@ namespace Services.Implement
         public int GetStaffs()
         {
             var staffMembers = _accountRepository.GetAllStaff();
+            if (staffMembers == null)
+            {
+                throw new Exception("Staff data is null");
+            }
             return staffMembers.Count;
         }
 
