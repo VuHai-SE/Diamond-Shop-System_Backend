@@ -17,6 +17,8 @@ using System.Configuration;
 using Services.DTOs.Response;
 using BusinessObjects.ResponseModels;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
+using Serilog;
+using Microsoft.AspNetCore.Mvc.Formatters;
 
 
 namespace DiamondStoreAPI.Controllers
@@ -33,11 +35,13 @@ namespace DiamondStoreAPI.Controllers
         private readonly IShipperService _shipperService;
 
 
-        public AccountsController(IAccountService accountService, ICustomerService customerService, IConfiguration configuration)
+        public AccountsController(IAccountService accountService, ICustomerService customerService, IConfiguration configuration, ISaleStaffService saleStaffService, IShipperService shipperService)
         {
             _accountService = accountService;
             _customerService = customerService;
             _configuration = configuration;
+            _saleStaffService = saleStaffService;
+            _shipperService = shipperService;
             _jwtSecret = _configuration.GetValue<string>("Jwt:Day_la_key_JWT");
         }
 
@@ -173,60 +177,91 @@ namespace DiamondStoreAPI.Controllers
             return Ok(request.UsertName + "'s role has change into " + request.Role);
         }
 
-        [HttpPut("DisableAccount")]
-        public async Task<IActionResult> DisableAccount(string username)
+        [HttpPut("UpdateAccountStatus")]
+        public async Task<IActionResult> UpdateAccountStatus([FromBody] UpdateAccountStatusRequest request)
         {
-            var isSuccess = await _accountService.DisableAccount(username);
+            var isSuccess = await _accountService.UpdateAccountStatus(request.Username, request.Status);
             if (!isSuccess) return BadRequest("Update fail");
-            return Ok(username + " has been disabled");
+            return Ok(request.Username + "-" + request.Status);
         }
 
-        [HttpPost("AddStaffId")]
-        public async Task<IActionResult> AddToStaffTables([FromBody] AddStaffTables request)
+        [HttpPost("RegisterStaff")]
+        public async Task<IActionResult> RegisterStaff([FromBody] RegisterStaff request)
         {
-            var accountInfo = await _accountService.GetAccountInfo(request.Username);
-            if (accountInfo == null) return NotFound();
-            _accountService.AddToStaffTables(request.StaffId, accountInfo);
-            return Ok(request.StaffId + " has been added");
+            await _accountService.RegisterStaffAsync(request);
+            return Ok();
         }
 
-        [HttpPost("CreateStaffAccount")]
-        public async Task<IActionResult> CreateStaffAccount([FromBody] CreateStaffAccountRequest request)
-        {
-            var registerRequest = new Services.DTOs.Request.RegisterRequest()
-            {
-                Username = request.Username,
-                Password = request.Password,
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                Gender = request.Gender,
-                Birthday = request.Birthday,
-                Email = request.Email,
-                PhoneNumber = request.PhoneNumber,
-                Address = request.Address,
-            };
-            _accountService.RegisterAsync(registerRequest);
-            var updateRoleRequest = new UpdateRoleRequest() { Role = request.Role, UsertName = request.Username };
-            var isChanageRole = _accountService.ChangeAccountRole(updateRoleRequest);
-            var accountInfo = await _accountService.GetStaffInfo(request.Username);
-            _accountService.AddToStaffTables(request.StaffId, accountInfo);
-            var staffInfo = _accountService.GetStaffInfo(request.Username);
-            return Ok(staffInfo);
-        }
+        //[HttpPost("AddStaffId")]
+        //public async Task<IActionResult> AddToStaffTables([FromBody] AddStaffTables request)
+        //{
+        //    var accountInfo = await _accountService.GetAccountInfo(request.Username);
+        //    if (accountInfo == null) return NotFound();
+        //    await _accountService.AddToStaffTables(request.StaffId, accountInfo);
+        //    return Ok(request.StaffId + " has been added");
+        //}
 
-        [HttpGet("CheckSaleStaffIdExist")]
-        public async Task<IActionResult> CheckSaleStaffIdExist(string saleStaffId)
-        {
-            bool isExist = _saleStaffService.isSaleStaffIdExist(saleStaffId);
-            return Ok(isExist);
-        }
+        //[HttpPost("CreateStaffAccount")]
+        //public async Task<IActionResult> CreateStaffAccount([FromBody] CreateStaffAccountRequest request)
+        //{
+        //    try
+        //    {
+        //        if (request == null)
+        //        {
+        //            return BadRequest("Request body is null");
+        //        }
 
-        [HttpGet("CheckShipperIdExist")]
-        public async Task<IActionResult> CheckShipperIdExist(string shipperId)
-        {
-            bool isExist = _shipperService.IsShipperIdExist(shipperId);
-            return Ok(isExist);
-        }
+        //        var registerRequest = new Services.DTOs.Request.RegisterRequest()
+        //        {
+        //            Username = request.Username ?? string.Empty,
+        //            Password = request.Password ?? string.Empty,
+        //            FirstName = request.FirstName ?? string.Empty,
+        //            LastName = request.LastName ?? string.Empty,
+        //            Gender = request.Gender ?? string.Empty,
+        //            Birthday = request.Birthday ?? DateTime.MinValue,
+        //            Email = request.Email ?? string.Empty,
+        //            PhoneNumber = request.PhoneNumber ?? string.Empty,
+        //            Address = request.Address ?? string.Empty,
+        //        };
+
+        //        await _accountService.RegisterAsync(registerRequest);
+
+        //        var updateRoleRequest = new UpdateRoleRequest()
+        //        {
+        //            Role = request.Role ?? string.Empty,
+        //            UsertName = request.Username ?? string.Empty
+        //        };
+
+        //        var isChanageRole = await _accountService.ChangeAccountRole(updateRoleRequest);
+
+        //        var accountInfo = await _accountService.GetStaffInfo(request.Username);
+
+        //        await _accountService.AddToStaffTables(request.StaffId, accountInfo);
+
+        //        var staffInfo = await _accountService.GetStaffInfo(request.Username);
+
+        //        return Ok(staffInfo);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Log.Error("An error occurred while creating staff account: {ErrorMessage}", ex.Message);
+        //        return StatusCode(500, "Internal server error");
+        //    }
+        //}
+
+        //[HttpGet("CheckSaleStaffIdExist")]
+        //public async Task<IActionResult> CheckSaleStaffIdExist(string saleStaffId)
+        //{
+        //    bool isExist = _saleStaffService.isSaleStaffIdExist(saleStaffId);
+        //    return Ok(isExist);
+        //}
+
+        //[HttpGet("CheckShipperIdExist")]
+        //public async Task<IActionResult> CheckShipperIdExist(string shipperId)
+        //{
+        //    bool isExist = _shipperService.IsShipperIdExist(shipperId);
+        //    return Ok(isExist);
+        //}
 
         private string GenerateJwtToken(TblAccount account)
         {

@@ -10,49 +10,60 @@ namespace Repositories.Implement
 {
     public class GemRepository : IGemRepository
     {
-        public readonly GemDAO gemDAO;
+        public readonly GemDAO _gemDAO;
 
-        public GemRepository(GemDAO _gemDAO)
+        public GemRepository(GemDAO gemDAO)
         {
-            gemDAO = _gemDAO;
+            _gemDAO = gemDAO;
         }
 
         public TblGem AddGem(TblGem gem)
-            => gemDAO.AddGem(gem);
+            => _gemDAO.AddGem(gem);
 
         public TblDiamondGradingReport AddDiamondGradingReport(TblDiamondGradingReport report)
-            => gemDAO.AddDiamondGradingReport(report);
+            => _gemDAO.AddDiamondGradingReport(report);
 
         public bool GemExists(string gemId)
         {
-            return gemDAO.GemExists(gemId);
+            return _gemDAO.GemExists(gemId);
         }
 
         public bool IsGemInProduct(string gemId)
         {
-            return gemDAO.IsGemInProduct(gemId);
+            return _gemDAO.IsGemInProduct(gemId);
         }
 
         public void DeleteDiamondGradingReport(string gemId)
         {
-            gemDAO.DeleteDiamondGradingReport(gemId);
+            _gemDAO.DeleteDiamondGradingReport(gemId);
         }
 
         public void DeleteGem(string gemId)
         {
-            gemDAO.DeleteGem(gemId);
+            _gemDAO.DeleteGem(gemId);
         }
 
         public TblGem GetGem(string gemId)
-            => gemDAO.GetGem(gemId);
+            => _gemDAO.GetGem(gemId);
 
         public TblGem GetGemByProduct(string productId)
-            => gemDAO.GetGemByProduct(productId);
+            => _gemDAO.GetGemByProduct(productId);
 
         public List<TblGem> GetGems()
-            => gemDAO.GetGems();
+            => _gemDAO.GetGems();
 
         public bool UpdateGem(string id, TblGem gem)
-            => gemDAO.UpdateGem(id, gem);
+            => _gemDAO.UpdateGem(id, gem);
+
+        public TblDiamondGradingReport GetDiamondGradingReportByGemId(string gemId)
+        {
+            return _gemDAO.GetDiamondGradingReportByGemId(gemId);
+        }
+
+        public void UpdateDiamondGradingReport(TblDiamondGradingReport report)
+        {
+            _gemDAO.UpdateDiamondGradingReport(report);
+        }
+
     }
 }

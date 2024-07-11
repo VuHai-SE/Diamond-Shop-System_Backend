@@ -13,6 +13,7 @@ using Microsoft.Identity.Client;
 using Services.DTOs.Response;
 using Humanizer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 
 namespace DiamondStoreAPI.Controllers
 {
@@ -236,6 +237,12 @@ namespace DiamondStoreAPI.Controllers
                 orderToUpdate.OrderStatus = "Cancelled";
                 orderToUpdate.OrderNote = "Customer cancelled-" + request.Note.Trim();
                 var isUpdate = iOrderService.UpdateOrder(orderToUpdate);
+                var productsBuying = iOrderService.GetOrderInfo(request.OrderID).products;
+                foreach (var p in productsBuying) 
+                {
+                    iProductService.UpdateProductStatus(p.ProductID);
+                }
+                
                 return Ok("Cancel successfully");
             }
         }
@@ -297,21 +304,15 @@ public async Task<IActionResult> GetRevenue([FromQuery] int month, [FromQuery] i
     }
 }
         [HttpGet("GetStaffs")]
-        public IActionResult GetStaffs()
+        public async Task<IActionResult> GetStaffs()
         {
-            try
+            var result = iOrderService.GetStaffs();
+            if (result == 0)
             {
-                var result = iOrderService.GetStaffs();
-                if (result == 0)
-                {
-                    return NotFound(new { Message = "No staff found." });
-                }
-                return Ok(result);
+                return NotFound();
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { Message = ex.Message });
-            }
-        }
+            return Ok(result);
+        
+    }
     }
 }

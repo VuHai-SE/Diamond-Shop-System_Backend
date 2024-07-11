@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects;
+using Repositories.Implement;
 
 namespace Services
 {
@@ -19,5 +20,8 @@ namespace Services
         public void DeleteDiamondGradingReport(string gemId);
         public void DeleteGem(string gemId);
         TblGem GetGemByProduct(string productId);
+        public TblDiamondGradingReport GetDiamondGradingReportByGemId(string gemId);
+        public void UpdateDiamondGradingReport(TblDiamondGradingReport report);
+
     }
 }

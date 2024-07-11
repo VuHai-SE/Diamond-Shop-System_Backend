@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects;
+using DAOs;
 using Microsoft.EntityFrameworkCore;
 
 namespace Repositories
@@ -19,7 +20,9 @@ namespace Repositories
         public bool IsGemInProduct(string gemId);
         public void DeleteDiamondGradingReport(string gemId);
         public void DeleteGem(string gemId);
-
         TblGem GetGemByProduct(string productId);
+        public TblDiamondGradingReport GetDiamondGradingReportByGemId(string gemId);
+        public void UpdateDiamondGradingReport(TblDiamondGradingReport report);
+
     }
 }
