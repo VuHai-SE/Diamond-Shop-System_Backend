@@ -261,27 +261,41 @@ namespace DiamondStoreAPI.Controllers
             }
             return Ok(acceptedOrderInfoList);
         }
-
-        [HttpGet("GetSumOrderbyMonthAndYear")]
-        public async Task<IActionResult> GetSumOrderbyMonthAndYear([FromQuery] int month, [FromQuery] int year)
+[HttpGet("GetSumOrderbyMonthAndYear")]
+public async Task<IActionResult> GetSumOrderbyMonthAndYear([FromQuery] int month, [FromQuery] int year)
+{
+    try
+    {
+        var result = iOrderService.GetSumOrderByMonth(month, year);
+        if (result == 0)
         {
-            var result = iOrderService.GetSumOrderByMonth(month, year);
-            if (result == 0)
-            {
-                return NotFound();
-            }
-            return Ok(result);
+            return NotFound(new { Message = "No orders found for the specified month and year." });
         }
-        [HttpGet("GetRevenue")]
-        public async Task<IActionResult> GetRevenue([FromQuery] int month, [FromQuery] int year)
+        return Ok(result);
+    }
+    catch (Exception ex)
+    {
+        return StatusCode(500, new { Message = ex.Message });
+    }
+}
+/*
+[HttpGet("GetRevenue")]
+public async Task<IActionResult> GetRevenue([FromQuery] int month, [FromQuery] int year)
+{
+    try
+    {
+        var result = await iOrderService.GetSumRevenue(month, year);
+        if (result == 0)
         {
-            var result = iOrderService.GetSumRevenue(month, year);
-            if (result == null)
-            {
-                return NotFound();
-            }
-            return Ok(result);
+            return NotFound(new { Message = "No revenue found for the specified month and year." });
         }
+        return Ok(result);
+    }
+    catch (Exception ex)
+    {
+        return StatusCode(500, new { Message = ex.Message });
+    }
+}*/
         [HttpGet("GetStaffs")]
         public async Task<IActionResult> GetStaffs()
         {

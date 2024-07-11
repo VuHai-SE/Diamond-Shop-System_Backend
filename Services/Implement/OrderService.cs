@@ -280,8 +280,8 @@ namespace Services.Implement
         }
         public Task<bool> UpdateOrder(TblOrder order)
            => _orderRepository.UpdateOrder(order);
-    
-public int GetSumOrderByMonth(int month, int year)
+
+        public int GetSumOrderByMonth(int month, int year)
         {
             var orders = _orderRepository.GetOrders();
 
@@ -293,7 +293,6 @@ public int GetSumOrderByMonth(int month, int year)
             // Return the count of filtered orders
             return filteredOrders.Count();
         }
-
         public int GetStaffs()
         {
             var staffMembers = _accountRepository.GetAllStaff();
@@ -313,5 +312,6 @@ public int GetSumOrderByMonth(int month, int year)
 
             return totalRevenue;
         }
+        
     }
 }
