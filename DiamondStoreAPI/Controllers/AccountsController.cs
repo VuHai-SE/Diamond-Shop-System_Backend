@@ -192,14 +192,14 @@ namespace DiamondStoreAPI.Controllers
             return Ok();
         }
 
-        [HttpPost("AddStaffId")]
-        public async Task<IActionResult> AddToStaffTables([FromBody] AddStaffTables request)
-        {
-            var accountInfo = await _accountService.GetAccountInfo(request.Username);
-            if (accountInfo == null) return NotFound();
-            await _accountService.AddToStaffTables(request.StaffId, accountInfo);
-            return Ok(request.StaffId + " has been added");
-        }
+        //[HttpPost("AddStaffId")]
+        //public async Task<IActionResult> AddToStaffTables([FromBody] AddStaffTables request)
+        //{
+        //    var accountInfo = await _accountService.GetAccountInfo(request.Username);
+        //    if (accountInfo == null) return NotFound();
+        //    await _accountService.AddToStaffTables(request.StaffId, accountInfo);
+        //    return Ok(request.StaffId + " has been added");
+        //}
 
         //[HttpPost("CreateStaffAccount")]
         //public async Task<IActionResult> CreateStaffAccount([FromBody] CreateStaffAccountRequest request)
@@ -249,19 +249,19 @@ namespace DiamondStoreAPI.Controllers
         //    }
         //}
 
-        [HttpGet("CheckSaleStaffIdExist")]
-        public async Task<IActionResult> CheckSaleStaffIdExist(string saleStaffId)
-        {
-            bool isExist = _saleStaffService.isSaleStaffIdExist(saleStaffId);
-            return Ok(isExist);
-        }
+        //[HttpGet("CheckSaleStaffIdExist")]
+        //public async Task<IActionResult> CheckSaleStaffIdExist(string saleStaffId)
+        //{
+        //    bool isExist = _saleStaffService.isSaleStaffIdExist(saleStaffId);
+        //    return Ok(isExist);
+        //}
 
-        [HttpGet("CheckShipperIdExist")]
-        public async Task<IActionResult> CheckShipperIdExist(string shipperId)
-        {
-            bool isExist = _shipperService.IsShipperIdExist(shipperId);
-            return Ok(isExist);
-        }
+        //[HttpGet("CheckShipperIdExist")]
+        //public async Task<IActionResult> CheckShipperIdExist(string shipperId)
+        //{
+        //    bool isExist = _shipperService.IsShipperIdExist(shipperId);
+        //    return Ok(isExist);
+        //}
 
         private string GenerateJwtToken(TblAccount account)
         {

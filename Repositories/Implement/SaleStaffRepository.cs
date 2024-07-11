@@ -17,8 +17,11 @@ namespace Repositories.Implement
             _saleStaffDAO = saleStaffDAO;
         }
 
+
         public async Task AddSaleStaffAsync(TblSaleStaff saleStaff)
             => await _saleStaffDAO.AddSaleStaffAsync(saleStaff);
+        public string GetLastStaffId()
+            => _saleStaffDAO.GetLastStaffId();
 
         public TblSaleStaff GetSaleStaffByUsername(string username)
             => _saleStaffDAO.GetSaleStaffByUsername(username);
