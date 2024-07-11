@@ -395,6 +395,9 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "DiamondStoreAPI v1");
 });
 
+app.UseDefaultFiles(); // Để sử dụng index.html làm tệp mặc định
+app.UseStaticFiles(); // Để phục vụ các tệp tĩnh trong wwwroot
+
 app.MapControllers();
 
 app.Run();
