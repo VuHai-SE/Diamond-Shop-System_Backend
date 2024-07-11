@@ -11,6 +11,9 @@ namespace Repositories
     {
         public TblSaleStaff GetSaleStaffByUsername(string username);
         public bool isSaleStaffIdExist(string staffId);
+
         Task AddSaleStaffAsync(TblSaleStaff saleStaff);
+        public string GetLastStaffId();
+
     }
 }
