@@ -281,18 +281,18 @@ namespace Services.Implement
         public Task<bool> UpdateOrder(TblOrder order)
            => _orderRepository.UpdateOrder(order);
 
-        public int GetSumOrderByMonth(int month, int year)
-        {
-            var orders = _orderRepository.GetOrders();
+        //public int GetSumOrderByMonth(int month, int year)
+        //{
+        //    var orders = _orderRepository.GetOrders();
 
-            // Filter orders by the specified month and year
-            var filteredOrders = orders.Where(o => o.OrderDate.HasValue
-                                                    && o.OrderDate.Value.Month == month
-                                                    && o.OrderDate.Value.Year == year && o.OrderStatus == "Deliveried");
+        //    // Filter orders by the specified month and year
+        //    var filteredOrders = orders.Where(o => o.OrderDate.HasValue
+        //                                            && o.OrderDate.Value.Month == month
+        //                                            && o.OrderDate.Value.Year == year && o.OrderStatus == "Deliveried");
 
-            // Return the count of filtered orders
-            return filteredOrders.Count();
-        }
+        //    // Return the count of filtered orders
+        //    return filteredOrders.Count();
+        //}
 
         public List<TblOrder> GetDeliveriedOrdersByMonthYear(MonthYearCriteria criteria)
         {
@@ -333,18 +333,18 @@ namespace Services.Implement
             return staffMembers.Count;
         }
 
-        public async Task<decimal> GetSumRevenue(int month, int year)
-        {
-            var deliveredOrders = await _orderRepository.GetDeliveredOrdersByMonthAndYearAsync(month, year);
-            decimal totalRevenue = 0;
+        //public async Task<decimal> GetSumRevenue(int month, int year)
+        //{
+        //    var deliveredOrders = await _orderRepository.GetDeliveredOrdersByMonthAndYearAsync(month, year);
+        //    decimal totalRevenue = 0;
 
-            foreach (var order in deliveredOrders)
-            {
-                var orderDetails = _orderDetailRepository.GetOrderDetailsByOrderID(order.OrderId);
-                totalRevenue += orderDetails.Sum(od => (decimal)(od.FinalPrice ?? 0));
-            }
+        //    foreach (var order in deliveredOrders)
+        //    {
+        //        var orderDetails = _orderDetailRepository.GetOrderDetailsByOrderID(order.OrderId);
+        //        totalRevenue += orderDetails.Sum(od => (decimal)(od.FinalPrice ?? 0));
+        //    }
 
-            return totalRevenue;
-        }
+        //    return totalRevenue;
+        //}
     }
 }
