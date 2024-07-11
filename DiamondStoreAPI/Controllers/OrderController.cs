@@ -268,51 +268,45 @@ namespace DiamondStoreAPI.Controllers
             }
             return Ok(acceptedOrderInfoList);
         }
-[HttpGet("GetSumOrderbyMonthAndYear")]
-public async Task<IActionResult> GetSumOrderbyMonthAndYear([FromQuery] int month, [FromQuery] int year)
-{
-    try
-    {
-        var result = iOrderService.GetSumOrderByMonth(month, year);
-        if (result == 0)
+        [HttpGet("GetSumOrderbyMonthAndYear")]
+        public async Task<IActionResult> GetSumOrderbyMonthAndYear([FromQuery] int month, [FromQuery] int year)
         {
-            return NotFound(new { Message = "No orders found for the specified month and year." });
+            try
+            {
+                var result = iOrderService.GetSumOrderByMonth(month, year);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = ex.Message });
+            }
         }
-        return Ok(result);
-    }
-    catch (Exception ex)
-    {
-        return StatusCode(500, new { Message = ex.Message });
-    }
-}
 
-[HttpGet("GetRevenue")]
-public async Task<IActionResult> GetRevenue([FromQuery] int month, [FromQuery] int year)
-{
-    try
-    {
-        var result = await iOrderService.GetSumRevenue(month, year);
-        if (result == 0)
+        [HttpGet("GetRevenue")]
+        public async Task<IActionResult> GetRevenue([FromQuery] int month, [FromQuery] int year)
         {
-            return NotFound(new { Message = "No revenue found for the specified month and year." });
+            try
+            {
+                var result = await iOrderService.GetSumRevenue(month, year);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = ex.Message });
+            }
         }
-        return Ok(result);
-    }
-    catch (Exception ex)
-    {
-        return StatusCode(500, new { Message = ex.Message });
-    }
-}
         [HttpGet("GetStaffs")]
         public async Task<IActionResult> GetStaffs()
         {
-            var result = iOrderService.GetStaffs();
-            if (result == 0)
+            try
             {
-                return NotFound();
+                var result = iOrderService.GetStaffs();
+                return Ok(result);
             }
-            return Ok(result);
-        
-    }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = ex.Message });
+            }
+        }
     }
 }

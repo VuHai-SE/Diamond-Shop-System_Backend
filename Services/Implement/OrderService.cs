@@ -288,7 +288,8 @@ namespace Services.Implement
             // Filter orders by the specified month and year
             var filteredOrders = orders.Where(o => o.OrderDate.HasValue
                                                     && o.OrderDate.Value.Month == month
-                                                    && o.OrderDate.Value.Year == year && o.OrderStatus == "Delivered");
+                                                    && o.OrderDate.Value.Year == year
+                                                    && o.OrderStatus == "Delivered");
 
             // Return the count of filtered orders
             return filteredOrders.Count();
@@ -302,7 +303,6 @@ namespace Services.Implement
             }
             return staffMembers.Count;
         }
-
         public async Task<decimal> GetSumRevenue(int month, int year)
         {
             var deliveredOrders = await _orderRepository.GetDeliveredOrdersByMonthAndYearAsync(month, year);
@@ -316,6 +316,6 @@ namespace Services.Implement
 
             return totalRevenue;
         }
-        
+
     }
 }
