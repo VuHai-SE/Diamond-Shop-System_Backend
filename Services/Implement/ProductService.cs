@@ -208,6 +208,70 @@ namespace Services.Implement
             return products;
         }
 
+        public async Task<int> CountFilteredProducts(ProductFilterCriteria criteria)
+        {
+            var query = from p in _context.TblProducts
+                        join pm in _context.TblProductMaterials on p.ProductId equals pm.ProductId into pmJoin
+                        from pm in pmJoin.DefaultIfEmpty()
+                        join pg in _context.TblProductGems on p.ProductId equals pg.ProductId into pgJoin
+                        from pg in pgJoin.DefaultIfEmpty()
+                        join c in _context.TblProductCategories on p.CategoryId equals c.CategoryId into cJoin
+                        from c in cJoin.DefaultIfEmpty()
+                        join m in _context.TblMaterialCategories on pm.MaterialId equals m.MaterialId into mJoin
+                        from m in mJoin.DefaultIfEmpty()
+                        join g in _context.TblGems on pg.GemId equals g.GemId into gJoin
+                        from g in gJoin.DefaultIfEmpty()
+                        select new { p, pm, pg, c, m, g };
+
+            if (!string.IsNullOrEmpty(criteria.Category))
+            {
+                query = query.Where(x => x.c != null && x.c.CategoryName.Equals(criteria.Category.Trim()));
+            }
+
+            if (!string.IsNullOrEmpty(criteria.Material))
+            {
+                query = query.Where(x => x.m != null && x.m.MaterialName.Equals(criteria.Material.Trim()));
+            }
+
+            if (!string.IsNullOrEmpty(criteria.GemOrigin))
+            {
+                query = query.Where(x => x.g != null && ((bool)x.g.Origin ? "Natural" : "Synthetic").Equals(criteria.GemOrigin.Trim()));
+            }
+
+            if (criteria.MinCaratWeight.HasValue)
+            {
+                query = query.Where(x => x.g != null && x.g.CaratWeight >= criteria.MinCaratWeight);
+            }
+
+            if (criteria.MaxCaratWeight.HasValue)
+            {
+                query = query.Where(x => x.g != null && x.g.CaratWeight <= criteria.MaxCaratWeight);
+            }
+
+            if (!string.IsNullOrEmpty(criteria.Cut))
+            {
+                query = query.Where(x => x.g != null && x.g.Cut.Equals(criteria.Cut.Trim()));
+            }
+
+            if (!string.IsNullOrEmpty(criteria.Clarity))
+            {
+                query = query.Where(x => x.g != null && x.g.Clarity.Equals(criteria.Clarity.Trim()));
+            }
+
+            if (!string.IsNullOrEmpty(criteria.Color))
+            {
+                query = query.Where(x => x.g != null && x.g.Color.Equals(criteria.Color.Trim()));
+            }
+
+            if (!string.IsNullOrEmpty(criteria.Gender))
+            {
+                query = query.Where(x => x.p.Gender != null && x.p.Gender.Equals(criteria.Gender.Trim()));
+            }
+
+            return await query.CountAsync();
+        }
+
+
         public async Task<ProductWithPriceResponse> GetProductAndPriceByIdAsync(string productId)
         {
             var product = await productRepository.GetProductByIdAsync(productId);

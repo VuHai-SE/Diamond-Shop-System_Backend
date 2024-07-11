@@ -46,18 +46,27 @@ namespace DiamondStoreAPI.Controllers
         public async Task<IActionResult> GetProductsAndPrices([FromQuery] ProductFilterCriteria criteria)
         {
             var productWithPriceList = await _productService.FilterProducts(criteria);
-            if (productWithPriceList.IsNullOrEmpty())
+
+            if (productWithPriceList == null || !productWithPriceList.Any())
             {
                 return NotFound();
             }
 
+            // Tính toán tổng số trang
+            var totalRecords = await _productService.CountFilteredProducts(criteria);
+            var totalPages = (int)Math.Ceiling(totalRecords / (double)criteria.PageSize);
+
+            // Trả về phản hồi bao gồm dữ liệu phân trang
             return Ok(new
             {
-                TotalPages = (int)Math.Ceiling(productWithPriceList.Count / (double)criteria.PageSize),
+                TotalPages = totalPages,
                 CurrentPage = criteria.PageNumber,
+                PageSize = criteria.PageSize,
+                TotalRecords = totalRecords,
                 Products = productWithPriceList
             });
         }
+
 
 
         [HttpPost("CreateProduct")]
