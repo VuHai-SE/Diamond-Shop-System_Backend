@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Services.DTOs.Request
 {
-    public class SaveWarrantyImageRequest
+    public class MonthYearCriteria
     {
-        public int WarrantyId { get; set; }
-        public string Base64Image { get; set; }
+        public int Month { get; set; }
+        public int Year { get; set; }
     }
 }

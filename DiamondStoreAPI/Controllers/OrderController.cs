@@ -13,6 +13,7 @@ using Microsoft.Identity.Client;
 using Services.DTOs.Response;
 using Humanizer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 
 namespace DiamondStoreAPI.Controllers
 {
@@ -236,6 +237,12 @@ namespace DiamondStoreAPI.Controllers
                 orderToUpdate.OrderStatus = "Cancelled";
                 orderToUpdate.OrderNote = "Customer cancelled-" + request.Note.Trim();
                 var isUpdate = iOrderService.UpdateOrder(orderToUpdate);
+                var productsBuying = iOrderService.GetOrderInfo(request.OrderID).products;
+                foreach (var p in productsBuying) 
+                {
+                    iProductService.UpdateProductStatus(p.ProductID);
+                }
+                
                 return Ok("Cancel successfully");
             }
         }
@@ -263,25 +270,26 @@ namespace DiamondStoreAPI.Controllers
         }
 
         [HttpGet("GetSumOrderbyMonthAndYear")]
-        public async Task<IActionResult> GetSumOrderbyMonthAndYear([FromQuery] int month, [FromQuery] int year)
+        public async Task<IActionResult> GetSumOrderbyMonthAndYear([FromQuery] MonthYearCriteria criteria)
         {
-            var result = iOrderService.GetSumOrderByMonth(month, year);
-            if (result == 0)
-            {
-                return NotFound();
-            }
+            var result = iOrderService.GetDeliveriedOrdersByMonthYear(criteria).Count();
+            //if (result == 0)
+            //{
+            //    return NotFound();
+            //}
             return Ok(result);
         }
         [HttpGet("GetRevenue")]
-        public async Task<IActionResult> GetRevenue([FromQuery] int month, [FromQuery] int year)
+        public async Task<IActionResult> GetRevenue([FromQuery] MonthYearCriteria criteria)
         {
-            var result = iOrderService.GetSumRevenue(month, year);
-            if (result == null)
-            {
-                return NotFound();
-            }
+            var result = iOrderService.GetSumRevenue(criteria);
+            //if (result == null)
+            //{
+            //    return NotFound();
+            //}
             return Ok(result);
         }
+        
         [HttpGet("GetStaffs")]
         public async Task<IActionResult> GetStaffs()
         {
