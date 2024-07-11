@@ -20,6 +20,9 @@ namespace Repositories.Implement
         public async Task AddShipperAsync(TblShipper shipper)
             => await _shipperDAO.AddShipperAsync(shipper);
 
+        public List<TblShipper> GetAllShippers()
+            => _shipperDAO.GetAllShippers();
+
         public string GetLastShipperId()
             => _shipperDAO.GetLastShipperId();
 

@@ -20,6 +20,10 @@ namespace Repositories.Implement
 
         public async Task AddSaleStaffAsync(TblSaleStaff saleStaff)
             => await _saleStaffDAO.AddSaleStaffAsync(saleStaff);
+
+        public List<TblSaleStaff> GetAllSaleStaffs()
+            => _saleStaffDAO.GetAllSaleStaffs();
+
         public string GetLastStaffId()
             => _saleStaffDAO.GetLastStaffId();
 
@@ -28,5 +32,6 @@ namespace Repositories.Implement
 
         public bool isSaleStaffIdExist(string staffId)
             => _saleStaffDAO.isSaleStaffIdExist(staffId);
+
     }
 }
