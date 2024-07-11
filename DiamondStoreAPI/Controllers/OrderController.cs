@@ -289,6 +289,13 @@ namespace DiamondStoreAPI.Controllers
             //}
             return Ok(result);
         }
+        return Ok(result);
+    }
+    catch (Exception ex)
+    {
+        return StatusCode(500, new { Message = ex.Message });
+    }
+}*/
         [HttpGet("GetStaffs")]
         public async Task<IActionResult> GetStaffs()
         {
