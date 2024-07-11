@@ -57,7 +57,11 @@ namespace DAOs
 
             return lastStaffId;
         }
-
+        
+        public List<TblSaleStaff> GetAllSaleStaffs()
+        {
+            return _dbContext.TblSaleStaffs.ToList();
+        }
     }
     
 }

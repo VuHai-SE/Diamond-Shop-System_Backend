@@ -40,5 +40,8 @@ namespace Services
         public Task<bool> UpdateAccountStatus(string username, bool status);
         public Task AddToStaffTables(string staffId, AccountInfo accountInfo);
         Task RegisterStaffAsync(RegisterStaff register);
+        public int NumbersOfStaffs();
+        public int NumbersOfSaleStaff();
+        public int NumbersOfShipper();
     }
 }

@@ -14,6 +14,7 @@ namespace Repositories
 
         Task AddSaleStaffAsync(TblSaleStaff saleStaff);
         public string GetLastStaffId();
+        public List<TblSaleStaff> GetAllSaleStaffs();
 
     }
 }

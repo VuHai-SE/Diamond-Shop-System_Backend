@@ -13,5 +13,6 @@ namespace Repositories
         public bool IsShipperIdExist(string shipperId);
         Task AddShipperAsync(TblShipper shipper);
         public string GetLastShipperId();
+        public List<TblShipper> GetAllShippers();
     }
 }

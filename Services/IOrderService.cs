@@ -21,10 +21,14 @@ namespace Services
         public List<OrderInfo> GetOrderInfoListForSaleStaff();
         public List<OrderInfo> GetOrderInforListForShipper();
         Task<bool> UpdateOrder(TblOrder order);
-        public int GetSumOrderByMonth(int month, int year);
+        //public int GetSumOrderByMonth(int month, int year);
 
         public int GetStaffs();
 
-        public Task<decimal> GetSumRevenue(int month, int year);
+        //public Task<decimal> GetSumRevenue(int month, int year);
+
+        public List<TblOrder> GetDeliveriedOrdersByMonthYear(MonthYearCriteria criteria);
+
+        public decimal GetSumRevenue(MonthYearCriteria criteria);
     }
 }
