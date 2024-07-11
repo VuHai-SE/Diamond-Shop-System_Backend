@@ -27,6 +27,7 @@ namespace Services
 
         Task<List<ProductWithPriceResponse>> GetAllProductsAndPricesAsync();
         Task<List<ProductWithPriceResponse>> FilterProducts(ProductFilterCriteria criteria);
+        Task<int> CountFilteredProducts(ProductFilterCriteria criteria);
         Task<ProductWithPriceResponse> GetProductAndPriceByIdAsync(string productId);
 
         public TblProduct GetProduct(string id);

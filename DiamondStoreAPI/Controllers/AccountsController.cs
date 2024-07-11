@@ -74,7 +74,7 @@ namespace DiamondStoreAPI.Controllers
             }
 
             var account = await _accountService.AuthenticateAsync(request.Username, request.Password);
-            if (account == null)
+            if (account == null || _customerService.GetCustomerByAccountForLogin(request.Username).Status != true)
             {
                 return Unauthorized();
             }
@@ -135,6 +135,12 @@ namespace DiamondStoreAPI.Controllers
         public async Task<IActionResult> CheckPhoneExist(string phone)
         {
             return Ok(_customerService.isPhoneExisted(phone));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Hi()
+        {
+            return Ok("HI there");
         }
 
         [HttpGet("GetAccountList")]
