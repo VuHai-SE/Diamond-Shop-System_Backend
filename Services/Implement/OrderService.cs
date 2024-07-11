@@ -293,7 +293,6 @@ namespace Services.Implement
             // Return the count of filtered orders
             return filteredOrders.Count();
         }
-
         public int GetStaffs()
         {
             var staffMembers = _accountRepository.GetAllStaff();
@@ -313,5 +312,6 @@ namespace Services.Implement
 
             return totalRevenue;
         }
+        
     }
 }
