@@ -36,7 +36,15 @@ namespace DAOs
 
         public async Task AddAccountAsync(TblAccount account)
         {
-            _context.TblAccounts.Add(account);
+            var existingAccount = await _context.TblAccounts.AsNoTracking().FirstOrDefaultAsync(a => a.AccountId == account.AccountId);
+            if (existingAccount == null)
+            {
+                await _context.TblAccounts.AddAsync(account);
+            }
+            else
+            {
+                _context.Entry(account).State = EntityState.Modified;
+            }
             await _context.SaveChangesAsync();
         }
 
@@ -85,9 +93,14 @@ namespace DAOs
 
         public bool UpdateAccount(TblAccount account)
         {
-            _context.TblAccounts.Update(account);
-            _context.SaveChanges();
-            return true;
+            var existingAccount = _context.TblAccounts.AsNoTracking().FirstOrDefault(a => a.AccountId == account.AccountId);
+            if (existingAccount != null)
+            {
+                _context.Entry(account).State = EntityState.Modified;
+                _context.SaveChanges();
+                return true;
+            }
+            return false;
         }
     }
 }

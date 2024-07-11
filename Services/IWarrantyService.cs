@@ -17,6 +17,6 @@ namespace Services
 
         public TblWarranty AddWarranty(TblWarranty warranty);
         public void SaveWarrantyImg(int warrantyId, byte[] bytes);
-        Task<WarrantyResponse> GetWarrantyInfo(int orderDetailID);
+        //Task<WarrantyResponse> GetWarrantyInfo(int orderDetailID);
     }
 }
