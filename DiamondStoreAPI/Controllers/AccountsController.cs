@@ -133,6 +133,12 @@ namespace DiamondStoreAPI.Controllers
             return Ok(_customerService.isPhoneExisted(phone));
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Hi()
+        {
+            return Ok("HI there");
+        }
+
         [HttpGet("GetAccountList")]
         public async Task<IActionResult> GetAccountList()
         {
