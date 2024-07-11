@@ -1,6 +1,7 @@
 ﻿using BusinessObjects;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,5 +34,7 @@ namespace Services.DTOs.Response
         public double? UnitSizePrice { get; set; }
         public string? Gender { get; set; }
         public double? ProductPrice { get; set; }
+        [NotMapped]
+        public Task<double> CalculatePriceTask { get; set; } // Thuộc tính tạm thời để giữ Task
     }
 }
