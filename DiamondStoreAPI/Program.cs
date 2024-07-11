@@ -384,10 +384,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
+app.UseCors("AllowReact");
 
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseCors("AllowReact");
+
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
