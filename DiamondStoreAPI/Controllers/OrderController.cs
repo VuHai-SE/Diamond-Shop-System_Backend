@@ -261,50 +261,57 @@ namespace DiamondStoreAPI.Controllers
             }
             return Ok(acceptedOrderInfoList);
         }
-[HttpGet("GetSumOrderbyMonthAndYear")]
-public async Task<IActionResult> GetSumOrderbyMonthAndYear([FromQuery] int month, [FromQuery] int year)
-{
-    try
-    {
-        var result = iOrderService.GetSumOrderByMonth(month, year);
-        if (result == 0)
+        [HttpGet("GetSumOrderbyMonthAndYear")]
+        public async Task<IActionResult> GetSumOrderbyMonthAndYear([FromQuery] int month, [FromQuery] int year)
         {
-            return NotFound(new { Message = "No orders found for the specified month and year." });
-        }
-        return Ok(result);
-    }
-    catch (Exception ex)
-    {
-        return StatusCode(500, new { Message = ex.Message });
-    }
-}
-/*
-[HttpGet("GetRevenue")]
-public async Task<IActionResult> GetRevenue([FromQuery] int month, [FromQuery] int year)
-{
-    try
-    {
-        var result = await iOrderService.GetSumRevenue(month, year);
-        if (result == 0)
-        {
-            return NotFound(new { Message = "No revenue found for the specified month and year." });
-        }
-        return Ok(result);
-    }
-    catch (Exception ex)
-    {
-        return StatusCode(500, new { Message = ex.Message });
-    }
-}*/
-        [HttpGet("GetStaffs")]
-        public async Task<IActionResult> GetStaffs()
-        {
-            var result = iOrderService.GetStaffs();
-            if (result == 0)
+            try
             {
-                return NotFound();
+                var result = iOrderService.GetSumOrderByMonth(month, year);
+                if (result == 0)
+                {
+                    return NotFound(new { Message = "No orders found for the specified month and year." });
+                }
+                return Ok(result);
             }
-            return Ok(result);
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = ex.Message });
+            }
+        }
+
+        [HttpGet("GetRevenue")]
+        public async Task<IActionResult> GetRevenue([FromQuery] int month, [FromQuery] int year)
+        {
+            try
+            {
+                var result = await iOrderService.GetSumRevenue(month, year);
+                if (result == 0)
+                {
+                    return NotFound(new { Message = "No revenue found for the specified month and year." });
+                }
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = ex.Message });
+            }
+        }
+        [HttpGet("GetStaffs")]
+        public IActionResult GetStaffs()
+        {
+            try
+            {
+                var result = iOrderService.GetStaffs();
+                if (result == 0)
+                {
+                    return NotFound(new { Message = "No staff found." });
+                }
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = ex.Message });
+            }
         }
     }
 }
