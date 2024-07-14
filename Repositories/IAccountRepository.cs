@@ -1,4 +1,5 @@
 ﻿using BusinessObjects;
+using DAOs.DTOs.Response;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,7 @@ namespace Repositories
         public bool IsUsernameExisted(string username);
         public TblAccount GetAccountByEmail(string email);
         List<TblAccount> GetAllStaff();
+        public Task<AccountCount> GetAccountCount();
 
         public List<TblAccount> GetAllAccount();
         public bool UpdateAccount(TblAccount account);

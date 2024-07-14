@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects;
+using DAOs.DTOs.Response;
 using Services.DTOs.Request;
 using Services.DTOs.Response;
 
@@ -26,5 +27,6 @@ namespace Services
 
         public Task<decimal> GetSumRevenue(MonthYearCriteria criteria);
         public Task<OrderStatusCount> GetOrderStatusCountAsync();
+       
     }
 }

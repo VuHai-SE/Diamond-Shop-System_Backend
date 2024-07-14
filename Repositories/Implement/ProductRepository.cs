@@ -9,6 +9,7 @@ using BusinessObjects;
 using BusinessObjects.RequestModels;
 using BusinessObjects.ResponseModels;
 using DAOs;
+using DAOs.DTOs.Response;
 
 namespace Repositories.Implement
 {
@@ -115,5 +116,8 @@ namespace Repositories.Implement
             await productDAO.UpdateAsync(id, product);
             await productDAO.SaveChangesAsync(); // Gọi lưu thay đổi tại tầng DAO
         }
+
+        public async Task<ProductCount> GetProductsCountAsync()
+            => await productDAO.GetProductsCountAsync();
     }
 }

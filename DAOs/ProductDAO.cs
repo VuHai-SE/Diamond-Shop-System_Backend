@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 using BusinessObjects;
 using BusinessObjects.RequestModels;
 using BusinessObjects.ResponseModels;
+using DAOs.DTOs.Response;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Update.Internal;
+using SkiaSharp;
 
 namespace DAOs
 {
@@ -436,6 +438,21 @@ namespace DAOs
         public async Task SaveChangesAsync()
         {
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<ProductCount> GetProductsCountAsync()
+        {
+            var all = await _context.TblProducts.CountAsync();
+            var sold = await _context.TblOrderDetails
+                        .Where(od => _context.TblOrders
+                                        .Any(o => o.OrderId == od.OrderId && o.OrderStatus == "Deliveried"))
+                        .CountAsync();
+                
+            return new ProductCount()
+            {
+                TotalProducts = all,
+                SoldProducts = sold
+            };
         }
     }
 }

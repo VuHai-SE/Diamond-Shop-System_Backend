@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects;
 using DAOs;
+using DAOs.DTOs.Response;
 using Services.DTOs.Response;
 
 namespace Repositories.Implement
@@ -48,5 +49,6 @@ namespace Repositories.Implement
 
         public async Task<OrderStatusCount> GetOrderStatusCountAsync()
             => await orderDAO.GetOrderStatusCountAsync();
+
     }
 }

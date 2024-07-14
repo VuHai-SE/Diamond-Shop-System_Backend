@@ -17,6 +17,7 @@ using Services.DTOs.Request;
 using Services.DTOs.Response;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
+using DAOs.DTOs.Response;
 
 namespace Services.Implement
 {
@@ -29,6 +30,7 @@ namespace Services.Implement
         private readonly IMaterialCategoryRepository materialCategoryRepository;
         private readonly IGemRepository gemRepository;
         private readonly ILogger<ProductService> _logger;
+        private readonly DiamondStoreContext db = null;
         public ProductService(IProductRepository _productRepository, IProductCategoryRepository _productCategoryRepository, IProductMaterialRepository _productMaterialRepository, IMaterialCategoryRepository _materialCategoryRepository, IGemRepository _gemRepository, ILogger<ProductService> logger, DiamondStoreContext context)
         {
             productRepository = _productRepository;
@@ -38,6 +40,14 @@ namespace Services.Implement
             gemRepository = _gemRepository;
             _logger = logger;
             _context = context;
+        }
+
+        public ProductService()
+        {
+            if (db == null)
+            {
+                db = new();
+            }
         }
 
         public async Task<double> CalculateProductPriceAsync(string productId)
@@ -204,7 +214,6 @@ namespace Services.Implement
             {
                 product.ProductPrice = await CalculateProductPriceAsync(product.ProductId);
             }
-
             return products;
         }
 
@@ -412,5 +421,8 @@ namespace Services.Implement
 
             return true;
         }
+
+        public async Task<ProductCount> GetProductsCountAsync()
+            => await productRepository.GetProductsCountAsync();
     }
 }

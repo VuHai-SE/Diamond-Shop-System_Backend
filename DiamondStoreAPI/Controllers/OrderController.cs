@@ -218,8 +218,8 @@ namespace DiamondStoreAPI.Controllers
             return Ok(result);
         }
 
-        [HttpGet("OrderQuantity")]
-        public async Task<IActionResult> OrderQuantity()
+        [HttpGet("OrderCount")]
+        public async Task<IActionResult> OrderCount()
         {
             var result = await iOrderService.GetOrderStatusCountAsync();
             return Ok(result);
@@ -231,6 +231,6 @@ namespace DiamondStoreAPI.Controllers
             var result = await iOrderService.GetSumRevenue(criteria);
             return Ok(result);
         }
-        
+
     }
 }

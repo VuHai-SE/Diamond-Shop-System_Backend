@@ -198,89 +198,14 @@ namespace DiamondStoreAPI.Controllers
             return Ok();
         }
 
-        [HttpGet("NumberOfEmployee")]
-        public async Task<IActionResult> NumberOfEmployee()
+        [HttpGet("AccountCount")]
+        public async Task<IActionResult> GetAccountCount()
         {
-            var numberOfEmployees = new NumberOfEmployee()
-            {
-                NumberOfStaffs = _accountService.NumbersOfStaffs(),
-                NumberOfSales = _accountService.NumbersOfSaleStaff(),
-                NumberOfShippers = _accountService.NumbersOfShipper()
-            };
-            return Ok(numberOfEmployees);
+            var result = await _accountService.GetAccountCount();
+            return Ok(result);
         }
 
-        //[HttpPost("AddStaffId")]
-        //public async Task<IActionResult> AddToStaffTables([FromBody] AddStaffTables request)
-        //{
-        //    var accountInfo = await _accountService.GetAccountInfo(request.Username);
-        //    if (accountInfo == null) return NotFound();
-        //    await _accountService.AddToStaffTables(request.StaffId, accountInfo);
-        //    return Ok(request.StaffId + " has been added");
-        //}
-
-        //[HttpPost("CreateStaffAccount")]
-        //public async Task<IActionResult> CreateStaffAccount([FromBody] CreateStaffAccountRequest request)
-        //{
-        //    try
-        //    {
-        //        if (request == null)
-        //        {
-        //            return BadRequest("Request body is null");
-        //        }
-
-        //        var registerRequest = new Services.DTOs.Request.RegisterRequest()
-        //        {
-        //            Username = request.Username ?? string.Empty,
-        //            Password = request.Password ?? string.Empty,
-        //            FirstName = request.FirstName ?? string.Empty,
-        //            LastName = request.LastName ?? string.Empty,
-        //            Gender = request.Gender ?? string.Empty,
-        //            Birthday = request.Birthday ?? DateTime.MinValue,
-        //            Email = request.Email ?? string.Empty,
-        //            PhoneNumber = request.PhoneNumber ?? string.Empty,
-        //            Address = request.Address ?? string.Empty,
-        //        };
-
-        //        await _accountService.RegisterAsync(registerRequest);
-
-        //        var updateRoleRequest = new UpdateRoleRequest()
-        //        {
-        //            Role = request.Role ?? string.Empty,
-        //            UsertName = request.Username ?? string.Empty
-        //        };
-
-        //        var isChanageRole = await _accountService.ChangeAccountRole(updateRoleRequest);
-
-        //        var accountInfo = await _accountService.GetStaffInfo(request.Username);
-
-        //        await _accountService.AddToStaffTables(request.StaffId, accountInfo);
-
-        //        var staffInfo = await _accountService.GetStaffInfo(request.Username);
-
-        //        return Ok(staffInfo);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Log.Error("An error occurred while creating staff account: {ErrorMessage}", ex.Message);
-        //        return StatusCode(500, "Internal server error");
-        //    }
-        //}
-
-        //[HttpGet("CheckSaleStaffIdExist")]
-        //public async Task<IActionResult> CheckSaleStaffIdExist(string saleStaffId)
-        //{
-        //    bool isExist = _saleStaffService.isSaleStaffIdExist(saleStaffId);
-        //    return Ok(isExist);
-        //}
-
-        //[HttpGet("CheckShipperIdExist")]
-        //public async Task<IActionResult> CheckShipperIdExist(string shipperId)
-        //{
-        //    bool isExist = _shipperService.IsShipperIdExist(shipperId);
-        //    return Ok(isExist);
-        //}
-
+        
         private string GenerateJwtToken(TblAccount account)
         {
             var tokenHandler = new JwtSecurityTokenHandler();

@@ -1,5 +1,6 @@
 ﻿using BusinessObjects;
 using DAOs;
+using DAOs.DTOs.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -63,5 +64,8 @@ namespace Repositories.Implement
 
         public bool UpdateAccount(TblAccount account)
             => _accountDAO.UpdateAccount(account);
+
+        public async Task<AccountCount> GetAccountCount()
+            => await _accountDAO.GetAccountCount();
     }
 }

@@ -6,6 +6,7 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects;
+using DAOs.DTOs.Response;
 using Microsoft.Identity.Client;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Linq;
@@ -318,5 +319,8 @@ namespace Services.Implement
 
         public async Task<OrderStatusCount> GetOrderStatusCountAsync()
             => await _orderRepository.GetOrderStatusCountAsync();
+
+        public async Task<ProductCount> GetProductsCountAsync()
+            => await GetProductsCountAsync();
     }
 }

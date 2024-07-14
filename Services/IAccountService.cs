@@ -1,4 +1,5 @@
 ﻿using BusinessObjects;
+using DAOs.DTOs.Response;
 using Services.DTOs.Request;
 using Services.DTOs.Response;
 using System;
@@ -40,9 +41,8 @@ namespace Services
         public Task<bool> UpdateAccountStatus(string username, bool status);
         public Task AddToStaffTables(string staffId, AccountInfo accountInfo);
         Task RegisterStaffAsync(RegisterStaff register);
-        public int NumbersOfStaffs();
-        public int NumbersOfSaleStaff();
-        public int NumbersOfShipper();
-        
+        public Task<AccountCount> GetAccountCount();
+
+
     }
 }

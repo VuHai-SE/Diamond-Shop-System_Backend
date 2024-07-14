@@ -1,5 +1,6 @@
 ﻿using BCrypt.Net;
 using BusinessObjects;
+using DAOs.DTOs.Response;
 using Microsoft.EntityFrameworkCore;
 using Org.BouncyCastle.Crypto.Generators;
 using System;
@@ -101,6 +102,23 @@ namespace DAOs
                 return true;
             }
             return false;
+        }
+
+        public async Task<AccountCount> GetAccountCount()
+        {
+            var all = await _context.TblAccounts.CountAsync();
+            var manager = await _context.TblAccounts.CountAsync(a => a.Role == "Manager");
+            var customer = await _context.TblAccounts.CountAsync(a => a.Role == "Customer");
+            var saleStaff = await _context.TblAccounts.CountAsync(a => a.Role == "SaleStaff");
+            var shipper = await _context.TblAccounts.CountAsync(a => a.Role == "Shipper");
+            return new AccountCount()
+            {
+                All = all,
+                Manager = manager,
+                Customer = customer,
+                SaleStaff = saleStaff,
+                Shipper = shipper
+            };
         }
     }
 }
