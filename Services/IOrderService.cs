@@ -11,24 +11,20 @@ namespace Services
 {
     public interface IOrderService
     {
-        public List<TblOrder> GetOrders();
+        public Task<List<TblOrder>> GetOrders();
         public TblOrder AddOrder(TblOrder order);
         public List<TblOrder> GetOrdersByCustomerID(int customerID);
         public List<OrderInfo> GetOrderHistory(string username);
         public TblOrder getOrderByOrderID(int orderID);
         public OrderInfo GetOrderInfo(int orderID);
         Task<bool> UpdateOrderStatus(OrderStatusRequest request);
-        public List<OrderInfo> GetOrderInfoListForSaleStaff();
-        public List<OrderInfo> GetOrderInforListForShipper();
+        public Task<List<OrderInfo>> GetOrderInfoListForSaleStaff();
+        public Task<List<OrderInfo>> GetOrderInforListForShipper();
         Task<bool> UpdateOrder(TblOrder order);
-        //public int GetSumOrderByMonth(int month, int year);
+       
+        public Task<List<TblOrder>> GetDeliveriedOrdersByMonthYear(MonthYearCriteria criteria);
 
-        public int GetStaffs();
-
-        //public Task<decimal> GetSumRevenue(int month, int year);
-
-        public List<TblOrder> GetDeliveriedOrdersByMonthYear(MonthYearCriteria criteria);
-
-        public decimal GetSumRevenue(MonthYearCriteria criteria);
+        public Task<decimal> GetSumRevenue(MonthYearCriteria criteria);
+        public Task<OrderStatusCount> GetOrderStatusCountAsync();
     }
 }
