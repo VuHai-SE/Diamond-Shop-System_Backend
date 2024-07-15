@@ -29,5 +29,6 @@ namespace Repositories
 
         public List<TblAccount> GetAllAccount();
         public bool UpdateAccount(TblAccount account);
+        public Task<CustomerRankingCount> GetCustomerRankingCount();
     }
 }

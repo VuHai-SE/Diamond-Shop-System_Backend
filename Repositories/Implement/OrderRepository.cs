@@ -42,13 +42,18 @@ namespace Repositories.Implement
         {
             return await orderDAO.UpdateOrder(order);
         }
-        public async Task<List<TblOrder>> GetDeliveredOrdersByMonthAndYearAsync(int month, int year)
-        {
-            return await orderDAO.GetDeliveredOrdersByMonthAndYearAsync(month, year);
-        }
+        //public async Task<List<TblOrder>> GetDeliveredOrdersByMonthAndYearAsync(int month, int year)
+        //{
+        //    return await orderDAO.GetDeliveredOrdersByMonthAndYearAsync(month, year);
+        //}
 
         public async Task<OrderStatusCount> GetOrderStatusCountAsync()
             => await orderDAO.GetOrderStatusCountAsync();
 
+        public async Task<decimal> GetTotalRevenueAsync(int? month = null, int? year = null)
+            => await orderDAO.GetTotalRevenueAsync(month, year);
+
+        public async Task<int> GetNumbersOrdersByMonthAndYearAsync(int? month = null, int? year = null)
+            => await orderDAO.GetNumbersOrdersByMonthAndYearAsync(month, year);
     }
 }

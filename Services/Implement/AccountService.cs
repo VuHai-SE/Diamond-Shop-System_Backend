@@ -354,5 +354,7 @@ namespace Services.Implement
 
         public async Task<AccountCount> GetAccountCount()
             => await _accountRepository.GetAccountCount();
+        public async Task<CustomerRankingCount> GetCustomerRankingCount()
+            => await _accountRepository.GetCustomerRankingCount();
     }
 }

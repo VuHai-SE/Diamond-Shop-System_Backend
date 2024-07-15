@@ -67,5 +67,8 @@ namespace Repositories.Implement
 
         public async Task<AccountCount> GetAccountCount()
             => await _accountDAO.GetAccountCount();
+
+        public async Task<CustomerRankingCount> GetCustomerRankingCount()
+            => await _accountDAO.GetCustomerRankingCount();
     }
 }

@@ -42,7 +42,6 @@ namespace Services
         public Task AddToStaffTables(string staffId, AccountInfo accountInfo);
         Task RegisterStaffAsync(RegisterStaff register);
         public Task<AccountCount> GetAccountCount();
-
-
+        public Task<CustomerRankingCount> GetCustomerRankingCount();
     }
 }

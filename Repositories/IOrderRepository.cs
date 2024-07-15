@@ -19,7 +19,9 @@ namespace Repositories
         public void CancelOrder(int orderID);
         Task<TblOrder> GetOrderById(int orderId);
         Task<bool> UpdateOrder(TblOrder order);
-        Task<List<TblOrder>> GetDeliveredOrdersByMonthAndYearAsync(int month, int year);
+        //Task<List<TblOrder>> GetDeliveredOrdersByMonthAndYearAsync(int month, int year);
         public Task<OrderStatusCount> GetOrderStatusCountAsync();
+        public Task<decimal> GetTotalRevenueAsync(int? month = null, int? year = null);
+        public Task<int> GetNumbersOrdersByMonthAndYearAsync(int? month = null, int? year = null);
     }
 }

@@ -210,14 +210,6 @@ namespace DiamondStoreAPI.Controllers
             return Ok(acceptedOrderInfoList);
         }
 
-        [HttpGet("GetSumOrderbyMonthAndYear")]
-        public async Task<IActionResult> GetSumOrderbyMonthAndYear([FromQuery] MonthYearCriteria criteria)
-        {
-            var list = await iOrderService.GetDeliveriedOrdersByMonthYear(criteria);
-            var result = list.Count();
-            return Ok(result);
-        }
-
         [HttpGet("OrderCount")]
         public async Task<IActionResult> OrderCount()
         {
@@ -228,9 +220,15 @@ namespace DiamondStoreAPI.Controllers
         [HttpGet("GetRevenue")]
         public async Task<IActionResult> GetRevenue([FromQuery] MonthYearCriteria criteria)
         {
-            var result = await iOrderService.GetSumRevenue(criteria);
+            var result = await iOrderService.GetTotalRevenueAsync(criteria.Month, criteria.Year);
             return Ok(result);
         }
 
+        [HttpGet("GetNumberOrderByMonthYear")]
+        public async Task<IActionResult> GetNumbersOrdersByMonthAndYearAsync([FromQuery] MonthYearCriteria criteria)
+        {
+            var result = await iOrderService.GetNumbersOrdersByMonthAndYearAsync(criteria.Month, criteria.Year);
+            return Ok(result);
+        }
     }
 }

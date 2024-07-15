@@ -41,5 +41,6 @@ namespace Services
         Task<bool> UpdateMaterialPriceAndUnitPriceSize(string productID, TblMaterialPriceList materialPriceList);
         Task<bool> UpdateProductStatus(string productID);
         public Task<ProductCount> GetProductsCountAsync();
+        public Task<string> GetMostSoldProductCategoryByMonthYear(int? month = null, int? year = null);
     }
 }

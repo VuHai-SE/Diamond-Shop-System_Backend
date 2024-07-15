@@ -205,7 +205,13 @@ namespace DiamondStoreAPI.Controllers
             return Ok(result);
         }
 
-        
+        [HttpGet("CustomerRankingCount")]
+        public async Task<IActionResult> GetCustomerRankingCount()
+        {
+            var result = await _accountService.GetCustomerRankingCount();
+            return Ok(result);
+        }
+
         private string GenerateJwtToken(TblAccount account)
         {
             var tokenHandler = new JwtSecurityTokenHandler();

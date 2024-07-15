@@ -23,10 +23,9 @@ namespace Services
         public Task<List<OrderInfo>> GetOrderInforListForShipper();
         Task<bool> UpdateOrder(TblOrder order);
        
-        public Task<List<TblOrder>> GetDeliveriedOrdersByMonthYear(MonthYearCriteria criteria);
-
-        public Task<decimal> GetSumRevenue(MonthYearCriteria criteria);
+        public Task<decimal> GetTotalRevenueAsync(int? month = null, int? year = null);
         public Task<OrderStatusCount> GetOrderStatusCountAsync();
-       
+        public Task<int> GetNumbersOrdersByMonthAndYearAsync(int? month = null, int? year = null);
+        
     }
 }

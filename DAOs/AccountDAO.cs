@@ -120,5 +120,23 @@ namespace DAOs
                 Shipper = shipper
             };
         }
+
+        public async Task<CustomerRankingCount> GetCustomerRankingCount()
+        {
+            var bronzeCount = await _context.TblCustomers.CountAsync(c => c.Ranking == "Bronze" && c.Account.Role == "Customer");
+            var silverCount = await _context.TblCustomers.CountAsync(c => c.Ranking == "Silver" && c.Account.Role == "Customer");
+            var goldCount = await _context.TblCustomers.CountAsync(c => c.Ranking == "Gold" && c.Account.Role == "Customer");
+            var platinumCount = await _context.TblCustomers.CountAsync(c => c.Ranking == "Platinum" && c.Account.Role == "Customer");
+            var diamondCount = await _context.TblCustomers.CountAsync(c => c.Ranking == "Diamond" && c.Account.Role == "Customer");
+
+            return new CustomerRankingCount
+            {
+                Bronze = bronzeCount,
+                Silver = silverCount,
+                Gold = goldCount,
+                Platinum = platinumCount,
+                Diamond = diamondCount
+            };
+        }
     }
 }

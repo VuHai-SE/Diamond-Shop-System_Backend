@@ -283,44 +283,12 @@ namespace Services.Implement
            => _orderRepository.UpdateOrder(order);
 
 
-        public async Task<List<TblOrder>> GetDeliveriedOrdersByMonthYear(MonthYearCriteria criteria)
-        {
-            var orders = await _orderRepository.GetOrders();
-            var filterList = orders.Where(o => o.OrderStatus == "Deliveried").ToList();
-
-            if (criteria.Month > 0 && criteria.Year > 0)
-            {
-                filterList = filterList.Where(o => o.OrderDate?.Month == criteria.Month && o.OrderDate?.Year == criteria.Year).ToList();
-            }
-            else if (criteria.Month > 0)
-            {
-                filterList = filterList.Where(o => o.OrderDate?.Month == criteria.Month).ToList();
-            }
-            else if (criteria.Year > 0)
-            {
-                filterList = filterList.Where(o => o.OrderDate?.Year == criteria.Year).ToList();
-            }
-            return filterList;
-        }
-
-        public async Task<decimal> GetSumRevenue(MonthYearCriteria criteria)
-        {
-            var deliveredOrders = await GetDeliveriedOrdersByMonthYear(criteria);
-            decimal totalRevenue = 0;
-
-            foreach (var order in deliveredOrders)
-            {
-                var orderDetails = _orderDetailRepository.GetOrderDetailsByOrderID(order.OrderId);
-                totalRevenue += orderDetails.Sum(od => (decimal)(od.FinalPrice ?? 0));
-            }
-
-            return totalRevenue;
-        }
-
+        public async Task<decimal> GetTotalRevenueAsync(int? month = null, int? year = null)
+            => await _orderRepository.GetTotalRevenueAsync(month, year);
         public async Task<OrderStatusCount> GetOrderStatusCountAsync()
             => await _orderRepository.GetOrderStatusCountAsync();
 
-        public async Task<ProductCount> GetProductsCountAsync()
-            => await GetProductsCountAsync();
+        public async Task<int> GetNumbersOrdersByMonthAndYearAsync(int? month = null, int? year = null)
+            => await _orderRepository.GetNumbersOrdersByMonthAndYearAsync(month, year);
     }
 }
