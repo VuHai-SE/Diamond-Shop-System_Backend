@@ -161,9 +161,9 @@ namespace DiamondStoreAPI.Controllers
         }
 
         [HttpPut("CancelOrder")]
-        public async Task<IActionResult> CancelOrder([FromBody] CustomerCancelOrderRequest request)
+        public async Task<IActionResult> CancelOrder(int orderID)
         {
-            var orderToUpdate = iOrderService.getOrderByOrderID(request.OrderID);
+            var orderToUpdate = iOrderService.getOrderByOrderID(orderID);
             if (orderToUpdate == null)
             {
                 return NotFound();
@@ -176,13 +176,13 @@ namespace DiamondStoreAPI.Controllers
             else
             {
                 orderToUpdate.OrderStatus = "Cancelled";
-                orderToUpdate.OrderNote = "Customer cancelled-" + request.Note.Trim();
-                var isUpdate = iOrderService.UpdateOrder(orderToUpdate);
-                var productsBuying = iOrderService.GetOrderInfo(request.OrderID).products;
-                foreach (var p in productsBuying) 
-                {
-                    iProductService.UpdateProductStatus(p.ProductID);
-                }
+                orderToUpdate.OrderNote = "Customer cancelled";
+                //var isUpdate = iOrderService.UpdateOrder(orderToUpdate);
+                //var productsBuying = iOrderService.GetOrderInfo(orderID).products;
+                //foreach (var p in productsBuying) 
+                //{
+                //    iProductService.UpdateProductStatus(p.ProductID);
+                //}
                 
                 return Ok("Cancel successfully");
             }
