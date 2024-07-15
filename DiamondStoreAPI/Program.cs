@@ -330,19 +330,19 @@ services.AddSwaggerGen();
 // Configure Swagger
 services.AddSwaggerGen(c =>
 {
-c.SwaggerDoc("v1", new OpenApiInfo { Title = "DiamondStoreAPI", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "DiamondStoreAPI", Version = "v1" });
 
-// Configure JWT authentication for Swagger
-c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-{
-    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
-    Name = "Authorization",
-    In = ParameterLocation.Header,
-    Type = SecuritySchemeType.ApiKey,
-    Scheme = "Bearer"
-});
+    // Configure JWT authentication for Swagger
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
 
-c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement()
     {
         {
             new OpenApiSecurityScheme

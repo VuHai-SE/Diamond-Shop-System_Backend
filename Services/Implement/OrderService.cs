@@ -6,6 +6,7 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects;
+using DAOs.DTOs.Response;
 using Microsoft.Identity.Client;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Linq;
@@ -186,8 +187,8 @@ namespace Services.Implement
             return orderHistory;
         }
 
-        public List<TblOrder> GetOrders()
-            => _orderRepository.GetOrders();
+        public async Task<List<TblOrder>> GetOrders()
+            => await _orderRepository.GetOrders();
         public OrderInfo GetOrderInfo(int orderID)
         {
             var orderInfo = new OrderInfo();
@@ -243,10 +244,10 @@ namespace Services.Implement
             return orderInfo;
         }
 
-        public List<OrderInfo> GetOrderInfoListForSaleStaff()
+        public async Task<List<OrderInfo>> GetOrderInfoListForSaleStaff()
         {
             var orderInforList = new List<OrderInfo>();
-            var orders = _orderRepository.GetOrders();
+            var orders = await _orderRepository.GetOrders();
             if (orders != null)
             {
                 foreach (var order in orders)
@@ -258,10 +259,10 @@ namespace Services.Implement
             return orderInforList;
         }
 
-        public List<OrderInfo> GetOrderInforListForShipper()
+        public async Task<List<OrderInfo>> GetOrderInforListForShipper()
         {
             var orderInforList = new List<OrderInfo>();
-            var orders = _orderRepository.GetOrders();
+            var orders = await _orderRepository.GetOrders();
             if (orders != null)
             {
                 foreach (var order in orders)
@@ -281,70 +282,13 @@ namespace Services.Implement
         public Task<bool> UpdateOrder(TblOrder order)
            => _orderRepository.UpdateOrder(order);
 
-        //public int GetSumOrderByMonth(int month, int year)
-        //{
-        //    var orders = _orderRepository.GetOrders();
 
-        //    // Filter orders by the specified month and year
-        //    var filteredOrders = orders.Where(o => o.OrderDate.HasValue
-        //                                            && o.OrderDate.Value.Month == month
-        //                                            && o.OrderDate.Value.Year == year && o.OrderStatus == "Deliveried");
+        public async Task<decimal> GetTotalRevenueAsync(int? month = null, int? year = null)
+            => await _orderRepository.GetTotalRevenueAsync(month, year);
+        public async Task<OrderStatusCount> GetOrderStatusCountAsync()
+            => await _orderRepository.GetOrderStatusCountAsync();
 
-        //    // Return the count of filtered orders
-        //    return filteredOrders.Count();
-        //}
-
-        public List<TblOrder> GetDeliveriedOrdersByMonthYear(MonthYearCriteria criteria)
-        {
-            var orders = _orderRepository.GetOrders().Where(o => o.OrderStatus == "Deliveried").ToList();
-
-            if (criteria.Month > 0 && criteria.Year > 0)
-            {
-                orders = orders.Where(o => o.OrderDate?.Month == criteria.Month && o.OrderDate?.Year == criteria.Year).ToList();
-            }
-            else if (criteria.Month > 0)
-            {
-                orders = orders.Where(o => o.OrderDate?.Month == criteria.Month).ToList();
-            }
-            else if (criteria.Year > 0)
-            {
-                orders = orders.Where(o => o.OrderDate?.Year == criteria.Year).ToList();
-            }
-            return orders;
-        }
-
-        public decimal GetSumRevenue(MonthYearCriteria criteria)
-        {
-            var deliveredOrders = GetDeliveriedOrdersByMonthYear(criteria);
-            decimal totalRevenue = 0;
-
-            foreach (var order in deliveredOrders)
-            {
-                var orderDetails = _orderDetailRepository.GetOrderDetailsByOrderID(order.OrderId);
-                totalRevenue += orderDetails.Sum(od => (decimal)(od.FinalPrice ?? 0));
-            }
-
-            return totalRevenue;
-        }
-
-        public int GetStaffs()
-        {
-            var staffMembers = _accountRepository.GetAllStaff();
-            return staffMembers.Count;
-        }
-
-        //public async Task<decimal> GetSumRevenue(int month, int year)
-        //{
-        //    var deliveredOrders = await _orderRepository.GetDeliveredOrdersByMonthAndYearAsync(month, year);
-        //    decimal totalRevenue = 0;
-
-        //    foreach (var order in deliveredOrders)
-        //    {
-        //        var orderDetails = _orderDetailRepository.GetOrderDetailsByOrderID(order.OrderId);
-        //        totalRevenue += orderDetails.Sum(od => (decimal)(od.FinalPrice ?? 0));
-        //    }
-
-        //    return totalRevenue;
-        //}
+        public async Task<int> GetNumbersOrdersByMonthAndYearAsync(int? month = null, int? year = null)
+            => await _orderRepository.GetNumbersOrdersByMonthAndYearAsync(month, year);
     }
 }

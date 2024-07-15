@@ -1,5 +1,6 @@
 ﻿using Azure.Core;
 using BusinessObjects;
+using DAOs.DTOs.Response;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Repositories;
@@ -351,19 +352,9 @@ namespace Services.Implement
             return true;
         }
 
-        public int NumbersOfStaffs()
-        {
-            return NumbersOfSaleStaff() + NumbersOfShipper();
-        }
-
-        public int NumbersOfSaleStaff()
-        {
-            return _saleStaffRepository.GetAllSaleStaffs().Count();
-        }
-
-        public int NumbersOfShipper()
-        {
-            return _shipperRepository.GetAllShippers().Count();
-        }
+        public async Task<AccountCount> GetAccountCount()
+            => await _accountRepository.GetAccountCount();
+        public async Task<CustomerRankingCount> GetCustomerRankingCount()
+            => await _accountRepository.GetCustomerRankingCount();
     }
 }

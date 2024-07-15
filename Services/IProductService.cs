@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using BusinessObjects;
 using BusinessObjects.RequestModels;
 using BusinessObjects.ResponseModels;
+using DAOs.DTOs.Response;
 using Services.DTOs.Request;
 using Services.DTOs.Response;
 
@@ -39,5 +40,7 @@ namespace Services
         public List<TblProduct> GetAllProducts();
         Task<bool> UpdateMaterialPriceAndUnitPriceSize(string productID, TblMaterialPriceList materialPriceList);
         Task<bool> UpdateProductStatus(string productID);
+        public Task<ProductCount> GetProductsCountAsync();
+        public Task<string> GetMostSoldProductCategoryByMonthYear(int? month = null, int? year = null);
     }
 }
