@@ -50,7 +50,7 @@ namespace DAOs
             var list = _dbContext.TblSaleStaffs.ToList();
 
             // Nếu danh sách trống, trả về "S000"
-            if (list.Count == 0) return "SP000";
+            if (list.Count == 0) return "S000";
 
             // Lấy staff ID cuối cùng từ danh sách đã sắp xếp
             var lastStaffId = list.OrderByDescending(s => s.StaffId).FirstOrDefault().StaffId;
