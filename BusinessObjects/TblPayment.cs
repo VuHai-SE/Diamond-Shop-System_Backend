@@ -13,6 +13,18 @@ public partial class TblPayment
 
     public string? PaymentMethod { get; set; }
 
+    public string? TransactionId { get; set; }
+
+    public string? PayerEmail { get; set; }
+
+    public decimal? Amount { get; set; }
+
+    public string? Currency { get; set; }
+
+    public string? PaymentStatus { get; set; }
+
+    public DateTime? PaymentDate { get; set; }
+
     public double? Deposits { get; set; }
 
     public string? PayDetail { get; set; }

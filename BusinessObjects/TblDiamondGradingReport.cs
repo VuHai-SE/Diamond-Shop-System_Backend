@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 
 namespace BusinessObjects;
 
@@ -14,6 +13,5 @@ public partial class TblDiamondGradingReport
 
     public string? Image { get; set; }
 
-    [JsonIgnore]
     public virtual TblGem? Gem { get; set; }
 }
