@@ -11,6 +11,7 @@ using Services.Implement;
 using Services.DTOs.Request;
 using Microsoft.IdentityModel.Tokens;
 using Services.DTOs.Response;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DiamondStoreAPI.Controllers
 {
@@ -60,6 +61,7 @@ namespace DiamondStoreAPI.Controllers
         }
 
         // POST: api/MaterialPriceLists
+        [Authorize(Roles = "Manager")]
         [HttpPost]
         public async Task<IActionResult> CreateMaterial([FromBody] CreateMaterialRequest request)
         {
@@ -73,6 +75,7 @@ namespace DiamondStoreAPI.Controllers
             return Ok(result);
         }
 
+        [Authorize(Roles = "Manager")]
         [HttpDelete("{materialId}")]
         public async Task<IActionResult> DeleteMaterial(string materialId)
         {
@@ -96,7 +99,7 @@ namespace DiamondStoreAPI.Controllers
         }
 
         // PUT: api/MaterialPriceLists/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "Manager")]
         [HttpPut("UpdateUnitPrice")]
         public async Task<IActionResult> UpdateMaterialPrice([FromBody] UpdateMeterialRequest request)
         {

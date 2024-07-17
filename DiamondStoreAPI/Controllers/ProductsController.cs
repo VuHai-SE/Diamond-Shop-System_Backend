@@ -57,11 +57,8 @@ namespace DiamondStoreAPI.Controllers
             });
         }
 
-
-
+        [Authorize(Roles = "Manager")]
         [HttpPost("CreateProduct")]
-        //[Authorize(Roles = "Admin,Manager")]
-        //[Authorize(Roles = "Customer")]
         public async Task<IActionResult> CreateProduct([FromBody] CreateProductRequest request)
         {
             var result = await _productService.CreateProductAsync(request);
@@ -76,6 +73,7 @@ namespace DiamondStoreAPI.Controllers
             return Ok(result.Message);
         }
 
+        [Authorize(Roles = "Manager")]
         [HttpPut("UpdateProduct/{id}")]
         public async Task<IActionResult> UpdateProduct(string id, [FromBody] CreateProductRequest request)
         {
@@ -91,6 +89,8 @@ namespace DiamondStoreAPI.Controllers
             return Ok(result.Message);
         }
 
+
+        [Authorize(Roles = "Manager")]
         [HttpDelete("DeleteProduct/{id}")]
         public async Task<IActionResult> DeleteProduct(string id)
         {
@@ -106,6 +106,8 @@ namespace DiamondStoreAPI.Controllers
             return Ok(result.Message);
         }
 
+
+        [Authorize(Roles = "Manager")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateProduct(string id, [FromBody] TblProduct product)
         {
@@ -162,6 +164,8 @@ namespace DiamondStoreAPI.Controllers
             return Ok(pruductList);
         }
 
+
+        [Authorize(Roles = "Manager, Customer")]
         [HttpPut("UpdateStatus")]
         public async Task<IActionResult> UpdateProductStatus(List<string> productIdList)
         {
@@ -173,6 +177,8 @@ namespace DiamondStoreAPI.Controllers
             return Ok("Update successfully");
         }
 
+
+        [Authorize(Roles = "Manager")]
         [HttpGet("ProductCount")]
         public async Task<IActionResult> GetProductCount()
         {
@@ -181,6 +187,8 @@ namespace DiamondStoreAPI.Controllers
             return Ok(result);
         }
 
+
+        [Authorize(Roles = "Manager")]
         [HttpGet("GetMostSoldProductCategory")]
         public async Task<IActionResult> GetMostSoldProductCategory([FromQuery] MonthYearCriteria criteria)
         {

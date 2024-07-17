@@ -60,7 +60,7 @@ namespace DiamondStoreAPI.Controllers
             return Ok(gemPrice);
         }
 
-        // PUT: api/GemPriceList/5
+        [Authorize(Roles = "Manager")]
         [HttpPut("UpdateGemPrice")]
         public async Task<IActionResult> UpdateGemPriceList([FromBody] UpdateGemPriceRequest request)
         {

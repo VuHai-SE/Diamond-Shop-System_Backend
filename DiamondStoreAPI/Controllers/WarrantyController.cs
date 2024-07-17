@@ -8,6 +8,7 @@ using GemBox.Document;
 using Services.DTOs.Request;
 using Services.DTOs.Response;
 using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -28,6 +29,8 @@ public class WarrantyController : ControllerBase
         _customerService = customerService;
     }
 
+
+    [Authorize]
     [HttpGet("WarrantyInfo")]
     public async Task<IActionResult> GetWarrantyInfo(int orderDetailID)
     {
@@ -36,6 +39,8 @@ public class WarrantyController : ControllerBase
         return Ok(warrantyInfor);
     }
 
+
+    [Authorize(Roles = "SaleSatff")]
     [HttpPost("CreateWarranty")]
     public async Task<IActionResult> CreateWarranty([FromBody] WarrantyRequest request)
     {
