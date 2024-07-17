@@ -385,10 +385,7 @@ namespace BusinessObjects.Migrations
                     PaymentStatus = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     PaymentDate = table.Column<DateTime>(type: "datetime", nullable: true),
                     Deposits = table.Column<double>(type: "float", nullable: true),
-                    PayDetail = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    RefundAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    RefundStatus = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    RefundDate = table.Column<DateTime>(type: "datetime", nullable: true)
+                    PayDetail = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -427,6 +424,34 @@ namespace BusinessObjects.Migrations
                         principalTable: "Tbl_OrderDetail",
                         principalColumn: "OrderDetailID",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tbl_Refund",
+                columns: table => new
+                {
+                    RefundID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PaymentID = table.Column<int>(type: "int", nullable: true),
+                    OrderID = table.Column<int>(type: "int", nullable: true),
+                    RefundAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    RefundStatus = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    RefundDate = table.Column<DateTime>(type: "datetime", nullable: true),
+                    Reason = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__Tbl_Refu__725AB900BE054FF3", x => x.RefundID);
+                    table.ForeignKey(
+                        name: "FK__Tbl_Refun__Order__123EB7A3",
+                        column: x => x.OrderID,
+                        principalTable: "Tbl_Order",
+                        principalColumn: "OrderID");
+                    table.ForeignKey(
+                        name: "FK__Tbl_Refun__Payme__114A936A",
+                        column: x => x.PaymentID,
+                        principalTable: "Tbl_Payment",
+                        principalColumn: "ID");
                 });
 
             migrationBuilder.CreateIndex(
@@ -524,6 +549,16 @@ namespace BusinessObjects.Migrations
                 filter: "[ProductID] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Tbl_Refund_OrderID",
+                table: "Tbl_Refund",
+                column: "OrderID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tbl_Refund_PaymentID",
+                table: "Tbl_Refund",
+                column: "PaymentID");
+
+            migrationBuilder.CreateIndex(
                 name: "UQ__Tbl_Sale__349DA587D74B32BF",
                 table: "Tbl_SaleStaff",
                 column: "AccountID",
@@ -561,13 +596,13 @@ namespace BusinessObjects.Migrations
                 name: "Tbl_Membership");
 
             migrationBuilder.DropTable(
-                name: "Tbl_Payment");
-
-            migrationBuilder.DropTable(
                 name: "Tbl_ProductGem");
 
             migrationBuilder.DropTable(
                 name: "Tbl_ProductMaterial");
+
+            migrationBuilder.DropTable(
+                name: "Tbl_Refund");
 
             migrationBuilder.DropTable(
                 name: "Tbl_Warranty");
@@ -577,6 +612,9 @@ namespace BusinessObjects.Migrations
 
             migrationBuilder.DropTable(
                 name: "Tbl_MaterialCategory");
+
+            migrationBuilder.DropTable(
+                name: "Tbl_Payment");
 
             migrationBuilder.DropTable(
                 name: "Tbl_OrderDetail");

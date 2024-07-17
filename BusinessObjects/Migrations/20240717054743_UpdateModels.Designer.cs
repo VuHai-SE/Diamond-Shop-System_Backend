@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BusinessObjects.Migrations
 {
     [DbContext(typeof(DiamondStoreContext))]
-    [Migration("20240717044856_UpdateModels")]
+    [Migration("20240717054743_UpdateModels")]
     partial class UpdateModels
     {
         /// <inheritdoc />
@@ -461,16 +461,6 @@ namespace BusinessObjects.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<decimal?>("RefundAmount")
-                        .HasColumnType("decimal(18, 2)");
-
-                    b.Property<DateTime?>("RefundDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("RefundStatus")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
                     b.Property<string>("TransactionId")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)")
@@ -628,6 +618,46 @@ namespace BusinessObjects.Migrations
                         .HasFilter("[ProductID] IS NOT NULL");
 
                     b.ToTable("Tbl_ProductMaterial", (string)null);
+                });
+
+            modelBuilder.Entity("BusinessObjects.TblRefund", b =>
+                {
+                    b.Property<int>("RefundId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("RefundID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RefundId"));
+
+                    b.Property<int?>("OrderId")
+                        .HasColumnType("int")
+                        .HasColumnName("OrderID");
+
+                    b.Property<int?>("PaymentId")
+                        .HasColumnType("int")
+                        .HasColumnName("PaymentID");
+
+                    b.Property<string>("Reason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("RefundAmount")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<DateTime?>("RefundDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("RefundStatus")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("RefundId")
+                        .HasName("PK__Tbl_Refu__725AB900BE054FF3");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("PaymentId");
+
+                    b.ToTable("Tbl_Refund", (string)null);
                 });
 
             modelBuilder.Entity("BusinessObjects.TblSaleStaff", b =>
@@ -864,6 +894,23 @@ namespace BusinessObjects.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("BusinessObjects.TblRefund", b =>
+                {
+                    b.HasOne("BusinessObjects.TblOrder", "Order")
+                        .WithMany("TblRefunds")
+                        .HasForeignKey("OrderId")
+                        .HasConstraintName("FK__Tbl_Refun__Order__123EB7A3");
+
+                    b.HasOne("BusinessObjects.TblPayment", "Payment")
+                        .WithMany("TblRefunds")
+                        .HasForeignKey("PaymentId")
+                        .HasConstraintName("FK__Tbl_Refun__Payme__114A936A");
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Payment");
+                });
+
             modelBuilder.Entity("BusinessObjects.TblSaleStaff", b =>
                 {
                     b.HasOne("BusinessObjects.TblAccount", "Account")
@@ -932,11 +979,18 @@ namespace BusinessObjects.Migrations
                     b.Navigation("TblOrderDetails");
 
                     b.Navigation("TblPayments");
+
+                    b.Navigation("TblRefunds");
                 });
 
             modelBuilder.Entity("BusinessObjects.TblOrderDetail", b =>
                 {
                     b.Navigation("TblWarranty");
+                });
+
+            modelBuilder.Entity("BusinessObjects.TblPayment", b =>
+                {
+                    b.Navigation("TblRefunds");
                 });
 
             modelBuilder.Entity("BusinessObjects.TblProduct", b =>

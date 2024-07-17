@@ -29,13 +29,9 @@ public partial class TblPayment
 
     public string? PayDetail { get; set; }
 
-    public decimal? RefundAmount { get; set; }
-
-    public string? RefundStatus { get; set; }
-
-    public DateTime? RefundDate { get; set; }
-
     public virtual TblCustomer? Customer { get; set; }
 
     public virtual TblOrder? Order { get; set; }
+
+    public virtual ICollection<TblRefund> TblRefunds { get; set; } = new List<TblRefund>();
 }
