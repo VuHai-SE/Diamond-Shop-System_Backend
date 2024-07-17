@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using BusinessObjects;
 using BusinessObjects.RequestModels;
 using BusinessObjects.ResponseModels;
+using DAOs.DTOs.Response;
 using Microsoft.EntityFrameworkCore;
 
 namespace Repositories
@@ -36,5 +37,7 @@ namespace Repositories
         Task UpdateAsync(string id, TblProduct product);
 
         Task SaveChangesAsync();
+        public Task<ProductCount> GetProductsCountAsync();
+        public Task<string> GetMostSoldProductCategoryByMonthYear(int? month = null, int? year = null);
     }
 }

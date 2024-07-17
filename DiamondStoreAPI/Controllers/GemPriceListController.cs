@@ -10,6 +10,7 @@ using Services;
 using Services.Implement;
 using Services.DTOs.Request;
 using Services.DTOs.Response;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DiamondStoreAPI.Controllers
 {
@@ -44,6 +45,7 @@ namespace DiamondStoreAPI.Controllers
             }
             return gemPriceList;
         }
+
         // get: api/gempricelist/5
         [HttpGet("{id}")]
         public async Task<ActionResult<GemPriceResponse>> GetGemPrice(int id)
@@ -59,7 +61,6 @@ namespace DiamondStoreAPI.Controllers
         }
 
         // PUT: api/GemPriceList/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("UpdateGemPrice")]
         public async Task<IActionResult> UpdateGemPriceList([FromBody] UpdateGemPriceRequest request)
         {
@@ -69,33 +70,12 @@ namespace DiamondStoreAPI.Controllers
         }
 
         // POST: api/GemPriceList
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "Manager")]
         [HttpPost]
         public async Task<ActionResult<TblGemPriceList>> PostTblGemPriceList(TblGemPriceList tblGemPriceList)
         {
             TblGemPriceList newGemPirce = iGemPriceListService.AddGemPriceList(tblGemPriceList);
             return CreatedAtAction("GetTblGemPriceList", new { id = tblGemPriceList.Id }, tblGemPriceList);
         }
-
-        // DELETE: api/GemPriceList/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteTblGemPriceList(int id)
-        //{
-        //    var tblGemPriceList = await iGemPriceListService.TblGemPriceLists.FindAsync(id);
-        //    if (tblGemPriceList == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    iGemPriceListService.TblGemPriceLists.Remove(tblGemPriceList);
-        //    await iGemPriceListService.SaveChangesAsync();
-
-        //    return NoContent();
-        //}
-
-        //private bool TblGemPriceListExists(int id)
-        //{
-        //    return iGemPriceListService.TblGemPriceLists.Any(e => e.Id == id);
-        //}
     }
 }

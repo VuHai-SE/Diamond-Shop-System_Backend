@@ -13,6 +13,7 @@ using Services.DTOs.Request;
 using Services.Implement;
 using BusinessObjects.RequestModels;
 using Microsoft.AspNetCore.Authorization;
+using DAOs.DTOs.Response;
 
 namespace DiamondStoreAPI.Controllers
 {
@@ -29,17 +30,6 @@ namespace DiamondStoreAPI.Controllers
             _productCategoryService = productCategoryService;
         }
 
-        //// GET: api/Products
-        //[HttpGet]
-        //public async Task<IActionResult> GetProductsAndPrices([FromQuery] ProductFilterCriteria criteria)
-        //{
-        //    var productWithPriceList = await _productService.FilterProducts(criteria);
-        //    if (productWithPriceList.IsNullOrEmpty())
-        //    {
-        //        return NotFound();
-        //    }
-        //    return Ok(productWithPriceList);
-        //}
 
         // GET: api/Products
         [HttpGet]
@@ -181,6 +171,23 @@ namespace DiamondStoreAPI.Controllers
                 if (isUpdate == false) return NotFound("Product " + id + " not found");
             }
             return Ok("Update successfully");
+        }
+
+        [HttpGet("ProductCount")]
+        public async Task<IActionResult> GetProductCount()
+        {
+
+            var result = await _productService.GetProductsCountAsync();
+            return Ok(result);
+        }
+
+        [HttpGet("GetMostSoldProductCategory")]
+        public async Task<IActionResult> GetMostSoldProductCategory([FromQuery] MonthYearCriteria criteria)
+        {
+
+            var result = await _productService.GetMostSoldProductCategoryByMonthYear(criteria.Month, criteria.Year);
+            if (result == null) return NotFound();
+            return Ok(result);
         }
     }
 }

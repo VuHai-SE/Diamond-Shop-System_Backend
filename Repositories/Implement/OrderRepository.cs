@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects;
 using DAOs;
+using DAOs.DTOs.Response;
+using Services.DTOs.Response;
 
 namespace Repositories.Implement
 {
@@ -28,8 +30,8 @@ namespace Repositories.Implement
         public TblOrder getOrderByOrderID(int orderID)
             => orderDAO.getOrderByOrderID(orderID);
 
-        public List<TblOrder> GetOrders()
-            => orderDAO.GetOrders();
+        public async Task<List<TblOrder>> GetOrders()
+            => await orderDAO.GetOrders();
 
         public async Task<TblOrder> GetOrderById(int orderId)
         {
@@ -40,9 +42,18 @@ namespace Repositories.Implement
         {
             return await orderDAO.UpdateOrder(order);
         }
-        public async Task<List<TblOrder>> GetDeliveredOrdersByMonthAndYearAsync(int month, int year)
-        {
-            return await orderDAO.GetDeliveredOrdersByMonthAndYearAsync(month, year);
-        }
+        //public async Task<List<TblOrder>> GetDeliveredOrdersByMonthAndYearAsync(int month, int year)
+        //{
+        //    return await orderDAO.GetDeliveredOrdersByMonthAndYearAsync(month, year);
+        //}
+
+        public async Task<OrderStatusCount> GetOrderStatusCountAsync()
+            => await orderDAO.GetOrderStatusCountAsync();
+
+        public async Task<decimal> GetTotalRevenueAsync(int? month = null, int? year = null)
+            => await orderDAO.GetTotalRevenueAsync(month, year);
+
+        public async Task<int> GetNumbersOrdersByMonthAndYearAsync(int? month = null, int? year = null)
+            => await orderDAO.GetNumbersOrdersByMonthAndYearAsync(month, year);
     }
 }

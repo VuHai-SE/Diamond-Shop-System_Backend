@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 using BusinessObjects;
 using BusinessObjects.RequestModels;
 using BusinessObjects.ResponseModels;
+using DAOs.DTOs.Response;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Update.Internal;
+using Org.BouncyCastle.Asn1.Mozilla;
+using SkiaSharp;
 
 namespace DAOs
 {
@@ -437,5 +440,58 @@ namespace DAOs
         {
             await _context.SaveChangesAsync();
         }
+
+        public async Task<ProductCount> GetProductsCountAsync()
+        {
+            var all = await _context.TblProducts.CountAsync();
+            var sold = await _context.TblOrderDetails
+                        .Where(od => _context.TblOrders
+                                        .Any(o => o.OrderId == od.OrderId && o.OrderStatus == "Deliveried"))
+                        .CountAsync();
+                
+            return new ProductCount()
+            {
+                TotalProducts = all,
+                SoldProducts = sold
+            };
+        }
+
+        public async Task<string> GetMostSoldProductCategoryByMonthYear(int? month = null, int? year = null)
+        {
+            var query = _context.TblOrderDetails
+                .Join(_context.TblOrders,
+                      orderDetail => orderDetail.OrderId,
+                      order => order.OrderId,
+                      (orderDetail, order) => new { orderDetail, order })
+                .Join(_context.TblProducts,
+                      orderDetailOrder => orderDetailOrder.orderDetail.ProductId,
+                      product => product.ProductId,
+                      (orderDetailOrder, product) => new { orderDetailOrder, product })
+                .Join(_context.TblProductCategories,
+                      orderDetailOrderProduct => orderDetailOrderProduct.product.CategoryId,
+                      category => category.CategoryId,
+                      (orderDetailOrderProduct, category) => new { orderDetailOrderProduct, category })
+                .Where(x => x.orderDetailOrderProduct.orderDetailOrder.order.OrderStatus == "Deliveried");
+
+            if (month.HasValue && year.HasValue)
+            {
+                query = query.Where(x => x.orderDetailOrderProduct.orderDetailOrder.order.OrderDate.HasValue &&
+                                         x.orderDetailOrderProduct.orderDetailOrder.order.OrderDate.Value.Month == month.Value &&
+                                         x.orderDetailOrderProduct.orderDetailOrder.order.OrderDate.Value.Year == year.Value);
+            }
+
+            var result = await query
+                .GroupBy(x => x.category.CategoryName)
+                .OrderByDescending(g => g.Sum(y => y.orderDetailOrderProduct.orderDetailOrder.orderDetail.Quantity))
+                .Select(g => new
+                {
+                    CategoryName = g.Key,
+                    TotalQuantity = g.Sum(y => y.orderDetailOrderProduct.orderDetailOrder.orderDetail.Quantity)
+                })
+                .FirstOrDefaultAsync();
+
+            return result?.CategoryName;
+        }
+
     }
 }

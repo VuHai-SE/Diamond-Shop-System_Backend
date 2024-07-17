@@ -51,66 +51,11 @@ namespace DiamondStoreAPI.Controllers
             return BadRequest(new { Message = "Failed to update order status." });
         }
 
-        //[HttpPost("{orderId}/accept")]
-        //public async Task<IActionResult> AcceptOrder(int orderId)
-        //{
-        //    var result = await iOrderService.UpdateOrderStatus(orderId, "Accepted");
-        //    if (result)
-        //    {
-        //        return Ok(new { Message = "Order accepted successfully." });
-        //    }
-        //    return BadRequest(new { Message = "Failed to accept order." });
-        //}
-
-        //[HttpPost("{orderId}/pickup")]
-        //public async Task<IActionResult> PickupOrder(int orderId)
-        //{
-        //    var result = await iOrderService.UpdateOrderStatus(orderId, "Delivering");
-        //    if (result)
-        //    {
-        //        return Ok(new { Message = "Order status updated to Delivering." });
-        //    }
-        //    return BadRequest(new { Message = "Failed to update order status." });
-        //}
-
-        //[HttpPost("{orderId}/delivered")]
-        //public async Task<IActionResult> DeliverOrder(int orderId)
-        //{
-        //    var result = await iOrderService.UpdateOrderStatus(orderId, "Delivered");
-        //    if (result)
-        //    {
-        //        return Ok(new { Message = "Order status updated to Delivered." });
-        //    }
-        //    return BadRequest(new { Message = "Failed to update order status." });
-        //}
-
-        //[HttpPost("{orderId}/usercancel")]
-        //public async Task<IActionResult> UserCancelOrder(int orderId)
-        //{
-        //    var result = await iOrderService.UpdateOrderStatus(orderId, "Canceled");
-        //    if (result)
-        //    {
-        //        return Ok(new { Message = "Order status updated to Canceled." });
-        //    }
-        //    return BadRequest(new { Message = "Failed to update order status." });
-        //}
-
-        //[HttpPost("{orderId}/cancel")]
-        //public async Task<IActionResult> CancelOrder(int orderId)
-        //{
-        //    var result = await iOrderService.UpdateOrderStatus(orderId, "Canceled");
-        //    if (result)
-        //    {
-        //        return Ok(new { Message = "Order canceled successfully." });
-        //    }
-        //    return BadRequest(new { Message = "Failed to cancel order." });
-        //}
-
         //GET: api/Order
         [HttpGet]
-        public List<TblOrder> GetOrders()
+        public async Task<ActionResult<List<TblOrder>>> GetOrders()
         {
-            return iOrderService.GetOrders();
+            return await iOrderService.GetOrders();
         }
 
         //GET: api/Order/5
@@ -195,10 +140,6 @@ namespace DiamondStoreAPI.Controllers
             orderInfo.OrderDate = newOrderRequest.OrderDate;
             orderInfo.OrderStatus = order.OrderStatus;
             orderInfo.CustomerID = customer.CustomerId;
-            //orderInfo.CustomerName = customer.FirstName + " " + customer.LastName;
-            //orderInfo.CustomerPhone = customer.PhoneNumber;
-            //orderInfo.Address = customer.Address;
-            //add new Payment
             TblPayment newPayMent = new TblPayment()
             {
                 OrderId = order.OrderId,
@@ -220,9 +161,9 @@ namespace DiamondStoreAPI.Controllers
         }
 
         [HttpPut("CancelOrder")]
-        public async Task<IActionResult> CancelOrder([FromBody] CustomerCancelOrderRequest request)
+        public async Task<IActionResult> CancelOrder(int orderID)
         {
-            var orderToUpdate = iOrderService.getOrderByOrderID(request.OrderID);
+            var orderToUpdate = iOrderService.getOrderByOrderID(orderID);
             if (orderToUpdate == null)
             {
                 return NotFound();
@@ -235,13 +176,13 @@ namespace DiamondStoreAPI.Controllers
             else
             {
                 orderToUpdate.OrderStatus = "Cancelled";
-                orderToUpdate.OrderNote = "Customer cancelled-" + request.Note.Trim();
-                var isUpdate = iOrderService.UpdateOrder(orderToUpdate);
-                var productsBuying = iOrderService.GetOrderInfo(request.OrderID).products;
-                foreach (var p in productsBuying) 
-                {
-                    iProductService.UpdateProductStatus(p.ProductID);
-                }
+                orderToUpdate.OrderNote = "Customer cancelled";
+                //var isUpdate = iOrderService.UpdateOrder(orderToUpdate);
+                //var productsBuying = iOrderService.GetOrderInfo(orderID).products;
+                //foreach (var p in productsBuying) 
+                //{
+                //    iProductService.UpdateProductStatus(p.ProductID);
+                //}
                 
                 return Ok("Cancel successfully");
             }
@@ -250,7 +191,7 @@ namespace DiamondStoreAPI.Controllers
         [HttpGet("GetOrderInfoListForSaleStaff")]
         public async Task<ActionResult<IEnumerable<TblOrder>>> GetOrderInfoListForSaleStaff()
         {
-            var orderInfoList = iOrderService.GetOrderInfoListForSaleStaff();
+            var orderInfoList = await iOrderService.GetOrderInfoListForSaleStaff();
             if (orderInfoList.IsNullOrEmpty())
             {
                 return NotFound();
@@ -261,7 +202,7 @@ namespace DiamondStoreAPI.Controllers
         [HttpGet("GetOrderInforListForShipper")]
         public async Task<ActionResult<IEnumerable<TblOrder>>> GetOrderInforListForShipper()
         {
-            var acceptedOrderInfoList = iOrderService.GetOrderInforListForShipper();
+            var acceptedOrderInfoList = await iOrderService.GetOrderInforListForShipper();
             if (acceptedOrderInfoList.IsNullOrEmpty())
             {
                 return NotFound();
@@ -269,35 +210,24 @@ namespace DiamondStoreAPI.Controllers
             return Ok(acceptedOrderInfoList);
         }
 
-        [HttpGet("GetSumOrderbyMonthAndYear")]
-        public async Task<IActionResult> GetSumOrderbyMonthAndYear([FromQuery] MonthYearCriteria criteria)
+        [HttpGet("OrderCount")]
+        public async Task<IActionResult> OrderCount()
         {
-            var result = iOrderService.GetDeliveriedOrdersByMonthYear(criteria).Count();
-            //if (result == 0)
-            //{
-            //    return NotFound();
-            //}
+            var result = await iOrderService.GetOrderStatusCountAsync();
             return Ok(result);
         }
+
         [HttpGet("GetRevenue")]
         public async Task<IActionResult> GetRevenue([FromQuery] MonthYearCriteria criteria)
         {
-            var result = iOrderService.GetSumRevenue(criteria);
-            //if (result == null)
-            //{
-            //    return NotFound();
-            //}
+            var result = await iOrderService.GetTotalRevenueAsync(criteria.Month, criteria.Year);
             return Ok(result);
         }
-        
-        [HttpGet("GetStaffs")]
-        public async Task<IActionResult> GetStaffs()
+
+        [HttpGet("GetNumberOrderByMonthYear")]
+        public async Task<IActionResult> GetNumbersOrdersByMonthAndYearAsync([FromQuery] MonthYearCriteria criteria)
         {
-            var result = iOrderService.GetStaffs();
-            if (result == 0)
-            {
-                return NotFound();
-            }
+            var result = await iOrderService.GetNumbersOrdersByMonthAndYearAsync(criteria.Month, criteria.Year);
             return Ok(result);
         }
     }
