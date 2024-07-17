@@ -146,6 +146,12 @@ namespace DiamondStoreAPI.Controllers
                 CustomerId = customer.CustomerId,
                 PaymentMethod = order.PaymentMethod,
                 Deposits = newOrderRequest.Deposits,
+                TransactionId = newOrderRequest.TransactionId,
+                PayerEmail = newOrderRequest.PayerEmail,
+                Amount = newOrderRequest.Amount,
+                Currency = newOrderRequest.Currency,
+                PaymentStatus = newOrderRequest.PaymentStatus,
+                PaymentDate = newOrderRequest.PaymentDate
             };
             newPayMent.PayDetail = newPayMent.PaymentMethod + "-Deposits: " + newPayMent.Deposits;
             var payment = iPaymentService.AddPayment(newPayMent);

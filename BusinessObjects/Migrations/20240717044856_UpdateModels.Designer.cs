@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BusinessObjects.Migrations
 {
     [DbContext(typeof(DiamondStoreContext))]
-    [Migration("20240716075302_UpdateModels")]
+    [Migration("20240717044856_UpdateModels")]
     partial class UpdateModels
     {
         /// <inheritdoc />
@@ -458,6 +458,16 @@ namespace BusinessObjects.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("PaymentStatus")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<decimal?>("RefundAmount")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<DateTime?>("RefundDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("RefundStatus")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 

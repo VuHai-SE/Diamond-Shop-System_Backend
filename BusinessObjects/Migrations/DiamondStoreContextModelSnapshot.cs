@@ -458,6 +458,16 @@ namespace BusinessObjects.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<decimal?>("RefundAmount")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<DateTime?>("RefundDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("RefundStatus")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<string>("TransactionId")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)")

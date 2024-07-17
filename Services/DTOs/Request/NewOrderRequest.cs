@@ -14,6 +14,12 @@ namespace Services.DTOs.Request
         public List<ProductRequest> Products { get; set; } = new List<ProductRequest>();
 
         public double Deposits { get; set; } = 0;
-        
+
+        public string TransactionId { get; set; }
+        public string PayerEmail { get; set; }
+        public decimal Amount { get; set; }
+        public string Currency {  get; set; }
+        public string PaymentStatus { get; set; }
+        public DateTime? PaymentDate { get; set; }
     }
 }

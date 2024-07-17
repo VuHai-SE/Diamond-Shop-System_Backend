@@ -385,7 +385,10 @@ namespace BusinessObjects.Migrations
                     PaymentStatus = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     PaymentDate = table.Column<DateTime>(type: "datetime", nullable: true),
                     Deposits = table.Column<double>(type: "float", nullable: true),
-                    PayDetail = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true)
+                    PayDetail = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    RefundAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    RefundStatus = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    RefundDate = table.Column<DateTime>(type: "datetime", nullable: true)
                 },
                 constraints: table =>
                 {
