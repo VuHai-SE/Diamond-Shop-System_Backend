@@ -30,7 +30,6 @@ namespace Services.Implement
         private readonly IMaterialCategoryRepository materialCategoryRepository;
         private readonly IGemRepository gemRepository;
         private readonly ILogger<ProductService> _logger;
-        private readonly DiamondStoreContext db = null;
         public ProductService(IProductRepository _productRepository, IProductCategoryRepository _productCategoryRepository, IProductMaterialRepository _productMaterialRepository, IMaterialCategoryRepository _materialCategoryRepository, IGemRepository _gemRepository, ILogger<ProductService> logger, DiamondStoreContext context)
         {
             productRepository = _productRepository;
@@ -40,14 +39,6 @@ namespace Services.Implement
             gemRepository = _gemRepository;
             _logger = logger;
             _context = context;
-        }
-
-        public ProductService()
-        {
-            if (db == null)
-            {
-                db = new();
-            }
         }
 
         public async Task<double> CalculateProductPriceAsync(string productId)
@@ -72,57 +63,6 @@ namespace Services.Implement
             }
             return productWithPriceList;
         }
-
-        //public async Task<List<ProductWithPriceResponse>> FilterProducts(ProductFilterCriteria criteria)
-        //{
-        //    var productWithPriceList = await GetAllProductsAndPricesAsync();
-        //    if (!string.IsNullOrEmpty(criteria.Category))
-        //    {
-        //        productWithPriceList = productWithPriceList.Where(p => p.Category != null && p.Category.Equals(criteria.Category.Trim())).ToList();
-        //    }
-
-        //    if (!string.IsNullOrEmpty(criteria.Material))
-        //    {
-        //        productWithPriceList = productWithPriceList.Where(p => p.Material != null && p.Material.Equals(criteria.Material.Trim())).ToList();
-        //    }
-
-        //    if (!string.IsNullOrEmpty(criteria.GemOrigin))
-        //    {
-        //        productWithPriceList = productWithPriceList.Where(p => p.GemOrigin != null && p.GemOrigin.Equals(criteria.GemOrigin.Trim())).ToList();
-        //    }
-
-        //    if (criteria.MinCaratWeight.HasValue)
-        //    {
-        //        productWithPriceList = productWithPriceList.Where(p => p.CaratWeight.HasValue && p.CaratWeight >= criteria.MinCaratWeight).ToList();
-        //    }
-
-        //    if (criteria.MaxCaratWeight.HasValue)
-        //    {
-        //        productWithPriceList = productWithPriceList.Where(p => p.CaratWeight.HasValue && p.CaratWeight <= criteria.MaxCaratWeight).ToList();
-        //    }
-
-        //    if (!string.IsNullOrEmpty(criteria.Cut))
-        //    {
-        //        productWithPriceList = productWithPriceList.Where(p => p.Cut != null && p.Cut.Equals(criteria.Cut.Trim())).ToList();
-        //    }
-
-        //    if (!string.IsNullOrEmpty(criteria.Clarity))
-        //    {
-        //        productWithPriceList = productWithPriceList.Where(p => p.Clarity != null && p.Clarity.Equals(criteria.Clarity.Trim())).ToList();
-        //    }
-
-        //    if (!string.IsNullOrEmpty(criteria.Color))
-        //    {
-        //        productWithPriceList = productWithPriceList.Where(p => p.Color != null && p.Color.Equals(criteria.Color.Trim())).ToList();
-        //    }
-
-        //    if (!string.IsNullOrEmpty(criteria.Gender))
-        //    {
-        //        productWithPriceList = productWithPriceList.Where(p => p.Gender != null && p.Gender.Equals(criteria.Gender.Trim())).ToList();
-        //    }
-
-        //    return productWithPriceList;
-        //}
 
         public async Task<List<ProductWithPriceResponse>> FilterProducts(ProductFilterCriteria criteria)
         {
