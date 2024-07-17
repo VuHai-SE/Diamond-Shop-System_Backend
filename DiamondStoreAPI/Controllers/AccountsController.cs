@@ -19,6 +19,7 @@ using BusinessObjects.ResponseModels;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using Serilog;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace DiamondStoreAPI.Controllers
@@ -96,6 +97,8 @@ namespace DiamondStoreAPI.Controllers
             return Ok();
         }
 
+        //[Authorize(Roles = "Customer")]
+        [Authorize]
         [HttpPost("forgot-password")]
         public async Task<IActionResult> ForgotPassword([FromBody] Services.DTOs.Request.ForgotPasswordRequest request)
         {
@@ -135,12 +138,6 @@ namespace DiamondStoreAPI.Controllers
         public async Task<IActionResult> CheckPhoneExist(string phone)
         {
             return Ok(_customerService.isPhoneExisted(phone));
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Hi()
-        {
-            return Ok("HI there");
         }
 
         [HttpGet("GetAccountList")]
