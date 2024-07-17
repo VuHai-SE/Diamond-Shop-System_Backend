@@ -464,11 +464,13 @@ namespace BusinessObjects.Migrations
                         .HasColumnName("TransactionID");
 
                     b.HasKey("Id")
-                        .HasName("PK__Tbl_Paym__3214EC27245EE08C");
+                        .HasName("PK__Tbl_Paym__3214EC278AF50C7D");
 
                     b.HasIndex("CustomerId");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex(new[] { "OrderId" }, "UQ__Tbl_Paym__C3905BAEE2026040")
+                        .IsUnique()
+                        .HasFilter("[OrderID] IS NOT NULL");
 
                     b.ToTable("Tbl_Payment", (string)null);
                 });
@@ -626,10 +628,6 @@ namespace BusinessObjects.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RefundId"));
 
-                    b.Property<int?>("OrderId")
-                        .HasColumnType("int")
-                        .HasColumnName("OrderID");
-
                     b.Property<int?>("PaymentId")
                         .HasColumnType("int")
                         .HasColumnName("PaymentID");
@@ -648,11 +646,11 @@ namespace BusinessObjects.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("RefundId")
-                        .HasName("PK__Tbl_Refu__725AB900BE054FF3");
+                        .HasName("PK__Tbl_Refu__725AB90042AC7B45");
 
-                    b.HasIndex("OrderId");
-
-                    b.HasIndex("PaymentId");
+                    b.HasIndex(new[] { "PaymentId" }, "UQ__Tbl_Refu__9B556A5944646271")
+                        .IsUnique()
+                        .HasFilter("[PaymentID] IS NOT NULL");
 
                     b.ToTable("Tbl_Refund", (string)null);
                 });
@@ -829,13 +827,13 @@ namespace BusinessObjects.Migrations
                         .WithMany("TblPayments")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.SetNull)
-                        .HasConstraintName("FK__Tbl_Payme__Custo__5812160E");
+                        .HasConstraintName("FK__Tbl_Payme__Custo__17F790F9");
 
                     b.HasOne("BusinessObjects.TblOrder", "Order")
-                        .WithMany("TblPayments")
-                        .HasForeignKey("OrderId")
+                        .WithOne("TblPayment")
+                        .HasForeignKey("BusinessObjects.TblPayment", "OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .HasConstraintName("FK__Tbl_Payme__Order__571DF1D5");
+                        .HasConstraintName("FK__Tbl_Payme__Order__17036CC0");
 
                     b.Navigation("Customer");
 
@@ -893,17 +891,10 @@ namespace BusinessObjects.Migrations
 
             modelBuilder.Entity("BusinessObjects.TblRefund", b =>
                 {
-                    b.HasOne("BusinessObjects.TblOrder", "Order")
-                        .WithMany("TblRefunds")
-                        .HasForeignKey("OrderId")
-                        .HasConstraintName("FK__Tbl_Refun__Order__123EB7A3");
-
                     b.HasOne("BusinessObjects.TblPayment", "Payment")
-                        .WithMany("TblRefunds")
-                        .HasForeignKey("PaymentId")
-                        .HasConstraintName("FK__Tbl_Refun__Payme__114A936A");
-
-                    b.Navigation("Order");
+                        .WithOne("TblRefund")
+                        .HasForeignKey("BusinessObjects.TblRefund", "PaymentId")
+                        .HasConstraintName("FK__Tbl_Refun__Payme__1BC821DD");
 
                     b.Navigation("Payment");
                 });
@@ -975,9 +966,7 @@ namespace BusinessObjects.Migrations
                 {
                     b.Navigation("TblOrderDetails");
 
-                    b.Navigation("TblPayments");
-
-                    b.Navigation("TblRefunds");
+                    b.Navigation("TblPayment");
                 });
 
             modelBuilder.Entity("BusinessObjects.TblOrderDetail", b =>
@@ -987,7 +976,7 @@ namespace BusinessObjects.Migrations
 
             modelBuilder.Entity("BusinessObjects.TblPayment", b =>
                 {
-                    b.Navigation("TblRefunds");
+                    b.Navigation("TblRefund");
                 });
 
             modelBuilder.Entity("BusinessObjects.TblProduct", b =>

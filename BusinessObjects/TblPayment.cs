@@ -33,5 +33,5 @@ public partial class TblPayment
 
     public virtual TblOrder? Order { get; set; }
 
-    public virtual ICollection<TblRefund> TblRefunds { get; set; } = new List<TblRefund>();
+    public virtual TblRefund? TblRefund { get; set; }
 }

@@ -389,15 +389,15 @@ namespace BusinessObjects.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Tbl_Paym__3214EC27245EE08C", x => x.ID);
+                    table.PrimaryKey("PK__Tbl_Paym__3214EC278AF50C7D", x => x.ID);
                     table.ForeignKey(
-                        name: "FK__Tbl_Payme__Custo__5812160E",
+                        name: "FK__Tbl_Payme__Custo__17F790F9",
                         column: x => x.CustomerID,
                         principalTable: "Tbl_Customer",
                         principalColumn: "CustomerID",
                         onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
-                        name: "FK__Tbl_Payme__Order__571DF1D5",
+                        name: "FK__Tbl_Payme__Order__17036CC0",
                         column: x => x.OrderID,
                         principalTable: "Tbl_Order",
                         principalColumn: "OrderID",
@@ -433,7 +433,6 @@ namespace BusinessObjects.Migrations
                     RefundID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PaymentID = table.Column<int>(type: "int", nullable: true),
-                    OrderID = table.Column<int>(type: "int", nullable: true),
                     RefundAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     RefundStatus = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     RefundDate = table.Column<DateTime>(type: "datetime", nullable: true),
@@ -441,14 +440,9 @@ namespace BusinessObjects.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Tbl_Refu__725AB900BE054FF3", x => x.RefundID);
+                    table.PrimaryKey("PK__Tbl_Refu__725AB90042AC7B45", x => x.RefundID);
                     table.ForeignKey(
-                        name: "FK__Tbl_Refun__Order__123EB7A3",
-                        column: x => x.OrderID,
-                        principalTable: "Tbl_Order",
-                        principalColumn: "OrderID");
-                    table.ForeignKey(
-                        name: "FK__Tbl_Refun__Payme__114A936A",
+                        name: "FK__Tbl_Refun__Payme__1BC821DD",
                         column: x => x.PaymentID,
                         principalTable: "Tbl_Payment",
                         principalColumn: "ID");
@@ -513,9 +507,11 @@ namespace BusinessObjects.Migrations
                 column: "CustomerID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tbl_Payment_OrderID",
+                name: "UQ__Tbl_Paym__C3905BAEE2026040",
                 table: "Tbl_Payment",
-                column: "OrderID");
+                column: "OrderID",
+                unique: true,
+                filter: "[OrderID] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tbl_Product_CategoryID",
@@ -549,14 +545,11 @@ namespace BusinessObjects.Migrations
                 filter: "[ProductID] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tbl_Refund_OrderID",
+                name: "UQ__Tbl_Refu__9B556A5944646271",
                 table: "Tbl_Refund",
-                column: "OrderID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Tbl_Refund_PaymentID",
-                table: "Tbl_Refund",
-                column: "PaymentID");
+                column: "PaymentID",
+                unique: true,
+                filter: "[PaymentID] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "UQ__Tbl_Sale__349DA587D74B32BF",

@@ -9,8 +9,6 @@ public partial class TblRefund
 
     public int? PaymentId { get; set; }
 
-    public int? OrderId { get; set; }
-
     public decimal? RefundAmount { get; set; }
 
     public string? RefundStatus { get; set; }
@@ -18,8 +16,6 @@ public partial class TblRefund
     public DateTime? RefundDate { get; set; }
 
     public string? Reason { get; set; }
-
-    public virtual TblOrder? Order { get; set; }
 
     public virtual TblPayment? Payment { get; set; }
 }

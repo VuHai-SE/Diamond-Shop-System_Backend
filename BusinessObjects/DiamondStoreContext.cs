@@ -250,9 +250,11 @@ public partial class DiamondStoreContext : DbContext
 
         modelBuilder.Entity<TblPayment>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Tbl_Paym__3214EC27245EE08C");
+            entity.HasKey(e => e.Id).HasName("PK__Tbl_Paym__3214EC278AF50C7D");
 
             entity.ToTable("Tbl_Payment");
+
+            entity.HasIndex(e => e.OrderId, "UQ__Tbl_Paym__C3905BAEE2026040").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Amount).HasColumnType("decimal(18, 2)");
@@ -271,12 +273,12 @@ public partial class DiamondStoreContext : DbContext
             entity.HasOne(d => d.Customer).WithMany(p => p.TblPayments)
                 .HasForeignKey(d => d.CustomerId)
                 .OnDelete(DeleteBehavior.SetNull)
-                .HasConstraintName("FK__Tbl_Payme__Custo__5812160E");
+                .HasConstraintName("FK__Tbl_Payme__Custo__17F790F9");
 
-            entity.HasOne(d => d.Order).WithMany(p => p.TblPayments)
-                .HasForeignKey(d => d.OrderId)
+            entity.HasOne(d => d.Order).WithOne(p => p.TblPayment)
+                .HasForeignKey<TblPayment>(d => d.OrderId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK__Tbl_Payme__Order__571DF1D5");
+                .HasConstraintName("FK__Tbl_Payme__Order__17036CC0");
         });
 
         modelBuilder.Entity<TblProduct>(entity =>
@@ -372,24 +374,21 @@ public partial class DiamondStoreContext : DbContext
 
         modelBuilder.Entity<TblRefund>(entity =>
         {
-            entity.HasKey(e => e.RefundId).HasName("PK__Tbl_Refu__725AB900BE054FF3");
+            entity.HasKey(e => e.RefundId).HasName("PK__Tbl_Refu__725AB90042AC7B45");
 
             entity.ToTable("Tbl_Refund");
 
+            entity.HasIndex(e => e.PaymentId, "UQ__Tbl_Refu__9B556A5944646271").IsUnique();
+
             entity.Property(e => e.RefundId).HasColumnName("RefundID");
-            entity.Property(e => e.OrderId).HasColumnName("OrderID");
             entity.Property(e => e.PaymentId).HasColumnName("PaymentID");
             entity.Property(e => e.RefundAmount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.RefundDate).HasColumnType("datetime");
             entity.Property(e => e.RefundStatus).HasMaxLength(50);
 
-            entity.HasOne(d => d.Order).WithMany(p => p.TblRefunds)
-                .HasForeignKey(d => d.OrderId)
-                .HasConstraintName("FK__Tbl_Refun__Order__123EB7A3");
-
-            entity.HasOne(d => d.Payment).WithMany(p => p.TblRefunds)
-                .HasForeignKey(d => d.PaymentId)
-                .HasConstraintName("FK__Tbl_Refun__Payme__114A936A");
+            entity.HasOne(d => d.Payment).WithOne(p => p.TblRefund)
+                .HasForeignKey<TblRefund>(d => d.PaymentId)
+                .HasConstraintName("FK__Tbl_Refun__Payme__1BC821DD");
         });
 
         modelBuilder.Entity<TblSaleStaff>(entity =>

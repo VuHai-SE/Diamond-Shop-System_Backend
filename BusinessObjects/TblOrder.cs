@@ -33,7 +33,5 @@ public partial class TblOrder
 
     public virtual ICollection<TblOrderDetail> TblOrderDetails { get; set; } = new List<TblOrderDetail>();
 
-    public virtual ICollection<TblPayment> TblPayments { get; set; } = new List<TblPayment>();
-
-    public virtual ICollection<TblRefund> TblRefunds { get; set; } = new List<TblRefund>();
+    public virtual TblPayment? TblPayment { get; set; }
 }
