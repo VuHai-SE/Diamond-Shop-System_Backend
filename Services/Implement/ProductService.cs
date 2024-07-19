@@ -29,8 +29,9 @@ namespace Services.Implement
         private readonly IMaterialCategoryRepository materialCategoryRepository;
         private readonly IGemRepository gemRepository;
         private readonly ILogger<ProductService> _logger;
+        private readonly IOrderDetailRepository orderDetailRepository;
         //private readonly DiamondStoreContext db = null;
-        public ProductService(IProductRepository _productRepository, IProductCategoryRepository _productCategoryRepository, IProductMaterialRepository _productMaterialRepository, IMaterialCategoryRepository _materialCategoryRepository, IGemRepository _gemRepository, ILogger<ProductService> logger, DiamondStoreContext context)
+        public ProductService(IProductRepository _productRepository, IProductCategoryRepository _productCategoryRepository, IProductMaterialRepository _productMaterialRepository, IMaterialCategoryRepository _materialCategoryRepository, IGemRepository _gemRepository, ILogger<ProductService> logger, DiamondStoreContext context, IOrderDetailRepository _orderDetailRepository)
         {
             productRepository = _productRepository;
             productCategoryRepository = _productCategoryRepository;
@@ -39,6 +40,7 @@ namespace Services.Implement
             gemRepository = _gemRepository;
             _logger = logger;
             _context = context;
+            orderDetailRepository = _orderDetailRepository;
         }
 
         //public ProductService()
@@ -426,6 +428,16 @@ namespace Services.Implement
         public async Task<string> GetMostSoldProductCategoryByMonthYear(int? month = null, int? year = null)
             => await productRepository.GetMostSoldProductCategoryByMonthYear(month, year);
 
-
+        public async Task UpdateProductStatusByCancelOrder(int orderId)
+        {
+            var productsBuying = orderDetailRepository.GetOrderDetailsByOrderID(orderId);
+            
+            foreach (var p in productsBuying)
+            {
+                var product = await productRepository.GetProductByIdAsync(p.ProductId);
+                product.Status = true;
+                await productRepository.UpdateProduct(product.ProductId, product);
+            }
+        }
     }
 }

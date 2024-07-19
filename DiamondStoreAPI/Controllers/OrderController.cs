@@ -48,6 +48,8 @@ namespace DiamondStoreAPI.Controllers
             var result = await iOrderService.UpdateOrderStatus(request);
             if (result)
             {
+                if (request.ButtonValue == "CANCEL")
+                    await iProductService.UpdateProductStatusByCancelOrder((int)request.OrderID);
                 return Ok(new { Message = "Order status updated successfully." });
             }
             return BadRequest(new { Message = "Failed to update order status." });
@@ -194,7 +196,8 @@ namespace DiamondStoreAPI.Controllers
                 //    product.Status = true;
                 //    await iProductService.UpdateProductAsync(product.ProductId, product);
                 //}
-                
+                await iProductService.UpdateProductStatusByCancelOrder(orderID);
+
                 var paymentToRefund = await iPaymentService.GetPaymentByOrderId(orderID);
                 if (paymentToRefund != null)
                 {
