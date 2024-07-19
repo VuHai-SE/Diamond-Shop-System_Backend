@@ -176,15 +176,32 @@ CREATE TABLE Tbl_OrderDetail (
 );
 
 CREATE TABLE Tbl_Payment (
-	ID INT IDENTITY(1,1) PRIMARY KEY,
-    OrderID INT,
+    ID INT PRIMARY KEY IDENTITY(1,1),
+    OrderID INT UNIQUE,
     CustomerID INT,
     PaymentMethod NVARCHAR(50),
+    TransactionID NVARCHAR(100),
+    PayerEmail NVARCHAR(100),
+    Amount DECIMAL(18, 2),
+    Currency NVARCHAR(10),
+    PaymentStatus NVARCHAR(50),
+    PaymentDate DATETIME,
     Deposits FLOAT,
     PayDetail NVARCHAR(255),
     FOREIGN KEY (OrderID) REFERENCES Tbl_Order(OrderID) ON DELETE CASCADE,
     FOREIGN KEY (CustomerID) REFERENCES Tbl_Customer(CustomerID) ON DELETE SET NULL
 );
+
+CREATE TABLE Tbl_Refund (
+    RefundID INT PRIMARY KEY IDENTITY(1,1),
+    PaymentID INT UNIQUE,
+    RefundAmount DECIMAL(18, 2),
+    RefundStatus NVARCHAR(50),
+    RefundDate DATETIME,
+    Reason NVARCHAR(MAX),
+    FOREIGN KEY (PaymentID) REFERENCES Tbl_Payment(ID),
+);
+
 
 CREATE TABLE Tbl_Warranty (
     WarrantyID INT IDENTITY(1,1) PRIMARY KEY,
