@@ -30,7 +30,7 @@ public class WarrantyController : ControllerBase
     }
 
 
-    [Authorize]
+    //[Authorize]
     [HttpGet("WarrantyInfo")]
     public async Task<IActionResult> GetWarrantyInfo(int orderDetailID)
     {
@@ -40,7 +40,7 @@ public class WarrantyController : ControllerBase
     }
 
 
-    [Authorize(Roles = "SaleSatff")]
+    //[Authorize(Roles = "SaleSatff")]
     [HttpPost("CreateWarranty")]
     public async Task<IActionResult> CreateWarranty([FromBody] WarrantyRequest request)
     {
