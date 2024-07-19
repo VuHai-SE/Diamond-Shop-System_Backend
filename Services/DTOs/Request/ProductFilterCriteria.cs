@@ -18,6 +18,6 @@ namespace Services.DTOs.Request
         public string? Category { get; set; }
         public string? Gender { get; set; }
         public int PageNumber { get; set; } = 1; // Mặc định là trang đầu tiên
-        public int PageSize { get; set; } = 20; // Mặc định là 50 bản ghi mỗi trang
+        public int PageSize { get; set; } = 50; // Mặc định là 50 bản ghi mỗi trang
     }
 }

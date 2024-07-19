@@ -14,6 +14,7 @@ using Services.DTOs.Response;
 using Humanizer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.EntityFrameworkCore.Query.Internal;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DiamondStoreAPI.Controllers
 {
@@ -41,8 +42,8 @@ namespace DiamondStoreAPI.Controllers
             iRefundService = refundService;
         }
 
+        [Authorize(Roles = "SaleStaff, Shipper")]
         [HttpPut("UpdateOrderStatus")]
-
         public async Task<IActionResult> AcceptOrder([FromBody] OrderStatusRequest request)
         {
             var result = await iOrderService.UpdateOrderStatus(request);
@@ -56,6 +57,7 @@ namespace DiamondStoreAPI.Controllers
         }
 
         //GET: api/Order
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<List<TblOrder>>> GetOrders()
         {
@@ -63,6 +65,7 @@ namespace DiamondStoreAPI.Controllers
         }
 
         //GET: api/Order/5
+        [Authorize]
         [HttpGet("getOrderInfo")]
         public async Task<ActionResult<TblOrder>> GetTblOrder(int id)
         {
@@ -78,7 +81,7 @@ namespace DiamondStoreAPI.Controllers
 
 
         // POST: api/Order
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "Customer")]
         [HttpPost("createorder")]
         public async Task<IActionResult> CreateOrder([FromBody] NewOrderRequest newOrderRequest)
         {
@@ -171,6 +174,7 @@ namespace DiamondStoreAPI.Controllers
         }
 
         [HttpPut("CancelOrder")]
+        [Authorize]
         public async Task<IActionResult> CancelOrder(int orderID)
         {
             var orderToUpdate = iOrderService.getOrderByOrderID(orderID);
@@ -215,6 +219,7 @@ namespace DiamondStoreAPI.Controllers
             }
         }
 
+        [Authorize(Roles = "SaleStaff, Shipper, Manager")]
         [HttpGet("GetOrderInfoListForSaleStaff")]
         public async Task<ActionResult<IEnumerable<TblOrder>>> GetOrderInfoListForSaleStaff()
         {
@@ -226,6 +231,7 @@ namespace DiamondStoreAPI.Controllers
             return Ok(orderInfoList);
         }
 
+        [Authorize(Roles = "SaleStaff, Shipper, Manager")]
         [HttpGet("GetOrderInforListForShipper")]
         public async Task<ActionResult<IEnumerable<TblOrder>>> GetOrderInforListForShipper()
         {
@@ -237,6 +243,7 @@ namespace DiamondStoreAPI.Controllers
             return Ok(acceptedOrderInfoList);
         }
 
+        [Authorize(Roles = "Manager")]
         [HttpGet("OrderCount")]
         public async Task<IActionResult> OrderCount()
         {
@@ -244,6 +251,7 @@ namespace DiamondStoreAPI.Controllers
             return Ok(result);
         }
 
+        [Authorize(Roles = "Manager")]
         [HttpGet("GetRevenue")]
         public async Task<IActionResult> GetRevenue([FromQuery] MonthYearCriteria criteria)
         {
@@ -251,6 +259,7 @@ namespace DiamondStoreAPI.Controllers
             return Ok(result);
         }
 
+        [Authorize(Roles = "Manager")]
         [HttpGet("GetNumberOrderByMonthYear")]
         public async Task<IActionResult> GetNumbersOrdersByMonthAndYearAsync([FromQuery] MonthYearCriteria criteria)
         {
