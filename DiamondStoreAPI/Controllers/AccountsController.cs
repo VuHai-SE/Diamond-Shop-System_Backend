@@ -98,7 +98,7 @@ namespace DiamondStoreAPI.Controllers
         }
 
         //[Authorize(Roles = "Customer")]
-        [Authorize]
+        //[Authorize]
         [HttpPost("forgot-password")]
         public async Task<IActionResult> ForgotPassword([FromBody] Services.DTOs.Request.ForgotPasswordRequest request)
         {
@@ -121,28 +121,28 @@ namespace DiamondStoreAPI.Controllers
             return Ok(result);
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPost("CheckUsernameExist")]
         public async Task<IActionResult> CheckUsernameExist(string username)
         {
             return Ok(_accountService.IsUsernameExisted(username));
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPost("CheckEmailExist")]
         public async Task<IActionResult> CheckEmailExist(string email)
         {
             return Ok(_customerService.IsEmailExisted(email));
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPost("CheckPhoneExist")]
         public async Task<IActionResult> CheckPhoneExist(string phone)
         {
             return Ok(_customerService.isPhoneExisted(phone));
         }
 
-        [Authorize(Roles = "Manager")]
+        //[Authorize(Roles = "Manager")]
         [HttpGet("GetAccountList")]
         public async Task<IActionResult> GetAccountList()
         {
@@ -151,7 +151,7 @@ namespace DiamondStoreAPI.Controllers
             return Ok(accountList);
         }
 
-        [Authorize(Roles = "Manager")]
+        //[Authorize(Roles = "Manager")]
         [HttpGet("GetCustomerList")]
         public async Task<IActionResult> GetCustomerList()
         {
@@ -160,7 +160,7 @@ namespace DiamondStoreAPI.Controllers
             return Ok(customerList);
         }
 
-        [Authorize(Roles = "Manager")]
+        //[Authorize(Roles = "Manager")]
         [HttpGet("GetSaleStaffList")]
         public async Task<IActionResult> GetSaleStaffList()
         {
@@ -169,7 +169,7 @@ namespace DiamondStoreAPI.Controllers
             return Ok(saleStaffList);
         }
 
-        [Authorize(Roles = "Manager")]
+        //[Authorize(Roles = "Manager")]
         [HttpGet("GetShipperList")]
         public async Task<IActionResult> GetShipperList()
         {
@@ -178,7 +178,7 @@ namespace DiamondStoreAPI.Controllers
             return Ok(shipperList);
         }
 
-        [Authorize(Roles = "Manager")]
+        //[Authorize(Roles = "Manager")]
         [HttpPut("ChangeRole")]
         public async Task<IActionResult> ChangeRole([FromBody] UpdateRoleRequest request)
         {
@@ -187,7 +187,7 @@ namespace DiamondStoreAPI.Controllers
             return Ok(request.UsertName + "'s role has change into " + request.Role);
         }
 
-        [Authorize(Roles = "Manager")]
+        //[Authorize(Roles = "Manager")]
         [HttpPut("UpdateAccountStatus")]
         public async Task<IActionResult> UpdateAccountStatus([FromBody] UpdateAccountStatusRequest request)
         {
@@ -196,7 +196,7 @@ namespace DiamondStoreAPI.Controllers
             return Ok(request.Username + "-" + request.Status);
         }
 
-        [Authorize(Roles = "Manager")]
+        //[Authorize(Roles = "Manager")]
         [HttpPost("RegisterStaff")]
         public async Task<IActionResult> RegisterStaff([FromBody] RegisterStaff request)
         {
@@ -204,7 +204,7 @@ namespace DiamondStoreAPI.Controllers
             return Ok();
         }
 
-        [Authorize(Roles = "Manager")]
+        //[Authorize(Roles = "Manager")]
         [HttpGet("AccountCount")]
         public async Task<IActionResult> GetAccountCount()
         {
@@ -212,7 +212,7 @@ namespace DiamondStoreAPI.Controllers
             return Ok(result);
         }
 
-        [Authorize(Roles = "Manager")]
+        //[Authorize(Roles = "Manager")]
         [HttpGet("CustomerRankingCount")]
         public async Task<IActionResult> GetCustomerRankingCount()
         {

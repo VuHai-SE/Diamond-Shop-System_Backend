@@ -57,7 +57,7 @@ namespace DiamondStoreAPI.Controllers
             });
         }
 
-        [Authorize(Roles = "Manager")]
+        //[Authorize(Roles = "Manager")]
         [HttpPost("CreateProduct")]
         public async Task<IActionResult> CreateProduct([FromBody] CreateProductRequest request)
         {
@@ -73,7 +73,7 @@ namespace DiamondStoreAPI.Controllers
             return Ok(result.Message);
         }
 
-        [Authorize(Roles = "Manager")]
+        //[Authorize(Roles = "Manager")]
         [HttpPut("UpdateProduct/{id}")]
         public async Task<IActionResult> UpdateProduct(string id, [FromBody] CreateProductRequest request)
         {
@@ -90,7 +90,7 @@ namespace DiamondStoreAPI.Controllers
         }
 
 
-        [Authorize(Roles = "Manager")]
+        //[Authorize(Roles = "Manager")]
         [HttpDelete("DeleteProduct/{id}")]
         public async Task<IActionResult> DeleteProduct(string id)
         {
@@ -107,7 +107,7 @@ namespace DiamondStoreAPI.Controllers
         }
 
 
-        [Authorize(Roles = "Manager")]
+        //[Authorize(Roles = "Manager")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateProduct(string id, [FromBody] TblProduct product)
         {
@@ -178,7 +178,7 @@ namespace DiamondStoreAPI.Controllers
         }
 
 
-        [Authorize(Roles = "Manager")]
+        //[Authorize(Roles = "Manager")]
         [HttpGet("ProductCount")]
         public async Task<IActionResult> GetProductCount()
         {
@@ -188,7 +188,7 @@ namespace DiamondStoreAPI.Controllers
         }
 
 
-        [Authorize(Roles = "Manager")]
+        //[Authorize(Roles = "Manager")]
         [HttpGet("GetMostSoldProductCategory")]
         public async Task<IActionResult> GetMostSoldProductCategory([FromQuery] MonthYearCriteria criteria)
         {

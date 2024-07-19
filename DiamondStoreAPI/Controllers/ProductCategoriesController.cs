@@ -54,7 +54,7 @@ namespace DiamondStoreAPI.Controllers
         }
 
         // POST: api/ProductCategories
-        [Authorize(Roles = "Manager")]
+        //[Authorize(Roles = "Manager")]
         [HttpPost]
         public async Task<ActionResult<TblProductCategory>> PostTblProductCategory(TblProductCategory tblProductCategory)
         {
