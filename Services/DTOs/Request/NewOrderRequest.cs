@@ -17,9 +17,6 @@ namespace Services.DTOs.Request
 
         public string TransactionId { get; set; }
         public string PayerEmail { get; set; }
-        public decimal Amount { get; set; }
-        public string Currency {  get; set; }
         public string PaymentStatus { get; set; }
-        public DateTime? PaymentDate { get; set; }
     }
 }

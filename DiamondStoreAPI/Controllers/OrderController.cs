@@ -28,7 +28,8 @@ namespace DiamondStoreAPI.Controllers
         private readonly IPaymentService iPaymentService;
         private readonly IProductMaterialService iProductMaterialService;
         private readonly IMaterialCategoryService iMaterialCategoryService;
-        public OrderController(IOrderService orderService, IOrderDetailService orderDetailService, IProductService productService, ICustomerService customerService, IPaymentService paymentService, IProductMaterialService productMaterialService, IMaterialCategoryService materialCategoryService)
+        private readonly IRefundService iRefundService;
+        public OrderController(IOrderService orderService, IOrderDetailService orderDetailService, IProductService productService, ICustomerService customerService, IPaymentService paymentService, IProductMaterialService productMaterialService, IMaterialCategoryService materialCategoryService, IRefundService refundService)
         {
             iOrderService = orderService;
             iOrderDetailService = orderDetailService;
@@ -37,6 +38,7 @@ namespace DiamondStoreAPI.Controllers
             iPaymentService = paymentService;
             iProductMaterialService = productMaterialService;
             iMaterialCategoryService = materialCategoryService;
+            iRefundService = refundService;
         }
 
         [HttpPut("UpdateOrderStatus")]
@@ -148,10 +150,10 @@ namespace DiamondStoreAPI.Controllers
                 Deposits = newOrderRequest.Deposits,
                 TransactionId = newOrderRequest.TransactionId,
                 PayerEmail = newOrderRequest.PayerEmail,
-                Amount = newOrderRequest.Amount,
-                Currency = newOrderRequest.Currency,
+                Amount = (decimal)orderInfo.FinalPrice,
+                Currency = "USD",
                 PaymentStatus = newOrderRequest.PaymentStatus,
-                PaymentDate = newOrderRequest.PaymentDate
+                PaymentDate = newOrderRequest.OrderDate
             };
             newPayMent.PayDetail = newPayMent.PaymentMethod + "-Deposits: " + newPayMent.Deposits;
             var payment = iPaymentService.AddPayment(newPayMent);
@@ -183,13 +185,29 @@ namespace DiamondStoreAPI.Controllers
             {
                 orderToUpdate.OrderStatus = "Cancelled";
                 orderToUpdate.OrderNote = "Customer cancelled";
-                //var isUpdate = iOrderService.UpdateOrder(orderToUpdate);
+                await iOrderService.UpdateOrder(orderToUpdate);
+
                 //var productsBuying = iOrderService.GetOrderInfo(orderID).products;
-                //foreach (var p in productsBuying) 
+                //foreach (var p in productsBuying)
                 //{
-                //    iProductService.UpdateProductStatus(p.ProductID);
+                //    var product = await iProductService.GetProductByIdAsync(p.ProductID);
+                //    product.Status = true;
+                //    await iProductService.UpdateProductAsync(product.ProductId, product);
                 //}
                 
+                var paymentToRefund = await iPaymentService.GetPaymentByOrderId(orderID);
+                if (paymentToRefund != null)
+                {
+                    var refundRequest = new TblRefund()
+                    {
+                        PaymentId = paymentToRefund.Id,
+                        RefundAmount = (orderToUpdate.PaymentMethod == "Received") ? (decimal)paymentToRefund.Deposits : paymentToRefund.Amount,
+                        RefundStatus = "Pending",
+                        Reason = "Customer cancel order"
+                    };
+                    await iRefundService.MakeRefund(refundRequest);
+                }
+
                 return Ok("Cancel successfully");
             }
         }

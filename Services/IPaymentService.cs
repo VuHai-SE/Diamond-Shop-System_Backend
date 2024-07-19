@@ -10,7 +10,7 @@ namespace Services
     public interface IPaymentService
     {
         public TblPayment AddPayment(TblPayment payment);
-        public TblPayment GetPaymentByCustomerAndOrder(int orderID, int customerID);
+        public Task<TblPayment> GetPaymentByOrderId(int orderId);
         public List<TblPayment> GetPaymentsByCustomerID(int customerID);
     }
 }

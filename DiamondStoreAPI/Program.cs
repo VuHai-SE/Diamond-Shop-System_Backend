@@ -10,7 +10,6 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using Serilog;
-using Services.DTOs.Request;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,13 +34,6 @@ services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.PropertyNamingPolicy = null;
     options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
-});
-
-// Configure PayPal options
-services.Configure<PayPalOptions>(options =>
-{
-    options.ClientId = Environment.GetEnvironmentVariable("PAYPAL_CLIENT_ID");
-    options.Secret = Environment.GetEnvironmentVariable("PAYPAL_SECRET");
 });
 
 // Configure JWT authentication
@@ -133,6 +125,7 @@ services.AddScoped<RefundDAO>();
 services.AddScoped<IRefundRepository, RefundRepository>();
 services.AddScoped<IRefundService, RefundService>();
 
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
@@ -209,6 +202,7 @@ app.MapControllers();
 app.Run();
 
 
+
 //using BusinessObjects;
 //using DAOs;
 //using Microsoft.EntityFrameworkCore;
@@ -245,13 +239,6 @@ app.Run();
 //{
 //    options.JsonSerializerOptions.PropertyNamingPolicy = null;
 //    options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
-//});
-
-//// Configure PayPal options
-//services.Configure<PayPalOptions>(options =>
-//{
-//    options.ClientId = Environment.GetEnvironmentVariable("PAYPAL_CLIENT_ID");
-//    options.Secret = Environment.GetEnvironmentVariable("PAYPAL_SECRET");
 //});
 
 //// Configure JWT authentication
@@ -338,11 +325,6 @@ app.Run();
 //services.AddScoped<MembershipDAO>();
 //services.AddScoped<IMembershipRepository, MembershipRepository>();
 //services.AddScoped<IMembershipService, MembershipService>();
-
-//services.AddScoped<RefundDAO>();
-//services.AddScoped<IRefundRepository, RefundRepository>();
-//services.AddScoped<IRefundService, RefundService>();
-
 
 //// (Add other dependencies similarly)
 

@@ -13,55 +13,51 @@ using Services.DTOs.Request;
 [ApiController]
 public class RefundController : ControllerBase
 {
-    private readonly IHttpClientFactory _httpClientFactory;
-    private readonly PayPalOptions _payPalOptions;
     private readonly RefundDAO _refundDAO;
     private readonly PaymentDAO _paymentDAO;
 
-    public RefundController(IHttpClientFactory httpClientFactory, IOptions<PayPalOptions> payPalOptions, RefundDAO refundDAO, PaymentDAO paymentDAO)
+    public RefundController(RefundDAO refundDAO, PaymentDAO paymentDAO)
     {
-        _httpClientFactory = httpClientFactory;
-        _payPalOptions = payPalOptions.Value;
         _refundDAO = refundDAO;
         _paymentDAO = paymentDAO;
     }
 
-    [HttpPost]
-    public async Task<IActionResult> Refund([FromBody] RefundRequest refundRequest)
-    {
-        var client = _httpClientFactory.CreateClient();
+    //[HttpPost]
+    //public async Task<IActionResult> Refund([FromBody] RefundRequest refundRequest)
+    //{
+    //    var client = _httpClientFactory.CreateClient();
 
-        // Get PayPal access token
-        var byteArray = Encoding.ASCII.GetBytes($"{_payPalOptions.ClientId}:{_payPalOptions.Secret}");
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
-        var tokenResponse = await client.PostAsync("https://api.sandbox.paypal.com/v1/oauth2/token", new StringContent("grant_type=client_credentials", Encoding.UTF8, "application/x-www-form-urlencoded"));
-        var tokenResult = await tokenResponse.Content.ReadAsStringAsync();
-        var token = JsonConvert.DeserializeObject<PayPalToken>(tokenResult);
+    //     Get PayPal access token
+    //    var byteArray = Encoding.ASCII.GetBytes($"{_payPalOptions.ClientId}:{_payPalOptions.Secret}");
+    //    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
+    //    var tokenResponse = await client.PostAsync("https://api.sandbox.paypal.com/v1/oauth2/token", new StringContent("grant_type=client_credentials", Encoding.UTF8, "application/x-www-form-urlencoded"));
+    //    var tokenResult = await tokenResponse.Content.ReadAsStringAsync();
+    //    var token = JsonConvert.DeserializeObject<PayPalToken>(tokenResult);
 
-        // Create refund request
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.access_token);
-        var refundContent = new StringContent(JsonConvert.SerializeObject(new { amount = new { total = refundRequest.Amount, currency = refundRequest.Currency } }), Encoding.UTF8, "application/json");
-        var refundResponse = await client.PostAsync($"https://api.sandbox.paypal.com/v1/payments/sale/{refundRequest.TransactionId}/refund", refundContent);
-        var refundResult = await refundResponse.Content.ReadAsStringAsync();
+    //     Create refund request
+    //    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.access_token);
+    //    var refundContent = new StringContent(JsonConvert.SerializeObject(new { amount = new { total = refundRequest.Amount, currency = refundRequest.Currency } }), Encoding.UTF8, "application/json");
+    //    var refundResponse = await client.PostAsync($"https://api.sandbox.paypal.com/v1/payments/sale/{refundRequest.TransactionId}/refund", refundContent);
+    //    var refundResult = await refundResponse.Content.ReadAsStringAsync();
 
-        if (!refundResponse.IsSuccessStatusCode)
-        {
-            return BadRequest(refundResult);
-        }
+    //    if (!refundResponse.IsSuccessStatusCode)
+    //    {
+    //        return BadRequest(refundResult);
+    //    }
 
-        // Save refund information to database
-        var refund = new TblRefund
-        {
-            PaymentId = refundRequest.PaymentID,
-            RefundAmount = decimal.Parse(refundRequest.Amount),
-            RefundStatus = "Completed",
-            RefundDate = DateTime.UtcNow,
-            Reason = refundRequest.Reason
-        };
+    //     Save refund information to database
+    //    var refund = new TblRefund
+    //    {
+    //        PaymentId = refundRequest.PaymentID,
+    //        RefundAmount = decimal.Parse(refundRequest.Amount),
+    //        RefundStatus = "Completed",
+    //        RefundDate = DateTime.UtcNow,
+    //        Reason = refundRequest.Reason
+    //    };
 
-        await _refundDAO.MakeRefund(refund);
+    //    await _refundDAO.MakeRefund(refund);
 
-        return Ok(refund);
-    }
+    //    return Ok(refund);
+    //}
 }
 

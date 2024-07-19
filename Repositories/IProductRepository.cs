@@ -39,5 +39,6 @@ namespace Repositories
         Task SaveChangesAsync();
         public Task<ProductCount> GetProductsCountAsync();
         public Task<string> GetMostSoldProductCategoryByMonthYear(int? month = null, int? year = null);
+       
     }
 }

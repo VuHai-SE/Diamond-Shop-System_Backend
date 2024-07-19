@@ -15,7 +15,6 @@ using Repositories;
 using Repositories.Implement;
 using Services.DTOs.Request;
 using Services.DTOs.Response;
-using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using DAOs.DTOs.Response;
 
@@ -30,7 +29,7 @@ namespace Services.Implement
         private readonly IMaterialCategoryRepository materialCategoryRepository;
         private readonly IGemRepository gemRepository;
         private readonly ILogger<ProductService> _logger;
-        private readonly DiamondStoreContext db = null;
+        //private readonly DiamondStoreContext db = null;
         public ProductService(IProductRepository _productRepository, IProductCategoryRepository _productCategoryRepository, IProductMaterialRepository _productMaterialRepository, IMaterialCategoryRepository _materialCategoryRepository, IGemRepository _gemRepository, ILogger<ProductService> logger, DiamondStoreContext context)
         {
             productRepository = _productRepository;
@@ -42,13 +41,13 @@ namespace Services.Implement
             _context = context;
         }
 
-        public ProductService()
-        {
-            if (db == null)
-            {
-                db = new();
-            }
-        }
+        //public ProductService()
+        //{
+        //    if (db == null)
+        //    {
+        //        db = new();
+        //    }
+        //}
 
         public async Task<double> CalculateProductPriceAsync(string productId)
         {
@@ -379,19 +378,18 @@ namespace Services.Implement
 
         public async Task<bool> UpdateProductStatus(string productID)
         {
+            // Truy vấn sản phẩm với AsNoTracking để tránh theo dõi bởi ngữ cảnh
+
             var product = await productRepository.GetProductByIdAsync(productID);
             if (product == null)
             {
                 return false;
             }
-            if (product.Status == true)
-            {
-                product.Status = false;
-            } else
-            {
-                product.Status = true;
-            }
-            return await productRepository.UpdateProduct(productID, product);
+
+            // Cập nhật trạng thái của sản phẩm
+            product.Status = !product.Status;
+            await productRepository.UpdateAsync(product.ProductId, product);
+            return true;
         }
 
         public async Task<GenericResponse> CreateProductAsync(CreateProductRequest request)
@@ -427,5 +425,7 @@ namespace Services.Implement
 
         public async Task<string> GetMostSoldProductCategoryByMonthYear(int? month = null, int? year = null)
             => await productRepository.GetMostSoldProductCategoryByMonthYear(month, year);
+
+
     }
 }

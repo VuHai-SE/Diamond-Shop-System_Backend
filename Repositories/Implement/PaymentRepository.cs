@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects;
 using DAOs;
+using Microsoft.EntityFrameworkCore;
 
 namespace Repositories.Implement
 {
@@ -20,8 +21,8 @@ namespace Repositories.Implement
         public TblPayment AddPayment(TblPayment payment)
             => paymentDAO.AddPayment(payment);
 
-        public TblPayment GetPaymentByCustomerAndOrder(int orderID, int customerID)
-            => paymentDAO.GetPaymentByCustomerAndOrder(orderID, customerID);
+        public async Task<TblPayment> GetPaymentByOrderId(int orderId)
+           => await paymentDAO.GetPaymentByOrderId(orderId);
 
         public List<TblPayment> GetPaymentsByCustomerID(int customerID)
             => paymentDAO.GetPaymentsByCustomerID(customerID);
