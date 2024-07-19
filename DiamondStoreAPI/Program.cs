@@ -121,6 +121,10 @@ services.AddScoped<MembershipDAO>();
 services.AddScoped<IMembershipRepository, MembershipRepository>();
 services.AddScoped<IMembershipService, MembershipService>();
 
+services.AddScoped<RefundDAO>();
+services.AddScoped<IRefundRepository, RefundRepository>();
+services.AddScoped<IRefundService, RefundService>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
