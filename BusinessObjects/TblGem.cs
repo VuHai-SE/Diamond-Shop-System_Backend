@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 
 namespace BusinessObjects;
 
@@ -28,9 +27,7 @@ public partial class TblGem
 
     public string? Shape { get; set; }
 
-    [JsonIgnore]
     public virtual TblDiamondGradingReport? TblDiamondGradingReport { get; set; }
 
-    [JsonIgnore]
     public virtual TblProductGem? TblProductGem { get; set; }
 }

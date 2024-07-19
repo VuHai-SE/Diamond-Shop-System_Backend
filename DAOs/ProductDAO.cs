@@ -448,7 +448,7 @@ namespace DAOs
                         .Where(od => _context.TblOrders
                                         .Any(o => o.OrderId == od.OrderId && o.OrderStatus == "Deliveried"))
                         .CountAsync();
-                
+
             return new ProductCount()
             {
                 TotalProducts = all,

@@ -29,7 +29,8 @@ namespace DiamondStoreAPI.Controllers
         private readonly IPaymentService iPaymentService;
         private readonly IProductMaterialService iProductMaterialService;
         private readonly IMaterialCategoryService iMaterialCategoryService;
-        public OrderController(IOrderService orderService, IOrderDetailService orderDetailService, IProductService productService, ICustomerService customerService, IPaymentService paymentService, IProductMaterialService productMaterialService, IMaterialCategoryService materialCategoryService)
+        private readonly IRefundService iRefundService;
+        public OrderController(IOrderService orderService, IOrderDetailService orderDetailService, IProductService productService, ICustomerService customerService, IPaymentService paymentService, IProductMaterialService productMaterialService, IMaterialCategoryService materialCategoryService, IRefundService refundService)
         {
             iOrderService = orderService;
             iOrderDetailService = orderDetailService;
@@ -38,6 +39,7 @@ namespace DiamondStoreAPI.Controllers
             iPaymentService = paymentService;
             iProductMaterialService = productMaterialService;
             iMaterialCategoryService = materialCategoryService;
+            iRefundService = refundService;
         }
 
         [Authorize(Roles = "SaleStaff, Shipper")]
@@ -47,6 +49,8 @@ namespace DiamondStoreAPI.Controllers
             var result = await iOrderService.UpdateOrderStatus(request);
             if (result)
             {
+                if (request.ButtonValue == "CANCEL")
+                    await iProductService.UpdateProductStatusByCancelOrder((int)request.OrderID);
                 return Ok(new { Message = "Order status updated successfully." });
             }
             return BadRequest(new { Message = "Failed to update order status." });
@@ -149,6 +153,12 @@ namespace DiamondStoreAPI.Controllers
                 CustomerId = customer.CustomerId,
                 PaymentMethod = order.PaymentMethod,
                 Deposits = newOrderRequest.Deposits,
+                TransactionId = newOrderRequest.TransactionId,
+                PayerEmail = newOrderRequest.PayerEmail,
+                Amount = (decimal)orderInfo.FinalPrice,
+                Currency = "USD",
+                PaymentStatus = newOrderRequest.PaymentStatus,
+                PaymentDate = newOrderRequest.OrderDate
             };
             newPayMent.PayDetail = newPayMent.PaymentMethod + "-Deposits: " + newPayMent.Deposits;
             var payment = iPaymentService.AddPayment(newPayMent);
@@ -181,13 +191,30 @@ namespace DiamondStoreAPI.Controllers
             {
                 orderToUpdate.OrderStatus = "Cancelled";
                 orderToUpdate.OrderNote = "Customer cancelled";
-                //var isUpdate = iOrderService.UpdateOrder(orderToUpdate);
+                await iOrderService.UpdateOrder(orderToUpdate);
+
                 //var productsBuying = iOrderService.GetOrderInfo(orderID).products;
-                //foreach (var p in productsBuying) 
+                //foreach (var p in productsBuying)
                 //{
-                //    iProductService.UpdateProductStatus(p.ProductID);
+                //    var product = await iProductService.GetProductByIdAsync(p.ProductID);
+                //    product.Status = true;
+                //    await iProductService.UpdateProductAsync(product.ProductId, product);
                 //}
-                
+                await iProductService.UpdateProductStatusByCancelOrder(orderID);
+
+                var paymentToRefund = await iPaymentService.GetPaymentByOrderId(orderID);
+                if (paymentToRefund != null)
+                {
+                    var refundRequest = new TblRefund()
+                    {
+                        PaymentId = paymentToRefund.Id,
+                        RefundAmount = (orderToUpdate.PaymentMethod == "Received") ? (decimal)paymentToRefund.Deposits : paymentToRefund.Amount,
+                        RefundStatus = "Pending",
+                        Reason = "Customer cancel order"
+                    };
+                    await iRefundService.MakeRefund(refundRequest);
+                }
+
                 return Ok("Cancel successfully");
             }
         }
