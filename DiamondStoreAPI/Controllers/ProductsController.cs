@@ -165,7 +165,7 @@ namespace DiamondStoreAPI.Controllers
         }
 
 
-        [Authorize(Roles = "Manager, Customer")]
+       // [Authorize(Roles = "Manager, Customer")]
         [HttpPut("UpdateStatus")]
         public async Task<IActionResult> UpdateProductStatus(List<string> productIdList)
         {
