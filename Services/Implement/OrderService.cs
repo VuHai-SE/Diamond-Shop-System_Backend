@@ -180,6 +180,10 @@ namespace Services.Implement
                 foreach (var order in orders)
                 {
                     var orderInfo = GetOrderInfo(order.OrderId);
+                    var payment = _paymentRepository.GetPaymentByOrderId(order.OrderId);
+                    orderInfo.TransactionID = payment.Result.TransactionId;
+                    orderInfo.PayerEmail = payment.Result.PayerEmail;
+                    orderInfo.PaymentStatus = payment.Result.PaymentStatus;
                     orderHistory.Add(orderInfo);
                 }
             }

@@ -15,6 +15,7 @@ using Humanizer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 using Microsoft.AspNetCore.Authorization;
+using Org.BouncyCastle.Asn1.X509;
 
 namespace DiamondStoreAPI.Controllers
 {
@@ -91,7 +92,10 @@ namespace DiamondStoreAPI.Controllers
             {
                 return NotFound();
             }
-
+            var payment = iPaymentService.GetPaymentByOrderId(id);
+            orderInfo.TransactionID = payment.Result.TransactionId;
+            orderInfo.PayerEmail = payment.Result.PayerEmail;
+            orderInfo.PaymentStatus = payment.Result.PaymentStatus;
             return Ok(orderInfo);
         }
 
