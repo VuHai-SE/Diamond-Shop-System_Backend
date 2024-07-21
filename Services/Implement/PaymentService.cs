@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects;
+using DAOs;
 using Repositories;
 using Repositories.Implement;
 
@@ -21,8 +22,8 @@ namespace Services.Implement
         public TblPayment AddPayment(TblPayment payment)
             => paymentRepository.AddPayment(payment);
 
-        public TblPayment GetPaymentByCustomerAndOrder(int orderID, int customerID)
-            => paymentRepository.GetPaymentByCustomerAndOrder(orderID, customerID);
+        public async Task<TblPayment> GetPaymentByOrderId(int orderId)
+           => await paymentRepository.GetPaymentByOrderId(orderId);
 
         public List<TblPayment> GetPaymentsByCustomerID(int customerID)
             => paymentRepository.GetPaymentsByCustomerID(customerID);

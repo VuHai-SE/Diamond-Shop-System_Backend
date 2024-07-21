@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BusinessObjects;
 using Services;
 using Services.Implement;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DiamondStoreAPI.Controllers
 {
@@ -51,39 +52,8 @@ namespace DiamondStoreAPI.Controllers
             return tblMaterialCategory;
         }
 
-        // PUT: api/MaterialCategories/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutTblMaterialCategory(string id, TblMaterialCategory tblMaterialCategory)
-        //{
-        //    if (id != tblMaterialCategory.MaterialId)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    iMaterialCategoryService.Entry(tblMaterialCategory).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await iMaterialCategoryService.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!TblMaterialCategoryExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
-
         // POST: api/MaterialCategories
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //[Authorize(Roles = "Manager")]
         [HttpPost]
         public async Task<ActionResult<TblMaterialCategory>> PostTblMaterialCategory(TblMaterialCategory tblMaterialCategory)
         {
@@ -95,26 +65,5 @@ namespace DiamondStoreAPI.Controllers
             
             return CreatedAtAction("GetTblMaterialCategory", new { id = tblMaterialCategory.MaterialId }, tblMaterialCategory);
         }
-
-        // DELETE: api/MaterialCategories/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteTblMaterialCategory(string id)
-        //{
-        //    var tblMaterialCategory = await iMaterialCategoryService.TblMaterialCategories.FindAsync(id);
-        //    if (tblMaterialCategory == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    iMaterialCategoryService.TblMaterialCategories.Remove(tblMaterialCategory);
-        //    await iMaterialCategoryService.SaveChangesAsync();
-
-        //    return NoContent();
-        //}
-
-        //private bool TblMaterialCategoryExists(string id)
-        //{
-        //    return iMaterialCategoryService.TblMaterialCategories.Any(e => e.MaterialId == id);
-        //}
     }
 }

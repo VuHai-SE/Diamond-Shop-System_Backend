@@ -14,6 +14,7 @@ using Services.DTOs.Response;
 using Humanizer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.EntityFrameworkCore.Query.Internal;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DiamondStoreAPI.Controllers
 {
@@ -28,7 +29,8 @@ namespace DiamondStoreAPI.Controllers
         private readonly IPaymentService iPaymentService;
         private readonly IProductMaterialService iProductMaterialService;
         private readonly IMaterialCategoryService iMaterialCategoryService;
-        public OrderController(IOrderService orderService, IOrderDetailService orderDetailService, IProductService productService, ICustomerService customerService, IPaymentService paymentService, IProductMaterialService productMaterialService, IMaterialCategoryService materialCategoryService)
+        private readonly IRefundService iRefundService;
+        public OrderController(IOrderService orderService, IOrderDetailService orderDetailService, IProductService productService, ICustomerService customerService, IPaymentService paymentService, IProductMaterialService productMaterialService, IMaterialCategoryService materialCategoryService, IRefundService refundService)
         {
             iOrderService = orderService;
             iOrderDetailService = orderDetailService;
@@ -37,21 +39,25 @@ namespace DiamondStoreAPI.Controllers
             iPaymentService = paymentService;
             iProductMaterialService = productMaterialService;
             iMaterialCategoryService = materialCategoryService;
+            iRefundService = refundService;
         }
 
+        //[Authorize(Roles = "SaleStaff, Shipper")]
         [HttpPut("UpdateOrderStatus")]
-
         public async Task<IActionResult> AcceptOrder([FromBody] OrderStatusRequest request)
         {
             var result = await iOrderService.UpdateOrderStatus(request);
             if (result)
             {
+                if (request.ButtonValue == "CANCEL")
+                    await iProductService.UpdateProductStatusByCancelOrder((int)request.OrderID);
                 return Ok(new { Message = "Order status updated successfully." });
             }
             return BadRequest(new { Message = "Failed to update order status." });
         }
 
         //GET: api/Order
+        //[Authorize]
         [HttpGet]
         public async Task<ActionResult<List<TblOrder>>> GetOrders()
         {
@@ -59,6 +65,7 @@ namespace DiamondStoreAPI.Controllers
         }
 
         //GET: api/Order/5
+        //[Authorize]
         [HttpGet("getOrderInfo")]
         public async Task<ActionResult<TblOrder>> GetTblOrder(int id)
         {
@@ -74,7 +81,7 @@ namespace DiamondStoreAPI.Controllers
 
 
         // POST: api/Order
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //[Authorize(Roles = "Customer")]
         [HttpPost("createorder")]
         public async Task<IActionResult> CreateOrder([FromBody] NewOrderRequest newOrderRequest)
         {
@@ -146,6 +153,12 @@ namespace DiamondStoreAPI.Controllers
                 CustomerId = customer.CustomerId,
                 PaymentMethod = order.PaymentMethod,
                 Deposits = newOrderRequest.Deposits,
+                TransactionId = newOrderRequest.TransactionId,
+                PayerEmail = newOrderRequest.PayerEmail,
+                Amount = (decimal)orderInfo.FinalPrice,
+                Currency = "USD",
+                PaymentStatus = newOrderRequest.PaymentStatus,
+                PaymentDate = newOrderRequest.OrderDate
             };
             newPayMent.PayDetail = newPayMent.PaymentMethod + "-Deposits: " + newPayMent.Deposits;
             var payment = iPaymentService.AddPayment(newPayMent);
@@ -161,6 +174,7 @@ namespace DiamondStoreAPI.Controllers
         }
 
         [HttpPut("CancelOrder")]
+        //[Authorize]
         public async Task<IActionResult> CancelOrder(int orderID)
         {
             var orderToUpdate = iOrderService.getOrderByOrderID(orderID);
@@ -177,17 +191,35 @@ namespace DiamondStoreAPI.Controllers
             {
                 orderToUpdate.OrderStatus = "Cancelled";
                 orderToUpdate.OrderNote = "Customer cancelled";
-                //var isUpdate = iOrderService.UpdateOrder(orderToUpdate);
+                await iOrderService.UpdateOrder(orderToUpdate);
+
                 //var productsBuying = iOrderService.GetOrderInfo(orderID).products;
-                //foreach (var p in productsBuying) 
+                //foreach (var p in productsBuying)
                 //{
-                //    iProductService.UpdateProductStatus(p.ProductID);
+                //    var product = await iProductService.GetProductByIdAsync(p.ProductID);
+                //    product.Status = true;
+                //    await iProductService.UpdateProductAsync(product.ProductId, product);
                 //}
-                
+                await iProductService.UpdateProductStatusByCancelOrder(orderID);
+
+                var paymentToRefund = await iPaymentService.GetPaymentByOrderId(orderID);
+                if (paymentToRefund != null)
+                {
+                    var refundRequest = new TblRefund()
+                    {
+                        PaymentId = paymentToRefund.Id,
+                        RefundAmount = (orderToUpdate.PaymentMethod == "Received") ? (decimal)paymentToRefund.Deposits : paymentToRefund.Amount,
+                        RefundStatus = "Pending",
+                        Reason = "Customer cancel order"
+                    };
+                    await iRefundService.MakeRefund(refundRequest);
+                }
+
                 return Ok("Cancel successfully");
             }
         }
 
+        //[Authorize(Roles = "SaleStaff, Shipper, Manager")]
         [HttpGet("GetOrderInfoListForSaleStaff")]
         public async Task<ActionResult<IEnumerable<TblOrder>>> GetOrderInfoListForSaleStaff()
         {
@@ -199,6 +231,7 @@ namespace DiamondStoreAPI.Controllers
             return Ok(orderInfoList);
         }
 
+        //[Authorize(Roles = "SaleStaff, Shipper, Manager")]
         [HttpGet("GetOrderInforListForShipper")]
         public async Task<ActionResult<IEnumerable<TblOrder>>> GetOrderInforListForShipper()
         {
@@ -210,6 +243,7 @@ namespace DiamondStoreAPI.Controllers
             return Ok(acceptedOrderInfoList);
         }
 
+        //[Authorize(Roles = "Manager")]
         [HttpGet("OrderCount")]
         public async Task<IActionResult> OrderCount()
         {
@@ -217,6 +251,7 @@ namespace DiamondStoreAPI.Controllers
             return Ok(result);
         }
 
+        //[Authorize(Roles = "Manager")]
         [HttpGet("GetRevenue")]
         public async Task<IActionResult> GetRevenue([FromQuery] MonthYearCriteria criteria)
         {
@@ -224,6 +259,7 @@ namespace DiamondStoreAPI.Controllers
             return Ok(result);
         }
 
+        //[Authorize(Roles = "Manager")]
         [HttpGet("GetNumberOrderByMonthYear")]
         public async Task<IActionResult> GetNumbersOrdersByMonthAndYearAsync([FromQuery] MonthYearCriteria criteria)
         {

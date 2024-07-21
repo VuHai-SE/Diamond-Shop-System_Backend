@@ -11,7 +11,7 @@ namespace Repositories
     public interface IPaymentRepository
     {
         public TblPayment AddPayment(TblPayment payment);
-        public TblPayment GetPaymentByCustomerAndOrder(int orderID, int customerID);
+        public Task<TblPayment> GetPaymentByOrderId(int orderId);
         public List<TblPayment> GetPaymentsByCustomerID(int customerID);
     }
 }

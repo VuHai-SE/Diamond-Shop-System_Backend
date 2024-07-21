@@ -9,8 +9,6 @@ using BusinessObjects;
 using DAOs.DTOs.Response;
 using Microsoft.Identity.Client;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json.Linq;
-using PayPal.Api;
 using Repositories;
 using Repositories.Implement;
 using Services.DTOs.Request;
@@ -203,7 +201,7 @@ namespace Services.Implement
                 orderInfo.CustomerPhone = customer.PhoneNumber;
                 orderInfo.Address = customer.Address;
                 orderInfo.Payment = order.PaymentMethod;
-                orderInfo.Deposits = _paymentRepository.GetPaymentByCustomerAndOrder(orderID, customer.CustomerId).Deposits;
+                orderInfo.Deposits = _paymentRepository.GetPaymentByOrderId(orderID).Result.Deposits;
                 if (order.StaffId != null)
                 {
                     var accSaleStaff = _accountRepository.GetAccountSaleStaff(order.StaffId);
@@ -279,8 +277,8 @@ namespace Services.Implement
             }
             return orderInforList;
         }
-        public Task<bool> UpdateOrder(TblOrder order)
-           => _orderRepository.UpdateOrder(order);
+        public async Task<bool> UpdateOrder(TblOrder order)
+           => await _orderRepository.UpdateOrder(order);
 
 
         public async Task<decimal> GetTotalRevenueAsync(int? month = null, int? year = null)

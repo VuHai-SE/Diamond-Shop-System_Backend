@@ -15,7 +15,6 @@ using Repositories;
 using Repositories.Implement;
 using Services.DTOs.Request;
 using Services.DTOs.Response;
-using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using DAOs.DTOs.Response;
 
@@ -30,8 +29,9 @@ namespace Services.Implement
         private readonly IMaterialCategoryRepository materialCategoryRepository;
         private readonly IGemRepository gemRepository;
         private readonly ILogger<ProductService> _logger;
-        private readonly DiamondStoreContext db = null;
-        public ProductService(IProductRepository _productRepository, IProductCategoryRepository _productCategoryRepository, IProductMaterialRepository _productMaterialRepository, IMaterialCategoryRepository _materialCategoryRepository, IGemRepository _gemRepository, ILogger<ProductService> logger, DiamondStoreContext context)
+        private readonly IOrderDetailRepository orderDetailRepository;
+        //private readonly DiamondStoreContext db = null;
+        public ProductService(IProductRepository _productRepository, IProductCategoryRepository _productCategoryRepository, IProductMaterialRepository _productMaterialRepository, IMaterialCategoryRepository _materialCategoryRepository, IGemRepository _gemRepository, ILogger<ProductService> logger, DiamondStoreContext context, IOrderDetailRepository _orderDetailRepository)
         {
             productRepository = _productRepository;
             productCategoryRepository = _productCategoryRepository;
@@ -40,15 +40,16 @@ namespace Services.Implement
             gemRepository = _gemRepository;
             _logger = logger;
             _context = context;
+            orderDetailRepository = _orderDetailRepository;
         }
 
-        public ProductService()
-        {
-            if (db == null)
-            {
-                db = new();
-            }
-        }
+        //public ProductService()
+        //{
+        //    if (db == null)
+        //    {
+        //        db = new();
+        //    }
+        //}
 
         public async Task<double> CalculateProductPriceAsync(string productId)
         {
@@ -72,57 +73,6 @@ namespace Services.Implement
             }
             return productWithPriceList;
         }
-
-        //public async Task<List<ProductWithPriceResponse>> FilterProducts(ProductFilterCriteria criteria)
-        //{
-        //    var productWithPriceList = await GetAllProductsAndPricesAsync();
-        //    if (!string.IsNullOrEmpty(criteria.Category))
-        //    {
-        //        productWithPriceList = productWithPriceList.Where(p => p.Category != null && p.Category.Equals(criteria.Category.Trim())).ToList();
-        //    }
-
-        //    if (!string.IsNullOrEmpty(criteria.Material))
-        //    {
-        //        productWithPriceList = productWithPriceList.Where(p => p.Material != null && p.Material.Equals(criteria.Material.Trim())).ToList();
-        //    }
-
-        //    if (!string.IsNullOrEmpty(criteria.GemOrigin))
-        //    {
-        //        productWithPriceList = productWithPriceList.Where(p => p.GemOrigin != null && p.GemOrigin.Equals(criteria.GemOrigin.Trim())).ToList();
-        //    }
-
-        //    if (criteria.MinCaratWeight.HasValue)
-        //    {
-        //        productWithPriceList = productWithPriceList.Where(p => p.CaratWeight.HasValue && p.CaratWeight >= criteria.MinCaratWeight).ToList();
-        //    }
-
-        //    if (criteria.MaxCaratWeight.HasValue)
-        //    {
-        //        productWithPriceList = productWithPriceList.Where(p => p.CaratWeight.HasValue && p.CaratWeight <= criteria.MaxCaratWeight).ToList();
-        //    }
-
-        //    if (!string.IsNullOrEmpty(criteria.Cut))
-        //    {
-        //        productWithPriceList = productWithPriceList.Where(p => p.Cut != null && p.Cut.Equals(criteria.Cut.Trim())).ToList();
-        //    }
-
-        //    if (!string.IsNullOrEmpty(criteria.Clarity))
-        //    {
-        //        productWithPriceList = productWithPriceList.Where(p => p.Clarity != null && p.Clarity.Equals(criteria.Clarity.Trim())).ToList();
-        //    }
-
-        //    if (!string.IsNullOrEmpty(criteria.Color))
-        //    {
-        //        productWithPriceList = productWithPriceList.Where(p => p.Color != null && p.Color.Equals(criteria.Color.Trim())).ToList();
-        //    }
-
-        //    if (!string.IsNullOrEmpty(criteria.Gender))
-        //    {
-        //        productWithPriceList = productWithPriceList.Where(p => p.Gender != null && p.Gender.Equals(criteria.Gender.Trim())).ToList();
-        //    }
-
-        //    return productWithPriceList;
-        //}
 
         public async Task<List<ProductWithPriceResponse>> FilterProducts(ProductFilterCriteria criteria)
         {
@@ -379,19 +329,18 @@ namespace Services.Implement
 
         public async Task<bool> UpdateProductStatus(string productID)
         {
+            // Truy vấn sản phẩm với AsNoTracking để tránh theo dõi bởi ngữ cảnh
+
             var product = await productRepository.GetProductByIdAsync(productID);
             if (product == null)
             {
                 return false;
             }
-            if (product.Status == true)
-            {
-                product.Status = false;
-            } else
-            {
-                product.Status = true;
-            }
-            return await productRepository.UpdateProduct(productID, product);
+
+            // Cập nhật trạng thái của sản phẩm
+            product.Status = !product.Status;
+            await productRepository.UpdateAsync(product.ProductId, product);
+            return true;
         }
 
         public async Task<GenericResponse> CreateProductAsync(CreateProductRequest request)
@@ -427,5 +376,17 @@ namespace Services.Implement
 
         public async Task<string> GetMostSoldProductCategoryByMonthYear(int? month = null, int? year = null)
             => await productRepository.GetMostSoldProductCategoryByMonthYear(month, year);
+
+        public async Task UpdateProductStatusByCancelOrder(int orderId)
+        {
+            var productsBuying = orderDetailRepository.GetOrderDetailsByOrderID(orderId);
+            
+            foreach (var p in productsBuying)
+            {
+                var product = await productRepository.GetProductByIdAsync(p.ProductId);
+                product.Status = true;
+                await productRepository.UpdateProduct(product.ProductId, product);
+            }
+        }
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects;
+using Microsoft.EntityFrameworkCore;
 
 namespace DAOs
 {
@@ -23,8 +24,8 @@ namespace DAOs
             return payment;
         }
 
-        public TblPayment GetPaymentByCustomerAndOrder(int orderID, int customerID)
-            => dbContext.TblPayments.FirstOrDefault(p => p.OrderId.Equals(orderID) && p.CustomerId.Equals(customerID));
+        public async Task<TblPayment> GetPaymentByOrderId(int orderId)
+            => await dbContext.TblPayments.FirstOrDefaultAsync(p => p.OrderId.Equals(orderId));
 
         public List<TblPayment> GetPaymentsByCustomerID(int customerID)
             => dbContext.TblPayments.Where(p => p.CustomerId == customerID).ToList();
