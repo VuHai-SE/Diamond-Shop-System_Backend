@@ -46,10 +46,10 @@ namespace Repositories.Implement
         public async Task<OrderStatusCount> GetOrderStatusCountAsync()
             => await orderDAO.GetOrderStatusCountAsync();
 
-        public async Task<List<double>> GetRevenuePerMonthOfCurrentYear()
-            => await orderDAO.GetRevenuePerMonthOfCurrentYear();
-        public async Task<List<int>> GetNumberOrdersPerMonthOfCurrentYear()
-            => await orderDAO.GetNumberOrdersPerMonthOfCurrentYear();
+        public async Task<List<int>> GetNumberOrdersPerMonthOfYear(int year)
+            => await orderDAO.GetNumberOrdersPerMonthOfYear(year);
+        public async Task<List<decimal>> GetRevenuePerMonthOfYear(int year)
+            => await orderDAO.GetRevenuePerMonthOfYear(year);
         public async Task<decimal> GetTotalRevenueAsync()
             => await orderDAO.GetTotalRevenueAsync();
     }
