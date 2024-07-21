@@ -374,8 +374,8 @@ namespace Services.Implement
         public async Task<ProductCount> GetProductsCountAsync()
             => await productRepository.GetProductsCountAsync();
 
-        public async Task<string> GetMostSoldProductCategoryByMonthYear(int? month = null, int? year = null)
-            => await productRepository.GetMostSoldProductCategoryByMonthYear(month, year);
+        public async Task<string> GetMostSoldProductCategoryAtCurrentMonthYear()
+            => await productRepository.GetMostSoldProductCategoryAtCurrentMonthYear();
 
         public async Task UpdateProductStatusByCancelOrder(int orderId)
         {

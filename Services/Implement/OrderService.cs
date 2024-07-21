@@ -6,6 +6,7 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects;
+using DAOs;
 using DAOs.DTOs.Response;
 using Microsoft.Identity.Client;
 using Microsoft.IdentityModel.Tokens;
@@ -280,13 +281,14 @@ namespace Services.Implement
         public async Task<bool> UpdateOrder(TblOrder order)
            => await _orderRepository.UpdateOrder(order);
 
-
-        public async Task<decimal> GetTotalRevenueAsync(int? month = null, int? year = null)
-            => await _orderRepository.GetTotalRevenueAsync(month, year);
         public async Task<OrderStatusCount> GetOrderStatusCountAsync()
             => await _orderRepository.GetOrderStatusCountAsync();
 
-        public async Task<int> GetNumbersOrdersByMonthAndYearAsync(int? month = null, int? year = null)
-            => await _orderRepository.GetNumbersOrdersByMonthAndYearAsync(month, year);
+        public async Task<List<double>> GetRevenuePerMonthOfCurrentYear()
+             => await _orderRepository.GetRevenuePerMonthOfCurrentYear();
+        public async Task<List<int>> GetNumberOrdersPerMonthOfCurrentYear()
+            => await _orderRepository.GetNumberOrdersPerMonthOfCurrentYear();
+        public async Task<decimal> GetTotalRevenueAsync()
+            => await _orderRepository.GetTotalRevenueAsync();
     }
 }
