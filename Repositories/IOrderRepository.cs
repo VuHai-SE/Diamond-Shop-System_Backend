@@ -22,10 +22,10 @@ namespace Repositories
         Task<bool> UpdateOrder(TblOrder order);
         
         public Task<OrderStatusCount> GetOrderStatusCountAsync();
-        
-        public Task<List<double>> GetRevenuePerMonthOfCurrentYear();
 
-        public Task<List<int>> GetNumberOrdersPerMonthOfCurrentYear();
+        public Task<List<int>> GetNumberOrdersPerMonthOfYear(int year);
+
+        public Task<List<decimal>> GetRevenuePerMonthOfYear(int year);
         public Task<decimal> GetTotalRevenueAsync();
     }
 }

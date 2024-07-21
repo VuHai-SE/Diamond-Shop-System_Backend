@@ -87,40 +87,46 @@ namespace DAOs
             };
         }
 
-        public async Task<List<double>> GetRevenuePerMonthOfCurrentYear()
+        public async Task<List<decimal>> GetRevenuePerMonthOfYear(int year)
         {
             int currentYear = DateTime.Now.Year;
+            int currentMonth = DateTime.Now.Month;
 
             var revenuePerMonth = await dbContext.TblOrderDetails
                 .Join(dbContext.TblOrders,
                       orderDetail => orderDetail.OrderId,
                       order => order.OrderId,
                       (orderDetail, order) => new { orderDetail, order })
-                .Where(o => o.order.OrderStatus == "Deliveried" && o.order.OrderDate.HasValue && o.order.OrderDate.Value.Year == currentYear)
+                .Where(o => o.order.OrderStatus == "Deliveried" && o.order.OrderDate.HasValue && o.order.OrderDate.Value.Year == year)
                 .GroupBy(o => o.order.OrderDate.Value.Month)
                 .Select(g => new
                 {
                     Month = g.Key,
-                    TotalRevenue = g.Sum(x => (double)x.orderDetail.FinalPrice)
+                    TotalRevenue = g.Sum(x => (decimal)x.orderDetail.FinalPrice)
                 })
                 .ToListAsync();
 
-            List<double> monthlyRevenues = new List<double>(new double[12]);
+            int monthCount = (year == currentYear) ? currentMonth : 12;
+            List<decimal> monthlyRevenues = new List<decimal>(new decimal[monthCount]);
 
             foreach (var revenue in revenuePerMonth)
             {
-                monthlyRevenues[revenue.Month - 1] = revenue.TotalRevenue;
+                if (revenue.Month <= monthCount)
+                {
+                    monthlyRevenues[revenue.Month - 1] = revenue.TotalRevenue;
+                }
             }
 
             return monthlyRevenues;
         }
 
-        public async Task<List<int>> GetNumberOrdersPerMonthOfCurrentYear()
+        public async Task<List<int>> GetNumberOrdersPerMonthOfYear(int year)
         {
             int currentYear = DateTime.Now.Year;
+            int currentMonth = DateTime.Now.Month;
 
             var ordersPerMonth = await dbContext.TblOrders
-                .Where(o => o.OrderDate.HasValue && o.OrderDate.Value.Year == currentYear)
+                .Where(o => o.OrderDate.HasValue && o.OrderDate.Value.Year == year && o.OrderStatus == "Deliveried")
                 .GroupBy(o => o.OrderDate.Value.Month)
                 .Select(g => new
                 {
@@ -129,15 +135,20 @@ namespace DAOs
                 })
                 .ToListAsync();
 
-            List<int> monthlyOrders = new List<int>(new int[12]);
+            int monthCount = (year == currentYear) ? currentMonth : 12;
+            List<int> monthlyOrders = new List<int>(new int[monthCount]);
 
             foreach (var orders in ordersPerMonth)
             {
-                monthlyOrders[orders.Month - 1] = orders.OrderCount;
+                if (orders.Month <= monthCount)
+                {
+                    monthlyOrders[orders.Month - 1] = orders.OrderCount;
+                }
             }
 
             return monthlyOrders;
         }
+
 
 
         public async Task<decimal> GetTotalRevenueAsync()

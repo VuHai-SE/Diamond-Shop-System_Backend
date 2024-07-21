@@ -38,6 +38,6 @@ namespace Repositories
 
         Task SaveChangesAsync();
         public Task<ProductCount> GetProductsCountAsync();
-        public Task<string> GetMostSoldProductCategoryAtCurrentMonthYear();
+        public Task<string> GetMostSoldProductCategoryOfMonthYear(int month, int year);
     }
 }

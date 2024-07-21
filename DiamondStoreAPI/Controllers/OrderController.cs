@@ -260,18 +260,18 @@ namespace DiamondStoreAPI.Controllers
         }
 
         //[Authorize(Roles = "Manager")]
-        [HttpGet("GetRevenuePerMonth")]
-        public async Task<IActionResult> GetRevenuePerMonth()
+        [HttpGet("GetRevenuePerMonthOfYear")]
+        public async Task<IActionResult> GetRevenuePerMonthOfYear(int year)
         {
-            var result = await iOrderService.GetRevenuePerMonthOfCurrentYear();
+            var result = await iOrderService.GetRevenuePerMonthOfYear(year);
             return Ok(result);
         }
 
         //[Authorize(Roles = "Manager")]
-        [HttpGet("GetNumberOrderPerMonth")]
-        public async Task<IActionResult> GetNumberOrderPerMonth()
+        [HttpGet("GetNumberDeliveriedOrderPerMonthOfYear")]
+        public async Task<IActionResult> GetNumberDeliveriedOrderPerMonthOfYear(int year)
         {
-            var result = await iOrderService.GetNumberOrdersPerMonthOfCurrentYear();
+            var result = await iOrderService.GetNumberOrdersPerMonthOfYear(year);
             return Ok(result);
         }
     }

@@ -284,10 +284,10 @@ namespace Services.Implement
         public async Task<OrderStatusCount> GetOrderStatusCountAsync()
             => await _orderRepository.GetOrderStatusCountAsync();
 
-        public async Task<List<double>> GetRevenuePerMonthOfCurrentYear()
-             => await _orderRepository.GetRevenuePerMonthOfCurrentYear();
-        public async Task<List<int>> GetNumberOrdersPerMonthOfCurrentYear()
-            => await _orderRepository.GetNumberOrdersPerMonthOfCurrentYear();
+        public async Task<List<int>> GetNumberOrdersPerMonthOfYear(int year)
+           => await _orderRepository.GetNumberOrdersPerMonthOfYear(year);
+        public async Task<List<decimal>> GetRevenuePerMonthOfYear(int year)
+            => await _orderRepository.GetRevenuePerMonthOfYear(year);
         public async Task<decimal> GetTotalRevenueAsync()
             => await _orderRepository.GetTotalRevenueAsync();
     }
