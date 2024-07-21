@@ -28,5 +28,8 @@ namespace Services.DTOs.Response
         public DateTime? ShippingDate { get; set; }
         public DateTime? ReceiveDate { get; set; }
         public string? OrderNote { get; set; }
+        public string? TransactionID { get; set; }
+        public string? PayerEmail { get; set; }
+        public string? PaymentStatus { get; set; }
     }
 }
