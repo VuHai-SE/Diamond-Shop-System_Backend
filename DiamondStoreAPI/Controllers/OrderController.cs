@@ -50,7 +50,23 @@ namespace DiamondStoreAPI.Controllers
             if (result)
             {
                 if (request.ButtonValue == "CANCEL")
+                {
                     await iProductService.UpdateProductStatusByCancelOrder((int)request.OrderID);
+                    var paymentToRefund = await iPaymentService.GetPaymentByOrderId((int)request.OrderID);
+                    
+                    if (paymentToRefund != null)
+                    {
+                        var order = iOrderService.getOrderByOrderID((int)request.OrderID);
+                        var refundRequest = new TblRefund()
+                        {
+                            PaymentId = paymentToRefund.Id,
+                            RefundAmount = (order.PaymentMethod == "Received") ? (decimal)paymentToRefund.Deposits : paymentToRefund.Amount,
+                            RefundStatus = "Pending",
+                            Reason = "Staff cancel order"
+                        };
+                        await iRefundService.MakeRefund(refundRequest);
+                    }
+                }
                 return Ok(new { Message = "Order status updated successfully." });
             }
             return BadRequest(new { Message = "Failed to update order status." });

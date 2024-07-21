@@ -195,7 +195,7 @@ namespace Services.Implement
             if (order != null)
             {
                 var customer = _customerRepository.GetCustomerByID((int)order.CustomerId);
-
+                
                 orderInfo.OrderID = order.OrderId;
                 orderInfo.CustomerID = customer.CustomerId;
                 orderInfo.CustomerName = customer.FirstName + " " + customer.LastName;
@@ -203,6 +203,7 @@ namespace Services.Implement
                 orderInfo.Address = customer.Address;
                 orderInfo.Payment = order.PaymentMethod;
                 orderInfo.Deposits = _paymentRepository.GetPaymentByOrderId(orderID).Result.Deposits;
+                
                 if (order.StaffId != null)
                 {
                     var accSaleStaff = _accountRepository.GetAccountSaleStaff(order.StaffId);
@@ -252,6 +253,10 @@ namespace Services.Implement
                 foreach (var order in orders)
                 {
                     var orderInfo = GetOrderInfo(order.OrderId);
+                    var payment = _paymentRepository.GetPaymentByOrderId(order.OrderId);
+                    orderInfo.TransactionID = payment.Result.TransactionId;
+                    orderInfo.PayerEmail = payment.Result.PayerEmail;
+                    orderInfo.PaymentStatus = payment.Result.PaymentStatus;
                     orderInforList.Add(orderInfo);
                 }
             }
