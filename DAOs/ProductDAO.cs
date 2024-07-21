@@ -456,7 +456,7 @@ namespace DAOs
             };
         }
 
-        public async Task<string> GetMostSoldProductCategoryByMonthYear(int? month = null, int? year = null)
+        public async Task<string> GetMostSoldProductCategoryOfMonthYear(int month, int year)
         {
             var query = _context.TblOrderDetails
                 .Join(_context.TblOrders,
@@ -471,14 +471,10 @@ namespace DAOs
                       orderDetailOrderProduct => orderDetailOrderProduct.product.CategoryId,
                       category => category.CategoryId,
                       (orderDetailOrderProduct, category) => new { orderDetailOrderProduct, category })
-                .Where(x => x.orderDetailOrderProduct.orderDetailOrder.order.OrderStatus == "Deliveried");
-
-            if (month.HasValue && year.HasValue)
-            {
-                query = query.Where(x => x.orderDetailOrderProduct.orderDetailOrder.order.OrderDate.HasValue &&
-                                         x.orderDetailOrderProduct.orderDetailOrder.order.OrderDate.Value.Month == month.Value &&
-                                         x.orderDetailOrderProduct.orderDetailOrder.order.OrderDate.Value.Year == year.Value);
-            }
+                .Where(x => x.orderDetailOrderProduct.orderDetailOrder.order.OrderStatus == "Deliveried" &&
+                            x.orderDetailOrderProduct.orderDetailOrder.order.OrderDate.HasValue &&
+                            x.orderDetailOrderProduct.orderDetailOrder.order.OrderDate.Value.Year == year &&
+                            x.orderDetailOrderProduct.orderDetailOrder.order.OrderDate.Value.Month == month);
 
             var result = await query
                 .GroupBy(x => x.category.CategoryName)
@@ -492,6 +488,7 @@ namespace DAOs
 
             return result?.CategoryName;
         }
+
 
     }
 }

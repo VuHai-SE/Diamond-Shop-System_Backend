@@ -189,11 +189,10 @@ namespace DiamondStoreAPI.Controllers
 
 
         //[Authorize(Roles = "Manager")]
-        [HttpGet("GetMostSoldProductCategory")]
-        public async Task<IActionResult> GetMostSoldProductCategory([FromQuery] MonthYearCriteria criteria)
+        [HttpGet("GetMostSoldProductCategoryMonthYear")]
+        public async Task<IActionResult> GetMostSoldProductCategoryMonthYear([FromQuery] MonthYearCriteria request)
         {
-
-            var result = await _productService.GetMostSoldProductCategoryByMonthYear(criteria.Month, criteria.Year);
+            var result = await _productService.GetMostSoldProductCategoryOfMonthYear((int)request.Month, (int)request.Year);
             if (result == null) return NotFound();
             return Ok(result);
         }

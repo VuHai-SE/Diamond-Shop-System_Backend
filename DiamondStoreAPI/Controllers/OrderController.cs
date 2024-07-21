@@ -50,7 +50,23 @@ namespace DiamondStoreAPI.Controllers
             if (result)
             {
                 if (request.ButtonValue == "CANCEL")
+                {
                     await iProductService.UpdateProductStatusByCancelOrder((int)request.OrderID);
+                    var paymentToRefund = await iPaymentService.GetPaymentByOrderId((int)request.OrderID);
+                    
+                    if (paymentToRefund != null)
+                    {
+                        var order = iOrderService.getOrderByOrderID((int)request.OrderID);
+                        var refundRequest = new TblRefund()
+                        {
+                            PaymentId = paymentToRefund.Id,
+                            RefundAmount = (order.PaymentMethod == "Received") ? (decimal)paymentToRefund.Deposits : paymentToRefund.Amount,
+                            RefundStatus = "Pending",
+                            Reason = "Staff cancel order"
+                        };
+                        await iRefundService.MakeRefund(refundRequest);
+                    }
+                }
                 return Ok(new { Message = "Order status updated successfully." });
             }
             return BadRequest(new { Message = "Failed to update order status." });
@@ -253,17 +269,25 @@ namespace DiamondStoreAPI.Controllers
 
         //[Authorize(Roles = "Manager")]
         [HttpGet("GetRevenue")]
-        public async Task<IActionResult> GetRevenue([FromQuery] MonthYearCriteria criteria)
+        public async Task<IActionResult> GetRevenue()
         {
-            var result = await iOrderService.GetTotalRevenueAsync(criteria.Month, criteria.Year);
+            var result = await iOrderService.GetTotalRevenueAsync();
             return Ok(result);
         }
 
         //[Authorize(Roles = "Manager")]
-        [HttpGet("GetNumberOrderByMonthYear")]
-        public async Task<IActionResult> GetNumbersOrdersByMonthAndYearAsync([FromQuery] MonthYearCriteria criteria)
+        [HttpGet("GetRevenuePerMonthOfYear")]
+        public async Task<IActionResult> GetRevenuePerMonthOfYear(int year)
         {
-            var result = await iOrderService.GetNumbersOrdersByMonthAndYearAsync(criteria.Month, criteria.Year);
+            var result = await iOrderService.GetRevenuePerMonthOfYear(year);
+            return Ok(result);
+        }
+
+        //[Authorize(Roles = "Manager")]
+        [HttpGet("GetNumberDeliveriedOrderPerMonthOfYear")]
+        public async Task<IActionResult> GetNumberDeliveriedOrderPerMonthOfYear(int year)
+        {
+            var result = await iOrderService.GetNumberOrdersPerMonthOfYear(year);
             return Ok(result);
         }
     }
