@@ -120,7 +120,7 @@ namespace Repositories.Implement
         public async Task<ProductCount> GetProductsCountAsync()
             => await productDAO.GetProductsCountAsync();
 
-        public async Task<string> GetMostSoldProductCategoryAtCurrentMonthYear()
-            => await productDAO.GetMostSoldProductCategoryAtCurrentMonthYear();
+        public async Task<string> GetMostSoldProductCategoryOfMonthYear(int month, int year)
+            => await productDAO.GetMostSoldProductCategoryOfMonthYear(month, year);
     }
 }

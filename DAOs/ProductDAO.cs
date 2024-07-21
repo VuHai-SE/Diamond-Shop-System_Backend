@@ -456,11 +456,8 @@ namespace DAOs
             };
         }
 
-        public async Task<string> GetMostSoldProductCategoryAtCurrentMonthYear()
+        public async Task<string> GetMostSoldProductCategoryOfMonthYear(int month, int year)
         {
-            int currentYear = DateTime.Now.Year;
-            int currentMonth = DateTime.Now.Month;
-
             var query = _context.TblOrderDetails
                 .Join(_context.TblOrders,
                       orderDetail => orderDetail.OrderId,
@@ -476,8 +473,8 @@ namespace DAOs
                       (orderDetailOrderProduct, category) => new { orderDetailOrderProduct, category })
                 .Where(x => x.orderDetailOrderProduct.orderDetailOrder.order.OrderStatus == "Deliveried" &&
                             x.orderDetailOrderProduct.orderDetailOrder.order.OrderDate.HasValue &&
-                            x.orderDetailOrderProduct.orderDetailOrder.order.OrderDate.Value.Year == currentYear &&
-                            x.orderDetailOrderProduct.orderDetailOrder.order.OrderDate.Value.Month == currentMonth);
+                            x.orderDetailOrderProduct.orderDetailOrder.order.OrderDate.Value.Year == year &&
+                            x.orderDetailOrderProduct.orderDetailOrder.order.OrderDate.Value.Month == month);
 
             var result = await query
                 .GroupBy(x => x.category.CategoryName)
