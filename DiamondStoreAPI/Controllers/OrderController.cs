@@ -202,18 +202,18 @@ namespace DiamondStoreAPI.Controllers
                 //}
                 await iProductService.UpdateProductStatusByCancelOrder(orderID);
 
-                var paymentToRefund = await iPaymentService.GetPaymentByOrderId(orderID);
-                if (paymentToRefund != null)
-                {
-                    var refundRequest = new TblRefund()
-                    {
-                        PaymentId = paymentToRefund.Id,
-                        RefundAmount = (orderToUpdate.PaymentMethod == "Received") ? (decimal)paymentToRefund.Deposits : paymentToRefund.Amount,
-                        RefundStatus = "Pending",
-                        Reason = "Customer cancel order"
-                    };
-                    await iRefundService.MakeRefund(refundRequest);
-                }
+                //var paymentToRefund = await iPaymentService.GetPaymentByOrderId(orderID);
+                //if (paymentToRefund != null)
+                //{
+                //    var refundRequest = new TblRefund()
+                //    {
+                //        PaymentId = paymentToRefund.Id,
+                //        RefundAmount = (orderToUpdate.PaymentMethod == "Received") ? (decimal)paymentToRefund.Deposits : paymentToRefund.Amount,
+                //        RefundStatus = "Pending",
+                //        Reason = "Customer cancel order"
+                //    };
+                //    await iRefundService.MakeRefund(refundRequest);
+                //}
 
                 return Ok("Cancel successfully");
             }

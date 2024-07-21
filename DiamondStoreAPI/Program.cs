@@ -169,7 +169,7 @@ services.AddCors(options =>
     options.AddPolicy("AllowReact",
         builder =>
         {
-            builder.WithOrigins("http://localhost:3000", "http://localhost:5173", "https://diamond-store-eta.vercel.app", "https://diamond-manager.vercel.app/")
+            builder.WithOrigins("http://localhost:3000", "http://localhost:5173", "https://diamond-store-eta.vercel.app", "https://diamond-manager.vercel.app")
                    .AllowAnyHeader()
                    .AllowAnyMethod();
         });
