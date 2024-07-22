@@ -11,6 +11,9 @@ using System.Text;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using System.Reflection;
+using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using DiamondStoreAPI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -164,10 +167,8 @@ services.AddSwaggerGen(c =>
         }
     });
 
-    ////tạo fiel ghi chú cho endpoint
-    //var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    //var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    //c.IncludeXmlComments(xmlPath);
+    c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
+    c.DocInclusionPredicate((docName, apiDesc) => apiDesc.GroupName == docName);
 });
 
 // Add CORS policy
