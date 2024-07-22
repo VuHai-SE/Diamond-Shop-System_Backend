@@ -19,6 +19,7 @@ using Org.BouncyCastle.Asn1.X509;
 
 namespace DiamondStoreAPI.Controllers
 {
+    [ApiExplorerSettings(GroupName = "v1")]
     [Route("api/[controller]")]
     [ApiController]
     public class OrderController : ControllerBase

@@ -10,6 +10,7 @@ using Services.DTOs.Response;
 using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
 
+[ApiExplorerSettings(GroupName = "v1")]
 [ApiController]
 [Route("api/[controller]")]
 public class WarrantyController : ControllerBase

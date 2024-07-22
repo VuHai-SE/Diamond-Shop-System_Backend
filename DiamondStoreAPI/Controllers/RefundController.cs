@@ -9,6 +9,7 @@ using BusinessObjects;
 using DAOs;
 using Services.DTOs.Request;
 
+[ApiExplorerSettings(GroupName = "v1")]
 [Route("api/[controller]")]
 [ApiController]
 public class RefundController : ControllerBase

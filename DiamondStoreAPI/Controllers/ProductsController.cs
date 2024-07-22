@@ -17,6 +17,7 @@ using DAOs.DTOs.Response;
 
 namespace DiamondStoreAPI.Controllers
 {
+    [ApiExplorerSettings(GroupName = "v1")]
     [Route("api/[controller]")]
     [ApiController]
     public class ProductsController : ControllerBase

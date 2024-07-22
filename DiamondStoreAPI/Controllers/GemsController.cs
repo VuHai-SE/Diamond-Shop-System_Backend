@@ -14,6 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace DiamondStoreAPI.Controllers
 {
+    [ApiExplorerSettings(GroupName = "v1")]
     [Route("api/[controller]")]
     //[ApiController]
     public class GemsController : ControllerBase
