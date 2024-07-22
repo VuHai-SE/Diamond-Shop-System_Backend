@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -133,6 +134,7 @@ services.AddSwaggerGen();
 services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "DiamondStoreAPI", Version = "v1" });
+    c.SwaggerDoc("v2", new OpenApiInfo { Title = "DiamondStoreAPI", Version = "v2" }); //swagger v2
 
     // Configure JWT authentication for Swagger
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -161,6 +163,11 @@ services.AddSwaggerGen(c =>
             new List<string>()
         }
     });
+
+    ////tạo fiel ghi chú cho endpoint
+    //var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    //var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    //c.IncludeXmlComments(xmlPath);
 });
 
 // Add CORS policy
@@ -194,6 +201,7 @@ app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "DiamondStoreAPI v1");
+    c.SwaggerEndpoint("/swagger/v2/swagger.json", "DiamondStoreAPI v2"); //config v2
 });
 
 app.UseDefaultFiles(); // Để sử dụng index.html làm tệp mặc định
