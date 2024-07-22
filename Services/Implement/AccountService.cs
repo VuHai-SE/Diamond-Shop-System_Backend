@@ -97,6 +97,28 @@ namespace Services.Implement
             _customerRepository.AddCustomer(customer);
         }
 
+        public async Task RegisterAsync(TblAccount account)
+        {
+            await _accountRepository.AddAccountAsync(account);
+
+            var customer = new TblCustomer()
+            {
+                AccountId = account.AccountId,
+                Email = account.Username,
+                FirstName = "FirstName", // Sử dụng các giá trị mặc định hoặc từ yêu cầu của bạn
+                LastName = "LastName",
+                Gender = true,
+                Birthday = DateTime.Now,
+                PhoneNumber = "0000000000",
+                Address = "Default Address",
+                DiscountRate = 0.02,
+                Ranking = "Bronze",
+                Status = true
+            };
+            _customerRepository.AddCustomer(customer);
+        }
+
+
         public async Task RegisterStaffAsync(RegisterStaff register)
         {
             var passwordHash = BCrypt.Net.BCrypt.HashPassword(register.Password);

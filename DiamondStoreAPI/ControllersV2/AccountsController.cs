@@ -74,7 +74,16 @@ namespace DiamondStoreAPI.Controllers
             var account = _accountService.GetAccountByEmail(email);
             if (account == null)
             {
-                return Unauthorized();
+                // Nếu tài khoản chưa tồn tại, tạo tài khoản mới
+                var newAccount = new TblAccount
+                {
+                    Username = email,
+                    Password = BCrypt.Net.BCrypt.HashPassword("123pass"),
+                    Role = "Customer"
+                };
+                await _accountService.RegisterAsync(newAccount);
+
+                account = newAccount;
             }
 
             var token = GenerateJwtToken(account);
@@ -86,6 +95,7 @@ namespace DiamondStoreAPI.Controllers
                 CustomerInfo = customerInfo
             });
         }
+
 
 
 

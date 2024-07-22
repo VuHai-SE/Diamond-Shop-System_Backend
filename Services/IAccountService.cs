@@ -16,6 +16,8 @@ namespace Services
 
         Task RegisterAsync(RegisterRequest register);
 
+        Task RegisterAsync(TblAccount account);
+
         Task<string> ForgotPasswordAsync(ForgotPasswordRequest request);
 
         Task<TblAccount> GetAccountByUsernameAsync(string username);
