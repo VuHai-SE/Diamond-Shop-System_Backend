@@ -59,7 +59,7 @@ namespace DiamondStoreAPI.Controllers
 
         [Authorize(Roles = "Manager")]
         [HttpPost]
-        public async Task<ActionResult> AddGem(AddGemRequest addGemRequest)
+        public async Task<ActionResult> AddGem([FromBody] AddGemRequest addGemRequest)
         {
             try
             {
