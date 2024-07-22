@@ -9,15 +9,16 @@ using BusinessObjects;
 using DAOs;
 using Services.DTOs.Request;
 
-[ApiExplorerSettings(GroupName = "v1")]
-[Route("api/[controller]")]
+[ApiVersion("2.0")]
+[ApiExplorerSettings(GroupName = "v2")]
+[Route("api/v2/Refund/")]
 [ApiController]
-public class RefundController : ControllerBase
+public class RefundsController : ControllerBase
 {
     private readonly RefundDAO _refundDAO;
     private readonly PaymentDAO _paymentDAO;
 
-    public RefundController(RefundDAO refundDAO, PaymentDAO paymentDAO)
+    public RefundsController(RefundDAO refundDAO, PaymentDAO paymentDAO)
     {
         _refundDAO = refundDAO;
         _paymentDAO = paymentDAO;

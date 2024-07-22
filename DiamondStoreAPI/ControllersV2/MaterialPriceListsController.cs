@@ -15,16 +15,17 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace DiamondStoreAPI.Controllers
 {
-    [ApiExplorerSettings(GroupName = "v1")]
-    [Route("api/[controller]")]
+    [ApiVersion("2.0")]
+    [ApiExplorerSettings(GroupName = "v2")]
+    [Route("api/v2/MaterialPriceLists/")]
     [ApiController]
-    public class MaterialPriceListsController : ControllerBase
+    public class MaterialPriceListController : ControllerBase
     {
         private readonly IMaterialPriceListService iMaterialPriceListService;
         private readonly IProductService iProductService;
         private readonly IProductMaterialService iProductMaterialService;
 
-        public MaterialPriceListsController(IMaterialPriceListService materialPriceListService, IProductService productService, IProductMaterialService productMaterialService)
+        public MaterialPriceListController(IMaterialPriceListService materialPriceListService, IProductService productService, IProductMaterialService productMaterialService)
         {
             iMaterialPriceListService = materialPriceListService;
             iProductService = productService;
@@ -62,7 +63,7 @@ namespace DiamondStoreAPI.Controllers
         }
 
         // POST: api/MaterialPriceLists
-        //[Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager")]
         [HttpPost]
         public async Task<IActionResult> CreateMaterial([FromBody] CreateMaterialRequest request)
         {
@@ -76,7 +77,7 @@ namespace DiamondStoreAPI.Controllers
             return Ok(result);
         }
 
-        //[Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager")]
         [HttpDelete("{materialId}")]
         public async Task<IActionResult> DeleteMaterial(string materialId)
         {
@@ -100,7 +101,7 @@ namespace DiamondStoreAPI.Controllers
         }
 
         // PUT: api/MaterialPriceLists/5
-        //[Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager")]
         [HttpPut("UpdateUnitPrice")]
         public async Task<IActionResult> UpdateMaterialPrice([FromBody] UpdateMeterialRequest request)
         {

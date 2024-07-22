@@ -1,24 +1,27 @@
 ﻿using BusinessObjects.RequestModels;
 using BusinessObjects.ResponseModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Services;
 
 namespace DiamondStoreAPI.Controllers
 {
-    [ApiExplorerSettings(GroupName = "v1")]
-    [Route("api/[controller]")]
+    [ApiVersion("2.0")]
+    [ApiExplorerSettings(GroupName = "v2")]
+    [Route("api/v2/Customers/")]
     [ApiController]
-    public class CustomersController : ControllerBase
+    public class CustomerController : ControllerBase
     {
         private readonly ICustomerService _customerService;
 
-        public CustomersController(ICustomerService customerService)
+        public CustomerController(ICustomerService customerService)
         {
             _customerService = customerService;
         }
 
         //Update Customer profile
+        [Authorize]
         [HttpPut("UpdateCustomer/{customerId}")]
         public async Task<IActionResult> UpdateCustomer(int customerId, [FromBody] UpdateCustomerProfileRequest request)
         {

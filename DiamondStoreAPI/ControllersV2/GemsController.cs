@@ -14,14 +14,15 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace DiamondStoreAPI.Controllers
 {
-    [ApiExplorerSettings(GroupName = "v1")]
-    [Route("api/[controller]")]
-    //[ApiController]
-    public class GemsController : ControllerBase
+    [ApiVersion("2.0")]
+    [ApiExplorerSettings(GroupName = "v2")]
+    [Route("api/v2/Gems/")]
+    [ApiController]
+    public class GemController : ControllerBase
     {
         private readonly IGemService _gemService;
 
-        public GemsController(IGemService gemService)
+        public GemController(IGemService gemService)
         {
             _gemService = gemService;
         }
@@ -56,7 +57,7 @@ namespace DiamondStoreAPI.Controllers
             return tblGem;
         }
 
-        //[Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager")]
         [HttpPost]
         public async Task<ActionResult> AddGem(AddGemRequest addGemRequest)
         {
@@ -129,7 +130,7 @@ namespace DiamondStoreAPI.Controllers
             }
         }
 
-        //[Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager")]
         [HttpDelete("{gemId}")]
         public async Task<ActionResult> DeleteGem(string gemId)
         {
@@ -156,7 +157,7 @@ namespace DiamondStoreAPI.Controllers
             }
         }
 
-        //[Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager")]
         [HttpPut("{gemId}/gradingreport")]
         public async Task<ActionResult> UpdateDiamondGradingReport(string gemId, UpdateDiamondGradingReportRequest updateRequest)
         {
@@ -192,7 +193,7 @@ namespace DiamondStoreAPI.Controllers
             }
         }
 
-        //[Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager")]
         [HttpGet("GetDiamondGradingReport/{gemId}")]
         public async Task<ActionResult<string>> GetDiamondGradingReport(string gemId)
         {

@@ -10,10 +10,11 @@ using Services.DTOs.Response;
 using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
 
-[ApiExplorerSettings(GroupName = "v1")]
+[ApiVersion("2.0")]
+[ApiExplorerSettings(GroupName = "v2")]
+[Route("api/v2/Warranty/")]
 [ApiController]
-[Route("api/[controller]")]
-public class WarrantyController : ControllerBase
+public class WarrantiesController : ControllerBase
 {
     private readonly IWarrantyService _warrantyService;
     private readonly IOrderDetailService _orderDetailService;
@@ -21,7 +22,7 @@ public class WarrantyController : ControllerBase
     private readonly IProductService _productService;
     private readonly ICustomerService _customerService;
 
-    public WarrantyController(IWarrantyService warrantyService, IOrderDetailService orderDetailService, IOrderService orderService,IProductService productService, ICustomerService customerService)
+    public WarrantiesController(IWarrantyService warrantyService, IOrderDetailService orderDetailService, IOrderService orderService,IProductService productService, ICustomerService customerService)
     {
         _warrantyService = warrantyService;
         _orderDetailService = orderDetailService;
@@ -41,7 +42,7 @@ public class WarrantyController : ControllerBase
     }
 
 
-    //[Authorize(Roles = "SaleSatff")]
+    [Authorize(Roles = "SaleSatff")]
     [HttpPost("CreateWarranty")]
     public async Task<IActionResult> CreateWarranty([FromBody] WarrantyRequest request)
     {

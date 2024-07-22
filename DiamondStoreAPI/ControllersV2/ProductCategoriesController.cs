@@ -12,14 +12,15 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace DiamondStoreAPI.Controllers
 {
-    [ApiExplorerSettings(GroupName = "v1")]
-    [Route("api/[controller]")]
+    [ApiVersion("2.0")]
+    [ApiExplorerSettings(GroupName = "v2")]
+    [Route("api/v2/ProductCategories/")]
     [ApiController]
-    public class ProductCategoriesController : ControllerBase
+    public class ProductCategoryController : ControllerBase
     {
         private readonly IProductCategoryService iProductCategoryService;
 
-        public ProductCategoriesController(IProductCategoryService productCategoryService)
+        public ProductCategoryController(IProductCategoryService productCategoryService)
         {
             iProductCategoryService = productCategoryService;
         }
@@ -55,7 +56,7 @@ namespace DiamondStoreAPI.Controllers
         }
 
         // POST: api/ProductCategories
-        //[Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager")]
         [HttpPost]
         public async Task<ActionResult<TblProductCategory>> PostTblProductCategory(TblProductCategory tblProductCategory)
         {

@@ -12,14 +12,15 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace DiamondStoreAPI.Controllers
 {
-    [ApiExplorerSettings(GroupName = "v1")]
-    [Route("api/[controller]")]
+    [ApiVersion("2.0")]
+    [ApiExplorerSettings(GroupName = "v2")]
+    [Route("api/v2/MaterialCategories/")]
     [ApiController]
-    public class MaterialCategoriesController : ControllerBase
+    public class MaterialCategoryController : ControllerBase
     {
         private readonly IMaterialCategoryService iMaterialCategoryService;
 
-        public MaterialCategoriesController(IMaterialCategoryService materialCategoryService)
+        public MaterialCategoryController(IMaterialCategoryService materialCategoryService)
         {
             iMaterialCategoryService = materialCategoryService;
         }
@@ -54,7 +55,7 @@ namespace DiamondStoreAPI.Controllers
         }
 
         // POST: api/MaterialCategories
-        //[Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager")]
         [HttpPost]
         public async Task<ActionResult<TblMaterialCategory>> PostTblMaterialCategory(TblMaterialCategory tblMaterialCategory)
         {

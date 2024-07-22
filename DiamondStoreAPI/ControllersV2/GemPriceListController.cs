@@ -14,14 +14,15 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace DiamondStoreAPI.Controllers
 {
-    [ApiExplorerSettings(GroupName = "v1")]
-    [Route("api/[controller]")]
+    [ApiVersion("2.0")]
+    [ApiExplorerSettings(GroupName = "v2")]
+    [Route("api/v2/GemPriceList/")]
     [ApiController]
-    public class GemPriceListController : ControllerBase
+    public class GemPriceListsController : ControllerBase
     {
         private readonly IGemPriceListService iGemPriceListService;
 
-        public GemPriceListController(IGemPriceListService gemPriceListService)
+        public GemPriceListsController(IGemPriceListService gemPriceListService)
         {
             iGemPriceListService = gemPriceListService;
         }
@@ -61,7 +62,7 @@ namespace DiamondStoreAPI.Controllers
             return Ok(gemPrice);
         }
 
-        //[Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager")]
         [HttpPut("UpdateGemPrice")]
         public async Task<IActionResult> UpdateGemPriceList([FromBody] UpdateGemPriceRequest request)
         {
@@ -71,7 +72,7 @@ namespace DiamondStoreAPI.Controllers
         }
 
         // POST: api/GemPriceList
-        //[Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager")]
         [HttpPost]
         public async Task<ActionResult<TblGemPriceList>> PostTblGemPriceList(TblGemPriceList tblGemPriceList)
         {
