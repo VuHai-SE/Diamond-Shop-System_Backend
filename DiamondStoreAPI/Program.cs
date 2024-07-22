@@ -14,6 +14,8 @@ using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using DiamondStoreAPI;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.JsonWebTokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -56,9 +58,21 @@ services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(key),
         ValidateIssuer = false,
-        ValidateAudience = false
+        ValidateAudience = false,
+        // Custom validation logic
+        LifetimeValidator = (notBefore, expires, securityToken, validationParameters) =>
+        {
+            var jwtToken = securityToken as JwtSecurityToken;
+            if (jwtToken == null)
+            {
+                var jsonWebToken = securityToken as JsonWebToken;
+                return jsonWebToken != null && expires != null && expires > DateTime.UtcNow && !TokenBlacklist.IsBlacklisted(jsonWebToken.EncodedToken);
+            }
+            return expires != null && expires > DateTime.UtcNow && !TokenBlacklist.IsBlacklisted(jwtToken.RawData);
+        }
     };
 });
+
 
 // Add dependencies
 services.AddScoped<AccountDAO>();
