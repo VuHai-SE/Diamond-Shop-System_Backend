@@ -57,7 +57,7 @@ namespace DiamondStoreAPI.Controllers
             return tblGem;
         }
 
-        //[Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager")]
         [HttpPost]
         public async Task<ActionResult> AddGem(AddGemRequest addGemRequest)
         {
@@ -130,7 +130,7 @@ namespace DiamondStoreAPI.Controllers
             }
         }
 
-        //[Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager")]
         [HttpDelete("{gemId}")]
         public async Task<ActionResult> DeleteGem(string gemId)
         {
@@ -157,7 +157,7 @@ namespace DiamondStoreAPI.Controllers
             }
         }
 
-        //[Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager")]
         [HttpPut("{gemId}/gradingreport")]
         public async Task<ActionResult> UpdateDiamondGradingReport(string gemId, UpdateDiamondGradingReportRequest updateRequest)
         {
@@ -193,7 +193,7 @@ namespace DiamondStoreAPI.Controllers
             }
         }
 
-        //[Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager")]
         [HttpGet("GetDiamondGradingReport/{gemId}")]
         public async Task<ActionResult<string>> GetDiamondGradingReport(string gemId)
         {

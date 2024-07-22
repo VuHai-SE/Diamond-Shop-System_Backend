@@ -62,7 +62,7 @@ namespace DiamondStoreAPI.Controllers
             return Ok(gemPrice);
         }
 
-        //[Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager")]
         [HttpPut("UpdateGemPrice")]
         public async Task<IActionResult> UpdateGemPriceList([FromBody] UpdateGemPriceRequest request)
         {
@@ -72,7 +72,7 @@ namespace DiamondStoreAPI.Controllers
         }
 
         // POST: api/GemPriceList
-        //[Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager")]
         [HttpPost]
         public async Task<ActionResult<TblGemPriceList>> PostTblGemPriceList(TblGemPriceList tblGemPriceList)
         {

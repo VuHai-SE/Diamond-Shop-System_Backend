@@ -42,7 +42,7 @@ public class WarrantiesController : ControllerBase
     }
 
 
-    //[Authorize(Roles = "SaleSatff")]
+    [Authorize(Roles = "SaleSatff")]
     [HttpPost("CreateWarranty")]
     public async Task<IActionResult> CreateWarranty([FromBody] WarrantyRequest request)
     {
