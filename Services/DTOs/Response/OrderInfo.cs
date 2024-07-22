@@ -20,9 +20,9 @@ namespace Services.DTOs.Response
         public string? SaleStaff { get; set; } = null;
         public string? Shipper { get; set; } = null;
         public List<ProductBuyingResponse> products { get; set; } = new List<ProductBuyingResponse>();
-        public double? TotalPrice { get; set; } = 0;
-        public double? DiscountRate { get; set; }
-        public double? FinalPrice { get; set; } = 0;
+        public decimal? TotalPrice { get; set; } = 0;
+        public decimal? DiscountRate { get; set; }
+        public decimal? FinalPrice { get; set; } = 0;
         public DateTime OrderDate { get; set; }
         public string? OrderStatus { get; set; }
         public DateTime? ShippingDate { get; set; }
