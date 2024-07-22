@@ -14,6 +14,7 @@ using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using DiamondStoreAPI;
+using Google.Apis.Auth.AspNetCore3;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,6 +43,28 @@ services.AddControllers().AddJsonOptions(options =>
 
 // Configure JWT authentication
 var key = Encoding.ASCII.GetBytes(builder.Configuration.GetValue<string>("Jwt:Day_la_key_JWT"));
+//services.AddAuthentication(options =>
+//{
+//    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+//    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+//})
+//.AddJwtBearer(options =>
+//{
+//    options.RequireHttpsMetadata = false;
+//    options.SaveToken = true;
+//    options.TokenValidationParameters = new TokenValidationParameters
+//    {
+//        ValidateIssuerSigningKey = true,
+//        IssuerSigningKey = new SymmetricSecurityKey(key),
+//        ValidateIssuer = false,
+//        ValidateAudience = false
+//    };
+//})
+//.AddGoogle(options =>
+//{
+//    options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+//    options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+//});
 services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -54,10 +77,16 @@ services.AddAuthentication(options =>
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(key),
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Day_la_key_JWT"])),
         ValidateIssuer = false,
         ValidateAudience = false
     };
+})
+.AddGoogle(options =>
+{
+    options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+    options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+    options.CallbackPath = new PathString("/signin-google"); // Đảm bảo đường dẫn này khớp với redirect URI
 });
 
 // Add dependencies
@@ -172,12 +201,23 @@ services.AddSwaggerGen(c =>
 });
 
 // Add CORS policy
+//services.AddCors(options =>
+//{
+//    options.AddPolicy("AllowReact",
+//        builder =>
+//        {
+//            builder.WithOrigins("http://localhost:3000", "http://localhost:5173", "https://diamond-store-eta.vercel.app", "https://diamond-manager.vercel.app")
+//                   .AllowAnyHeader()
+//                   .AllowAnyMethod()
+//                   .AllowCredentials(); // Thêm dòng này nếu bạn cần gửi thông tin xác thực (cookies, headers)
+//        });
+//});
 services.AddCors(options =>
 {
-    options.AddPolicy("AllowReact",
+    options.AddPolicy("AllowAll",
         builder =>
         {
-            builder.WithOrigins("http://localhost:3000", "http://localhost:5173", "https://diamond-store-eta.vercel.app", "https://diamond-manager.vercel.app")
+            builder.AllowAnyOrigin()
                    .AllowAnyHeader()
                    .AllowAnyMethod();
         });
@@ -197,7 +237,10 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseCors("AllowReact");
+
+app.UseCors("AllowAll");
+//app.UseCors("AllowReact");
+
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {

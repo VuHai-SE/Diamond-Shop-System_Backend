@@ -20,6 +20,8 @@ using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pag
 using Serilog;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Google;
 
 
 namespace DiamondStoreAPI.Controllers
@@ -48,11 +50,27 @@ namespace DiamondStoreAPI.Controllers
             _jwtSecret = _configuration.GetValue<string>("Jwt:Day_la_key_JWT");
         }
 
-
-        [HttpPost("LoginGoogle")]
-        public async Task<IActionResult> LoginByGoogle(string email)
+        [HttpGet("LoginGoogle")]
+        public IActionResult LoginGoogle()
         {
-           
+            var redirectUrl = Url.Action(nameof(GoogleResponse), "Account", null, Request.Scheme);
+            var properties = new AuthenticationProperties { RedirectUri = redirectUrl };
+            return Challenge(properties, GoogleDefaults.AuthenticationScheme);
+        }
+
+
+
+        [HttpGet("/signin-google")]
+        public async Task<IActionResult> GoogleResponse()
+        {
+            var result = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
+            if (!result.Succeeded)
+                return BadRequest("Google authentication failed");
+
+            var email = result.Principal.FindFirstValue(ClaimTypes.Email);
+            if (string.IsNullOrEmpty(email))
+                return BadRequest("Email claim not found");
+
             var account = _accountService.GetAccountByEmail(email);
             if (account == null)
             {
@@ -60,7 +78,7 @@ namespace DiamondStoreAPI.Controllers
             }
 
             var token = GenerateJwtToken(account);
-            BusinessObjects.ResponseModels.LoginResponse customerInfo = _customerService.GetCustomerByAccountForLogin(account.Username);
+            var customerInfo = _customerService.GetCustomerByAccountForLogin(account.Username);
 
             return Ok(new
             {
@@ -68,6 +86,9 @@ namespace DiamondStoreAPI.Controllers
                 CustomerInfo = customerInfo
             });
         }
+
+
+
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] Services.DTOs.Request.LoginRequest request)
         {
