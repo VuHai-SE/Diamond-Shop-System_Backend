@@ -218,7 +218,7 @@ namespace Services.Implement
                     var accShipper = _accountRepository.GetAccountShipper(order.ShipperId);
                     orderInfo.Shipper = accShipper.Username;
                 }
-                orderInfo.DiscountRate = customer.DiscountRate;
+                orderInfo.DiscountRate = (decimal)customer.DiscountRate;
                 orderInfo.OrderDate = (DateTime)order.OrderDate;
                 orderInfo.OrderStatus = order.OrderStatus;
                 orderInfo.ShippingDate = order.ShippingDate;
@@ -227,8 +227,8 @@ namespace Services.Implement
                 var OrderDetail = _orderDetailRepository.GetOrderDetailsByOrderID(order.OrderId);
                 foreach (var orderDetail in OrderDetail)
                 {
-                    orderInfo.TotalPrice += (double)orderDetail.TotalPrice;
-                    orderInfo.FinalPrice += (double)orderDetail.FinalPrice;
+                    orderInfo.TotalPrice += (decimal)orderDetail.TotalPrice;
+                    orderInfo.FinalPrice += (decimal)orderDetail.FinalPrice;
                     var product = _productRepository.GetProduct(orderDetail.ProductId);
                     var productMaterial = _productMaterialRepository.GetProductMaterialProductID(product.ProductId);
                     orderInfo.products.Add(new ProductBuyingResponse()
@@ -240,7 +240,7 @@ namespace Services.Implement
                         Image = product.Image,
                         CustomizedSize = (int)orderDetail.CustomizedSize,
                         Quantity = (int)orderDetail.Quantity,
-                        Price = (double)orderDetail.TotalPrice
+                        Price = (decimal)orderDetail.TotalPrice
                     }
                         );
                 }
