@@ -130,6 +130,22 @@ namespace DiamondStoreAPI.Controllers
             return Ok();
         }
 
+        [Authorize]
+        [HttpPost("logout")]
+        public IActionResult Logout()
+        {
+            var token = Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+
+            if (token == null)
+            {
+                return BadRequest("Token is missing");
+            }
+
+            TokenBlacklist.Add(token);
+            return Ok("Logged out successfully");
+        }
+
+
         //[Authorize(Roles = "Customer")]
         [Authorize]
         [HttpPost("forgot-password")]

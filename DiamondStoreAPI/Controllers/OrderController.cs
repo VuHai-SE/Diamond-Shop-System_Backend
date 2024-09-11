@@ -157,14 +157,14 @@ namespace DiamondStoreAPI.Controllers
                     Image = product.Image,
                     CustomizedSize = p.CustomizedSize,
                     Quantity = p.Quantity,
-                    Price = (double)orderDetail.TotalPrice
+                    Price = (decimal)orderDetail.TotalPrice
                 };
                 orderInfo.products.Add(productBuying);
-                orderInfo.TotalPrice = orderInfo.TotalPrice += (double)orderDetail.TotalPrice;
+                orderInfo.TotalPrice = orderInfo.TotalPrice += (decimal)orderDetail.TotalPrice;
 
-                orderInfo.FinalPrice = orderInfo.FinalPrice += (double)orderDetail.FinalPrice;
+                orderInfo.FinalPrice = orderInfo.FinalPrice += (decimal)orderDetail.FinalPrice;
             }
-            orderInfo.DiscountRate = (double)customer.DiscountRate;
+            orderInfo.DiscountRate = (decimal)customer.DiscountRate;
             orderInfo.OrderDate = newOrderRequest.OrderDate;
             orderInfo.OrderStatus = order.OrderStatus;
             orderInfo.CustomerID = customer.CustomerId;

@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using DiamondStoreAPI;
 using Google.Apis.Auth.AspNetCore3;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.JsonWebTokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -79,7 +81,18 @@ services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Day_la_key_JWT"])),
         ValidateIssuer = false,
-        ValidateAudience = false
+        ValidateAudience = false,
+        // Custom validation logic
+        LifetimeValidator = (notBefore, expires, securityToken, validationParameters) =>
+        {
+            var jwtToken = securityToken as JwtSecurityToken;
+            if (jwtToken == null)
+            {
+                var jsonWebToken = securityToken as JsonWebToken;
+                return jsonWebToken != null && expires != null && expires > DateTime.UtcNow && !TokenBlacklist.IsBlacklisted(jsonWebToken.EncodedToken);
+            }
+            return expires != null && expires > DateTime.UtcNow && !TokenBlacklist.IsBlacklisted(jwtToken.RawData);
+        }
     };
 })
 .AddGoogle(options =>
@@ -88,6 +101,7 @@ services.AddAuthentication(options =>
     options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
     options.CallbackPath = new PathString("/signin-google"); // Đảm bảo đường dẫn này khớp với redirect URI
 });
+
 
 // Add dependencies
 services.AddScoped<AccountDAO>();
